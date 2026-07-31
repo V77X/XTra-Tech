@@ -1,254 +1,992 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>XTra Tech - Tech Made Simple</title>
 
+<meta name="theme-color" content="#0b1020">
+<meta name="description" content="All-in-One Tech Toolkit">
+
 <link rel="manifest" href="manifest.json">
 <link rel="stylesheet" href="style.css">
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
 </head>
 
 <body>
 
-<!-- Animated Background -->
 <div class="bg">
+
 <div class="circle c1"></div>
 <div class="circle c2"></div>
 <div class="circle c3"></div>
+<div class="circle c4"></div>
+
 <div class="grid"></div>
+
 </div>
 
-<!-- Header -->
-<header>
+<!-- Sidebar -->
 
-<div class="menu">☰</div>
+<aside id="sidebar">
+
+<div class="side-header">
 
 <div class="logo">
 
-<div class="logo-icon">⚡</div>
+<div class="logo-icon">
+⚡
+</div>
 
 <div>
-<h1>XTra Tech</h1>
+
+<h2>XTra Tech</h2>
+
 <p>Tech Made Simple</p>
-</div>
 
 </div>
 
-<div class="profile">👤</div>
+</div>
 
-</header>
+<button id="closeMenu">
+✕
+</button>
 
-<!-- Hero -->
+</div>
 
-<section class="hero">
+<div class="profile-card">
 
-<h2>Welcome 👋</h2>
+<div class="avatar">
+👤
+</div>
 
-<h3>Everything you need in one app.</h3>
+<h3>Guest User</h3>
 
-<p>
+<p>Welcome Back</p>
 
-AI • Translator • PDF • Images • QR • Calculators • Utilities
+</div>
 
-</p>
+<nav class="side-links">
 
-<button class="start-btn">
+<a href="#">
+🏠 Home
+</a>
 
-Explore Now →
+<a href="#">
+🤖 AI Tools
+</a>
+
+<a href="#">
+🌐 Translator
+</a>
+
+<a href="#">
+📄 PDF Tools
+</a>
+
+<a href="#">
+🖼 Image Tools
+</a>
+
+<a href="#">
+📱 QR Tools
+</a>
+
+<a href="#">
+🧮 Calculator
+</a>
+
+<a href="#">
+📝 Text Tools
+</a>
+
+<a href="#">
+⭐ Favorites
+</a>
+
+<a href="#">
+⚙ Settings
+</a>
+
+<a href="#">
+ℹ About
+</a>
+
+</nav>
+
+</aside>
+
+<div id="overlay"></div>
+
+<header>
+
+<button id="menuBtn">
+
+☰
 
 </button>
 
+<div class="brand">
+
+<div class="logo-box">
+
+⚡
+
+</div>
+
+<div>
+
+<h1>
+
+XTra Tech
+
+</h1>
+
+<p>
+
+Tech Made Simple
+
+</p>
+
+</div>
+
+</div>
+
+<button class="notify">
+
+🔔
+
+</button>
+
+</header>
+
+<section class="hero">
+
+<div class="hero-left">
+
+<span class="badge">
+
+NEW 2026
+
+</span>
+
+<h2>
+
+Everything You Need
+
+In One App
+
+</h2>
+
+<p>
+
+AI Chat
+
+Translator
+
+PDF
+
+Image
+
+QR
+
+Calculator
+
+Text Tools
+
+Utilities
+
+and more.
+
+</p>
+
+<div class="hero-buttons">
+
+<button class="primary">
+
+Explore Now
+
+</button>
+
+<button class="secondary">
+
+View Tools
+
+</button>
+
+</div>
+
+</div>
+
+<div class="hero-right">
+
+<div class="phone">
+
+<div class="screen">
+
+<div class="glow"></div>
+
+<div class="mini-card">
+
+🤖 AI
+
+</div>
+
+<div class="mini-card">
+
+📄 PDF
+
+</div>
+
+<div class="mini-card">
+
+🌐 Translate
+
+</div>
+
+<div class="mini-card">
+
+🧮 Calculator
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
 </section>
 
-<!-- Search -->
+<section class="search">
 
-<section class="search-box">
+<div class="search-box">
+
+<span>
+
+🔍
+
+</span>
 
 <input
 
 type="text"
 
-placeholder="Search any tool...">
-
-</section>
-
-<!-- Featured -->
-
-<section class="title">
-
-<h2>🔥 Featured</h2>
-
-</section>
-
-<section class="featured">
-
-<div class="tool ai">
-
-🤖
-
-<span>AI</span>
+placeholder="Search anything...">
 
 </div>
 
-<div class="tool">
+</section>
 
-🌐
+<section class="quick-actions">
 
-<span>Translator</span>
+<div class="quick-card">
+
+⚡
+
+<h3>
+
+Quick AI
+
+</h3>
 
 </div>
 
-<div class="tool">
+<div class="quick-card">
 
 📄
 
-<span>PDF</span>
+<h3>
+
+PDF
+
+</h3>
 
 </div>
 
-<div class="tool">
+<div class="quick-card">
 
-🖼️
-
-<span>Images</span>
-
-</div>
-
-</section>
-
-<!-- Categories -->
-
-<section class="title">
-
-<h2>📂 Categories</h2>
-
-</section>
-
-<section class="grid-tools">
-
-<div class="card">
-🤖
-<h3>AI</h3>
-<p>Smart Assistant</p>
-</div>
-
-<div class="card">
 🌐
-<h3>Translator</h3>
-<p>100+ Languages</p>
+
+<h3>
+
+Translate
+
+</h3>
+
 </div>
 
-<div class="card">
+<div class="quick-card">
+
+🖼
+
+<h3>
+
+Image
+
+</h3>
+
+</div>
+
+</section>
+
+<section class="section-title">
+
+<h2>
+
+🔥 Featured Tools
+
+</h2>
+
+<p>
+
+Most Popular
+
+</p>
+
+</section>
+
+<section class="featured-grid">
+
+<div class="feature-card">
+
+<div class="icon">
+
+🤖
+
+</div>
+
+<h3>
+
+AI Assistant
+
+</h3>
+
+<p>
+
+Ask Anything
+
+</p>
+
+</div>
+
+<div class="feature-card">
+
+<div class="icon">
+
+🌐
+
+</div>
+
+<h3>
+
+Translator
+
+</h3>
+
+<p>
+
+100+ Languages
+
+</p>
+
+</div>
+
+<div class="feature-card">
+
+<div class="icon">
+
 📄
-<h3>PDF</h3>
-<p>Edit & Convert</p>
+
 </div>
 
-<div class="card">
-🖼️
-<h3>Images</h3>
-<p>Compress & Resize</p>
+<h3>
+
+PDF Tools
+
+</h3>
+
+<p>
+
+Convert & Edit
+
+</p>
+
 </div>
 
-<div class="card">
+<div class="feature-card">
+
+<div class="icon">
+
+🖼
+
+</div>
+
+<h3>
+
+Image Tools
+
+</h3>
+
+<p>
+
+Compress & Resize
+
+</p>
+
+</div> <div class="feature-card">
+
+<div class="icon">
+
 📱
-<h3>QR</h3>
-<p>Scan & Generate</p>
+
 </div>
 
-<div class="card">
+<h3>
+
+QR Scanner
+
+</h3>
+
+<p>
+
+Scan & Generate
+
+</p>
+
+</div>
+
+<div class="feature-card">
+
+<div class="icon">
+
 🧮
-<h3>Calculator</h3>
-<p>Smart Calculations</p>
+
 </div>
 
-<div class="card">
+<h3>
+
+Calculator
+
+</h3>
+
+<p>
+
+Smart Calculations
+
+</p>
+
+</div>
+
+<div class="feature-card">
+
+<div class="icon">
+
 📝
+
+</div>
+
+<h3>
+
+Text Tools
+
+</h3>
+
+<p>
+
+Case Convert
+
+Merge
+
+Count
+
+</p>
+
+</div>
+
+</section>
+
+<section class="section-title">
+
+<h2>
+
+📂 Categories
+
+</h2>
+
+<p>
+
+Choose your favorite
+
+</p>
+
+</section>
+
+<section class="category-grid">
+
+<div class="category">
+
+🤖
+
+<h3>AI</h3>
+
+<p>Assistant & Chat</p>
+
+</div>
+
+<div class="category">
+
+🌐
+
+<h3>Translator</h3>
+
+<p>Translate Instantly</p>
+
+</div>
+
+<div class="category">
+
+📄
+
+<h3>PDF</h3>
+
+<p>Edit PDF</p>
+
+</div>
+
+<div class="category">
+
+🖼
+
+<h3>Images</h3>
+
+<p>Resize & Compress</p>
+
+</div>
+
+<div class="category">
+
+🎵
+
+<h3>Audio</h3>
+
+<p>Convert Audio</p>
+
+</div>
+
+<div class="category">
+
+🎬
+
+<h3>Video</h3>
+
+<p>Basic Tools</p>
+
+</div>
+
+<div class="category">
+
+📱
+
+<h3>QR</h3>
+
+<p>Create QR</p>
+
+</div>
+
+<div class="category">
+
+🧮
+
+<h3>Calculator</h3>
+
+<p>Math & Finance</p>
+
+</div>
+
+<div class="category">
+
+📝
+
 <h3>Text</h3>
-<p>Useful Text Tools</p>
+
+<p>Utilities</p>
+
 </div>
 
-<div class="card">
-⚙️
+<div class="category">
+
+🎓
+
+<h3>Study</h3>
+
+<p>Student Tools</p>
+
+</div>
+
+<div class="category">
+
+⚙
+
 <h3>Utilities</h3>
-<p>Daily Tools</p>
+
+<p>Daily Use</p>
+
+</div>
+
+<div class="category">
+
+⭐
+
+<h3>More</h3>
+
+<p>Coming Soon</p>
+
 </div>
 
 </section>
 
-<!-- Trending -->
+<section class="section-title">
 
-<section class="title">
+<h2>
 
-<h2>⭐ Trending</h2>
+⭐ Trending
+
+</h2>
+
+<p>
+
+Most Used Today
+
+</p>
 
 </section>
 
-<section class="trending">
+<section class="trending-list">
 
-<div class="trend">
+<div class="trend-card">
+
+<div>
 
 🤖 AI Chat
 
 </div>
 
-<div class="trend">
+<span>
+
+HOT
+
+</span>
+
+</div>
+
+<div class="trend-card">
+
+<div>
 
 🌐 Translator
 
 </div>
 
-<div class="trend">
+<span>
+
+NEW
+
+</span>
+
+</div>
+
+<div class="trend-card">
+
+<div>
 
 📄 PDF Converter
 
 </div>
 
-</section>
+<span>
 
-<!-- Bottom Navigation -->
+TOP
 
-<nav>
+</span>
+
+</div>
+
+<div class="trend-card">
 
 <div>
+
+🖼 Image Compressor
+
+</div>
+
+<span>
+
+FAST
+
+</span>
+
+</div>
+
+<div class="trend-card">
+
+<div>
+
+📱 QR Generator
+
+</div>
+
+<span>
+
+FREE
+
+</span>
+
+</div>
+
+<section class="section-title">
+
+<h2>
+
+❤️ Favorites
+
+</h2>
+
+<p>
+
+Recently Saved
+
+</p>
+
+</section>
+
+<section class="favorites">
+
+<div class="favorite-card">
+
+🤖 AI Assistant
+
+</div>
+
+<div class="favorite-card">
+
+📄 PDF Merge
+
+</div>
+
+<div class="favorite-card">
+
+🌐 Translate
+
+</div>
+
+<div class="favorite-card">
+
+🧮 Calculator
+
+</div>
+
+</section><section class="section-title">
+
+<h2>🕒 Recent Tools</h2>
+
+<p>Your last used tools</p>
+
+</section>
+
+<section class="recent-tools">
+
+<div class="recent-card">
+🤖 AI Chat
+</div>
+
+<div class="recent-card">
+📄 PDF Merge
+</div>
+
+<div class="recent-card">
+🌐 Translator
+</div>
+
+<div class="recent-card">
+🖼 Image Resize
+</div>
+
+<div class="recent-card">
+📱 QR Scanner
+</div>
+
+<div class="recent-card">
+🧮 Scientific Calculator
+</div>
+
+</section>
+
+<section class="section-title">
+
+<h2>📊 App Statistics</h2>
+
+<p>XTra Tech Overview</p>
+
+</section>
+
+<section class="stats-grid">
+
+<div class="stat-card">
+
+<h3>100+</h3>
+
+<p>Tools</p>
+
+</div>
+
+<div class="stat-card">
+
+<h3>50K+</h3>
+
+<p>Users</p>
+
+</div>
+
+<div class="stat-card">
+
+<h3>99%</h3>
+
+<p>Fast</p>
+
+</div>
+
+<div class="stat-card">
+
+<h3>24×7</h3>
+
+<p>Available</p>
+
+</div>
+
+</section>
+
+<section class="section-title">
+
+<h2>🚀 Coming Soon</h2>
+
+</section>
+
+<section class="coming-soon">
+
+<div class="coming-card">
+🎤 AI Voice
+</div>
+
+<div class="coming-card">
+🧠 AI Image Generator
+</div>
+
+<div class="coming-card">
+🎬 Video Editor
+</div>
+
+<div class="coming-card">
+☁ Cloud Storage
+</div>
+
+<div class="coming-card">
+🤝 Community
+</div>
+
+<div class="coming-card">
+💬 Live Chat
+</div>
+
+</section>
+
+<footer>
+
+<div class="footer-logo">
+
+⚡ XTra Tech
+
+</div>
+
+<p>
+
+Tech Made Simple
+
+</p>
+
+<p>
+
+Version 1.0
+
+</p>
+
+<p>
+
+Made with ❤️ by Vaibhav
+
+</p>
+
+</footer>
+
+<button class="fab">
+
+⚡
+
+</button>
+
+<nav class="bottom-nav">
+
+<a class="active">
 
 🏠
 
-<p>Home</p>
+<span>Home</span>
 
-</div>
+</a>
 
-<div>
+<a>
 
 🔍
 
-<p>Explore</p>
+<span>Explore</span>
 
-</div>
+</a>
 
-<div>
+<a>
 
 ❤️
 
-<p>Saved</p>
+<span>Saved</span>
 
-</div>
+</a>
 
-<div>
+<a>
+
+⚙
+
+<span>Settings</span>
+
+</a>
+
+<a>
 
 👤
 
-<p>Profile</p>
+<span>Profile</span>
 
-</div>
+</a>
 
 </nav>
 
 <script src="script.js"></script>
 
 </body>
+
 </html>

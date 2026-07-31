@@ -1,71 +1,161 @@
-// XTra Tech v1.0
+// =========================
+// XTra Tech v1
+// =========================
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded",()=>{
 
-const button = document.querySelector(".start-btn");
+// Welcome (only first time)
 
-const cards = document.querySelectorAll(".feature-card");
+if(!localStorage.getItem("visited")){
 
-// Fade animation
-cards.forEach((card,index)=>{
-    card.style.opacity="0";
-    card.style.transform="translateY(40px)";
+setTimeout(()=>{
 
-    setTimeout(()=>{
-        card.style.transition="0.6s ease";
-        card.style.opacity="1";
-        card.style.transform="translateY(0)";
-    },200*index);
-});
+alert("👋 Welcome to XTra Tech!\n\nTech Made Simple 🚀");
 
-// Button click
-button.addEventListener("click",()=>{
+},700);
 
-    button.innerHTML="Loading...";
+localStorage.setItem("visited","yes");
 
-    button.disabled=true;
+}
 
-    setTimeout(()=>{
+// Explore Button
 
-        window.scrollTo({
-            top:document.querySelector(".features").offsetTop-20,
-            behavior:"smooth"
-        });
+const start=document.querySelector(".start-btn");
 
-        button.innerHTML="Explore Tools";
-        button.disabled=false;
+start.onclick=()=>{
 
-    },700);
+document.querySelector(".grid-tools").scrollIntoView({
+
+behavior:"smooth"
 
 });
 
-// Card click animation
+};
+
+// Card Animation
+
+const cards=document.querySelectorAll(".card");
+
+const observer=new IntersectionObserver(entries=>{
+
+entries.forEach(entry=>{
+
+if(entry.isIntersecting){
+
+entry.target.style.opacity="1";
+
+entry.target.style.transform="translateY(0)";
+
+}
+
+});
+
+});
 
 cards.forEach(card=>{
 
-    card.addEventListener("click",()=>{
+card.style.opacity="0";
 
-        card.style.transform="scale(.95)";
+card.style.transform="translateY(60px)";
 
-        setTimeout(()=>{
-            card.style.transform="";
-        },150);
+card.style.transition=".6s";
 
-        alert(card.querySelector("h3").innerText+" page coming soon!");
-
-    });
+observer.observe(card);
 
 });
 
-// Floating logo effect
+// Click Animation
 
-const logo=document.querySelector(".logo");
+cards.forEach(card=>{
 
-let deg=0;
+card.addEventListener("click",()=>{
+
+card.style.transform="scale(.95)";
+
+setTimeout(()=>{
+
+card.style.transform="scale(1)";
+
+},150);
+
+const tool=card.querySelector("h3").innerText;
+
+alert(tool+" will open here in next update 🚀");
+
+});
+
+});
+
+// Live Search
+
+const search=document.querySelector("input");
+
+search.addEventListener("keyup",()=>{
+
+const value=search.value.toLowerCase();
+
+cards.forEach(card=>{
+
+const text=card.innerText.toLowerCase();
+
+if(text.includes(value)){
+
+card.style.display="block";
+
+}else{
+
+card.style.display="none";
+
+}
+
+});
+
+});
+
+// Bottom Navigation
+
+document.querySelectorAll("nav div").forEach(item=>{
+
+item.addEventListener("click",()=>{
+
+document.querySelectorAll("nav div").forEach(i=>{
+
+i.style.color="white";
+
+});
+
+item.style.color="#00E5FF";
+
+});
+
+});
+
+// Floating Logo
+
+const logo=document.querySelector(".logo-icon");
+
+let angle=0;
 
 setInterval(()=>{
-    deg+=1;
-    logo.style.transform=`rotate(${Math.sin(deg/20)*5}deg)`;
+
+angle++;
+
+logo.style.transform=
+
+`rotate(${Math.sin(angle/15)*8}deg)`;
+
 },30);
 
 });
+
+// Register Service Worker
+
+if("serviceWorker" in navigator){
+
+window.addEventListener("load",()=>{
+
+navigator.serviceWorker.register("sw.js");
+
+});
+
+}

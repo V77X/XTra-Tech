@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Translator - XTra Tech</title>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+.translator{
+max-width:700px;
+margin:30px auto;
+padding:20px;
+}
+
+.box{
+background:rgba(255,255,255,.08);
+backdrop-filter:blur(20px);
+border-radius:20px;
+padding:20px;
+margin-bottom:20px;
+}
+
+textarea{
+width:100%;
+height:160px;
+background:transparent;
+border:none;
+outline:none;
+resize:none;
+font-size:18px;
+color:white;
+}
+
+select{
+width:100%;
+padding:14px;
+border:none;
+border-radius:12px;
+margin:10px 0;
+background:#111;
+color:white;
+}
+
+button{
+width:100%;
+padding:16px;
+border:none;
+border-radius:15px;
+font-size:18px;
+cursor:pointer;
+background:linear-gradient(135deg,#00E5FF,#8A2BE2,#FF3CAC);
+color:white;
+margin-top:15px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="translator">
+
+<h1>🌐 Translator</h1>
+
+<div class="box">
+
+<textarea
+id="input"
+placeholder="Type text here..."></textarea>
+
+<select id="from">
+
+<option value="auto">Detect Language</option>
+<option value="en">English</option>
+<option value="hi">Hindi</option>
+<option value="fr">French</option>
+<option value="es">Spanish</option>
+
+</select>
+
+<select id="to">
+
+<option value="hi">Hindi</option>
+<option value="en">English</option>
+<option value="fr">French</option>
+<option value="es">Spanish</option>
+
+</select>
+
+<button onclick="translateText()">
+
+Translate
+
+</button>
+
+</div>
+
+<div class="box">
+
+<textarea
+id="output"
+readonly
+placeholder="Translation appears here..."></textarea>
+
+</div>
+
+</div>
+
+<script>
+
+function translateText(){
+
+alert("Translator API will be connected in the next step.");
+
+}
+
+</script>
+
+</body>
+</html>

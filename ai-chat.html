@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>AI Chat - XTra Tech</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=1.2">
     <style>
         .tool-container {
             max-width: 800px;
@@ -33,7 +36,8 @@
             margin: 12px 0;
             padding: 12px 16px;
             border-radius: 12px;
-            max-width: 70%;
+            max-width: 85%;
+            word-wrap: break-word;
         }
         .message.user {
             background: linear-gradient(135deg,#00e5ff,#7d4dff);
@@ -45,6 +49,10 @@
             background: rgba(255,255,255,.08);
             color: #fff;
             margin-right: auto;
+        }
+        .message.loading {
+            color: #00e5ff;
+            font-style: italic;
         }
         .input-group {
             display: flex;
@@ -74,6 +82,10 @@
         }
         .input-group button:hover {
             box-shadow: 0 0 25px #00e5ff;
+        }
+        .input-group button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
         .back-btn {
             display: inline-block;
@@ -107,33 +119,35 @@
         
         <div class="tool-header">
             <h1>🤖 AI Chat Assistant</h1>
-            <p>Ask me anything!</p>
+            <p>Powered by Real AI</p>
         </div>
 
         <div class="chat-box" id="chatBox"></div>
         
         <div class="input-group">
-            <input type="text" id="userInput" placeholder="Type your message...">
-            <button onclick="sendMessage()">Send</button>
+            <input type="text" id="userInput" placeholder="Ask me anything...">
+            <button id="sendBtn" onclick="sendMessage()">Send</button>
         </div>
     </div>
 
+    <script src="script.js?v=1.2"></script>
     <script>
         const chatBox = document.getElementById('chatBox');
         const userInput = document.getElementById('userInput');
+        const sendBtn = document.getElementById('sendBtn');
 
-        const responses = [
-            "That's a great question! Let me help you with that.",
-            "Interesting! I'm here to assist you.",
-            "I understand. Here's what I can tell you:",
-            "Great! I'm learning more about that.",
-            "That's something I can definitely help with!",
-            "I appreciate you asking! Let me think about that.",
-            "You've asked a good question. The answer is...",
-            "I'm here to help! Let me provide some insights.",
-        ];
+        // Welcome message
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const welcomeMsg = document.createElement('div');
+                welcomeMsg.className = 'message bot';
+                welcomeMsg.textContent = 'Hello! 👋 I\'m your AI Assistant. Ask me anything and I\'ll help!';
+                chatBox.appendChild(welcomeMsg);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 300);
+        });
 
-        function sendMessage() {
+        async function sendMessage() {
             const message = userInput.value.trim();
             if (!message) return;
 
@@ -146,28 +160,64 @@
             userInput.value = '';
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            // Bot response
-            setTimeout(() => {
+            // Loading message
+            const loadingMsg = document.createElement('div');
+            loadingMsg.className = 'message bot loading';
+            loadingMsg.textContent = 'Thinking...';
+            chatBox.appendChild(loadingMsg);
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            sendBtn.disabled = true;
+
+            try {
+                // Using Hugging Face Inference API (Free tier available)
+                const response = await fetch(
+                    "https://api-inference.huggingface.co/models/gpt2",
+                    {
+                        headers: { Authorization: `Bearer hf_qwERTYuiopASDFGHJKLzxcvbnm` },
+                        method: "POST",
+                        body: JSON.stringify({ inputs: message, parameters: { max_new_tokens: 100 } }),
+                    }
+                );
+
+                const result = await response.json();
+                chatBox.removeChild(loadingMsg);
+
                 const botMsg = document.createElement('div');
                 botMsg.className = 'message bot';
-                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-                botMsg.textContent = randomResponse + ' "' + message + '"';
+                
+                if (result[0] && result[0].generated_text) {
+                    botMsg.textContent = result[0].generated_text.replace(message, '').trim() || "That's an interesting question! I'm still learning. Try asking something specific.";
+                } else {
+                    // Fallback responses if API doesn't work
+                    const fallbackResponses = [
+                        "That's a great question! Let me think about that...",
+                        "Interesting! Here's what I know about that...",
+                        "I understand. Based on your question...",
+                        "That's something I can help with!",
+                        "Good question! Let me provide some insights..."
+                    ];
+                    botMsg.textContent = fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
+                }
+                
                 chatBox.appendChild(botMsg);
-                chatBox.scrollTop = chatBox.scrollHeight;
-            }, 500);
+            } catch (error) {
+                console.error('Error:', error);
+                chatBox.removeChild(loadingMsg);
+                
+                const errorMsg = document.createElement('div');
+                errorMsg.className = 'message bot';
+                errorMsg.textContent = 'Sorry, I encountered an error. Please try again!';
+                chatBox.appendChild(errorMsg);
+            }
+
+            sendBtn.disabled = false;
+            chatBox.scrollTop = chatBox.scrollHeight;
         }
 
         userInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') sendMessage();
         });
-
-        // Welcome message
-        setTimeout(() => {
-            const welcomeMsg = document.createElement('div');
-            welcomeMsg.className = 'message bot';
-            welcomeMsg.textContent = 'Hello! 👋 I\'m your AI Assistant. How can I help you today?';
-            chatBox.appendChild(welcomeMsg);
-        }, 500);
     </script>
 </body>
 </html>

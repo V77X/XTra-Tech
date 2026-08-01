@@ -36,7 +36,7 @@ async function sendMessage() {
 
         loading.remove();
 
-        const reply = data.reply || data.error || "No response.";
+        const reply = data.reply || JSON.stringify(data);
 
         addMessage(reply, "bot");
 

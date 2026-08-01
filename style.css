@@ -19,7 +19,7 @@ min-height:100vh;
 position:relative;
 }
 
-/* Animated Background */
+/* Static Background */
 .bg{
 position:fixed;
 top:0;
@@ -28,55 +28,27 @@ width:100%;
 height:100%;
 z-index:-5;
 overflow:hidden;
+background:#000;
+}
+.bg::before{
+content:"";
+position:absolute;
+inset:0;
 background:
-linear-gradient(135deg,#08090f,#0a0c14,#0d0f1a);
+radial-gradient(ellipse 900px 500px at 50% -10%,rgba(0,229,255,.16),transparent 70%),
+radial-gradient(ellipse 700px 400px at 100% 0%,rgba(125,77,255,.12),transparent 70%);
 }
 .circle{
-position:absolute;
-border-radius:50%;
-filter:blur(80px);
-animation:float 12s infinite ease-in-out;
-opacity:.35;
-}
-.c1{
-width:320px;
-height:320px;
-background:#00e5ff;
-top:-80px;
-left:-80px;
-}
-.c2{
-width:260px;
-height:260px;
-background:#7d4dff;
-bottom:-70px;
-right:-70px;
-animation-delay:2s;
-}
-.c3{
-width:220px;
-height:220px;
-background:#00e5ff;
-top:45%;
-left:65%;
-animation-delay:4s;
-}
-.c4{
-width:180px;
-height:180px;
-background:#7d4dff;
-top:65%;
-left:10%;
-animation-delay:6s;
+display:none;
 }
 .grid{
 position:absolute;
 inset:0;
 background-image:
-linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),
-linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);
+linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
 background-size:40px 40px;
-opacity:.2;
+opacity:.3;
 }
 
 /* Header */
@@ -257,21 +229,20 @@ flex-wrap:wrap;
 .primary{
 padding:14px 26px;
 border:none;
-border-radius:14px;
+border-radius:6px;
 font-weight:700;
 cursor:pointer;
 background:linear-gradient(135deg,#00e5ff,#7d4dff);
 color:#000;
-box-shadow:0 0 25px rgba(0,229,255,.5);
 }
 .secondary{
 padding:14px 26px;
 border:none;
-border-radius:14px;
+border-radius:6px;
 cursor:pointer;
-background:rgba(255,255,255,.06);
+background:rgba(255,255,255,.04);
 color:#fff;
-border:1px solid rgba(255,255,255,.1);
+border:1px solid rgba(255,255,255,.12);
 }
 .phone{
 width:260px;
@@ -333,11 +304,9 @@ display:flex;
 align-items:center;
 gap:12px;
 padding:18px 20px;
-border-radius:20px;
-background:rgba(255,255,255,.05);
-backdrop-filter:blur(18px);
-border:1px solid rgba(255,255,255,.08);
-box-shadow:0 0 30px rgba(0,229,255,.08);
+border-radius:6px;
+background:rgba(255,255,255,.04);
+border:1px solid rgba(255,255,255,.1);
 }
 .search-box span{
 font-size:22px;
@@ -385,21 +354,19 @@ padding:22px;
 .quick-card{
 padding:28px 20px;
 text-align:center;
-border-radius:22px;
+border-radius:6px;
 font-size:34px;
-background:rgba(255,255,255,.04);
-backdrop-filter:blur(20px);
-transition:.35s;
-border:1px solid rgba(255,255,255,.07);
+background:rgba(255,255,255,.03);
+transition:.25s;
+border:1px solid rgba(255,255,255,.08);
 }
 .quick-card h3{
 margin-top:15px;
 font-size:18px;
 }
 .quick-card:hover{
-transform:translateY(-8px) scale(1.03);
-box-shadow:0 0 30px rgba(0,229,255,.45);
-border-color:rgba(0,229,255,.4);
+transform:translateY(-4px);
+border-color:rgba(0,229,255,.6);
 }
 
 /* ===============================
@@ -413,16 +380,14 @@ padding:22px;
 }
 .feature-card{
 padding:28px;
-border-radius:24px;
-background:rgba(255,255,255,.04);
-border:1px solid rgba(255,255,255,.07);
-transition:.35s;
-backdrop-filter:blur(20px);
+border-radius:6px;
+background:rgba(255,255,255,.03);
+border:1px solid rgba(255,255,255,.08);
+transition:.25s;
 }
 .feature-card:hover{
-transform:translateY(-10px);
-box-shadow:0 0 35px rgba(0,229,255,.35);
-border-color:rgba(0,229,255,.4);
+transform:translateY(-4px);
+border-color:rgba(0,229,255,.6);
 }
 .feature-card .icon{
 font-size:42px;
@@ -447,12 +412,12 @@ padding:22px;
 }
 .category{
 padding:26px;
-border-radius:22px;
+border-radius:6px;
 text-align:center;
-background:rgba(255,255,255,.04);
-transition:.35s;
+background:rgba(255,255,255,.03);
+transition:.25s;
 font-size:38px;
-border:1px solid rgba(255,255,255,.07);
+border:1px solid rgba(255,255,255,.08);
 }
 .category h3{
 margin:14px 0 8px;
@@ -463,10 +428,8 @@ font-size:14px;
 opacity:.75;
 }
 .category:hover{
-transform:translateY(-8px);
-background:linear-gradient(135deg,#00e5ff22,#7d4dff22);
-box-shadow:0 0 30px rgba(125,77,255,.35);
-border-color:rgba(125,77,255,.4);
+transform:translateY(-4px);
+border-color:rgba(125,77,255,.6);
 }
 
 /* ===============================
@@ -483,19 +446,18 @@ display:flex;
 justify-content:space-between;
 align-items:center;
 padding:18px 22px;
-border-radius:18px;
-background:rgba(255,255,255,.04);
-border:1px solid rgba(255,255,255,.07);
-transition:.3s;
+border-radius:6px;
+background:rgba(255,255,255,.03);
+border:1px solid rgba(255,255,255,.08);
+transition:.25s;
 }
 .trend-card:hover{
-transform:translateX(8px);
-box-shadow:0 0 28px rgba(0,229,255,.3);
-border-color:rgba(0,229,255,.4);
+transform:translateX(4px);
+border-color:rgba(0,229,255,.6);
 }
 .trend-card span{
 padding:6px 14px;
-border-radius:50px;
+border-radius:4px;
 font-size:12px;
 font-weight:700;
 background:#00e5ff;
@@ -514,15 +476,14 @@ padding:22px;
 .favorite-card{
 padding:25px;
 text-align:center;
-border-radius:20px;
-background:rgba(255,255,255,.04);
-transition:.3s;
-border:1px solid rgba(255,255,255,.07);
+border-radius:6px;
+background:rgba(255,255,255,.03);
+transition:.25s;
+border:1px solid rgba(255,255,255,.08);
 }
 .favorite-card:hover{
-transform:scale(1.04);
-box-shadow:0 0 28px rgba(125,77,255,.4);
-border-color:rgba(125,77,255,.4);
+transform:translateY(-4px);
+border-color:rgba(125,77,255,.6);
 }
 
 /* ===============================
@@ -536,15 +497,14 @@ padding:22px;
 }
 .recent-card{
 padding:22px;
-border-radius:20px;
-background:rgba(255,255,255,.04);
-border:1px solid rgba(255,255,255,.07);
-transition:.3s;
+border-radius:6px;
+background:rgba(255,255,255,.03);
+border:1px solid rgba(255,255,255,.08);
+transition:.25s;
 }
 .recent-card:hover{
-transform:translateY(-8px);
-box-shadow:0 0 30px rgba(0,229,255,.35);
-border-color:rgba(0,229,255,.4);
+transform:translateY(-4px);
+border-color:rgba(0,229,255,.6);
 }
 
 /* ===============================
@@ -559,9 +519,10 @@ padding:22px;
 .stat-card{
 padding:30px;
 text-align:center;
-border-radius:22px;
-background:rgba(255,255,255,.04);
-border:1px solid rgba(255,255,255,.07);
+border-radius:6px;
+background:rgba(255,255,255,.03);
+border:1px solid rgba(255,255,255,.08);
+transition:.25s;
 }
 .stat-card h3{
 font-size:34px;
@@ -569,9 +530,8 @@ margin-bottom:10px;
 color:#00e5ff;
 }
 .stat-card:hover{
-box-shadow:0 0 35px rgba(0,229,255,.35);
-transform:translateY(-8px);
-border-color:rgba(0,229,255,.4);
+transform:translateY(-4px);
+border-color:rgba(0,229,255,.6);
 }/* ==========================================
 XTRA TECH PREMIUM CSS
 Part 3 (Final)
@@ -587,17 +547,15 @@ padding:22px;
 .coming-card{
 padding:28px;
 text-align:center;
-border-radius:22px;
-background:rgba(255,255,255,.04);
-backdrop-filter:blur(20px);
-border:1px solid rgba(255,255,255,.07);
-transition:.35s;
+border-radius:6px;
+background:rgba(255,255,255,.03);
+border:1px solid rgba(255,255,255,.08);
+transition:.25s;
 cursor:pointer;
 }
 .coming-card:hover{
-transform:translateY(-10px);
-box-shadow:0 0 35px rgba(125,77,255,.35);
-border-color:rgba(125,77,255,.4);
+transform:translateY(-4px);
+border-color:rgba(125,77,255,.6);
 }
 
 /* Footer */

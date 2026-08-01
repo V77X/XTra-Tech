@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Translator - XTra Tech</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=1.2">
     <style>
         .tool-container {
             max-width: 800px;
@@ -51,6 +54,7 @@
         }
         .translate-section select {
             margin-bottom: 15px;
+            cursor: pointer;
         }
         .translate-section textarea::placeholder {
             color: #b8bfd6;
@@ -69,6 +73,15 @@
         }
         .translate-btn:hover {
             box-shadow: 0 0 25px #00e5ff;
+        }
+        .translate-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .loading {
+            text-align: center;
+            color: #00e5ff;
+            font-weight: 600;
         }
         .back-btn {
             display: inline-block;
@@ -102,7 +115,7 @@
         
         <div class="tool-header">
             <h1>🌐 Translator</h1>
-            <p>Translate between 50+ languages</p>
+            <p>Translate between 100+ languages</p>
         </div>
 
         <div class="translator-grid">
@@ -121,6 +134,7 @@
                     <option value="zh">Chinese</option>
                     <option value="ar">Arabic</option>
                     <option value="hi">Hindi</option>
+                    <option value="auto">Auto Detect</option>
                 </select>
                 <textarea id="inputText" placeholder="Enter text to translate..."></textarea>
             </div>
@@ -145,93 +159,51 @@
             </div>
         </div>
 
-        <button class="translate-btn" onclick="translateText()">🔄 Translate</button>
+        <button class="translate-btn" id="translateBtn" onclick="translateText()">🔄 Translate</button>
+        <div id="loadingMsg" class="loading" style="display: none; margin-top: 15px;">Translating...</div>
     </div>
 
+    <script src="script.js?v=1.2"></script>
     <script>
-        const translations = {
-            'hello': {
-                'es': 'hola',
-                'fr': 'bonjour',
-                'de': 'hallo',
-                'it': 'ciao',
-                'pt': 'olá',
-                'ru': 'привет',
-                'ja': 'こんにちは',
-                'ko': '안녕하세요',
-                'zh': '你好',
-                'ar': 'مرحبا',
-                'hi': 'नमस्ते'
-            },
-            'thank you': {
-                'es': 'gracias',
-                'fr': 'merci',
-                'de': 'danke',
-                'it': 'grazie',
-                'pt': 'obrigado',
-                'ru': 'спасибо',
-                'ja': 'ありがとう',
-                'ko': '감사합니다',
-                'zh': '谢谢',
-                'ar': 'شكراً',
-                'hi': 'धन्यवाद'
-            },
-            'good morning': {
-                'es': 'buenos días',
-                'fr': 'bonjour',
-                'de': 'guten morgen',
-                'it': 'buongiorno',
-                'pt': 'bom dia',
-                'ru': 'доброе утро',
-                'ja': 'おはよう',
-                'ko': '좋은 아침',
-                'zh': '早上好',
-                'ar': 'صباح الخير',
-                'hi': 'सुप्रभात'
-            },
-            'good night': {
-                'es': 'buenas noches',
-                'fr': 'bonne nuit',
-                'de': 'gute nacht',
-                'it': 'buonanotte',
-                'pt': 'boa noite',
-                'ru': 'спокойной ночи',
-                'ja': 'おやすみなさい',
-                'ko': '안녕히 주무세요',
-                'zh': '晚安',
-                'ar': 'تصبح على خير',
-                'hi': 'शुभरात्रि'
-            }
-        };
-
-        function translateText() {
-            const inputText = document.getElementById('inputText').value.toLowerCase().trim();
+        async function translateText() {
+            const inputText = document.getElementById('inputText').value.trim();
             const fromLang = document.getElementById('fromLang').value;
             const toLang = document.getElementById('toLang').value;
             const outputText = document.getElementById('outputText');
+            const btn = document.getElementById('translateBtn');
+            const loading = document.getElementById('loadingMsg');
 
             if (!inputText) {
                 outputText.value = 'Please enter text to translate';
                 return;
             }
 
-            let result = '';
-            for (let key in translations) {
-                if (inputText.includes(key)) {
-                    result = translations[key][toLang] || 'Translation not available';
-                    break;
+            btn.disabled = true;
+            loading.style.display = 'block';
+
+            try {
+                // Using MyMemory Translation API (Free, No Key Required)
+                const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(inputText)}&langpair=${fromLang}|${toLang}`;
+                
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.responseStatus === 200) {
+                    outputText.value = data.responseData.translatedText;
+                } else {
+                    outputText.value = 'Translation failed. Please try again.';
                 }
+            } catch (error) {
+                console.error('Error:', error);
+                outputText.value = 'Error connecting to translation service. Please check your internet connection.';
+            } finally {
+                btn.disabled = false;
+                loading.style.display = 'none';
             }
-
-            if (!result) {
-                result = 'Demo mode - only basic words like "hello", "thank you", "good morning", "good night" are translated. Full translation requires API integration.';
-            }
-
-            outputText.value = result;
         }
 
-        document.getElementById('inputText').addEventListener('keyup', () => {
-            if (event.key === 'Enter') translateText();
+        document.getElementById('inputText').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && e.ctrlKey) translateText();
         });
     </script>
 </body>

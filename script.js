@@ -1,3 +1,9 @@
+function closeDownloadPopup() {
+    document.getElementById("downloadPopup").style.display = "none";
+}
+
+
+
 // ==========================
 // XTra Tech Script
 // ==========================

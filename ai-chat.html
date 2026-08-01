@@ -1,28 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>XTra Tech AI</title>
-  <link rel="stylesheet" href="ai.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XTra Tech AI</title>
+
+<link rel="stylesheet" href="ai.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 </head>
+
 <body>
 
-<div class="chat-container">
+<div class="chat-app">
 
-  <div class="header">
-    <h2>XTra Tech AI</h2>
-  </div>
+<header class="topbar">
 
-  <div id="chatBox" class="chat-box"></div>
+<div class="logo">
+🤖 XTra Tech AI
+</div>
 
-  <div class="input-area">
-    <input id="userInput" type="text" placeholder="Ask anything...">
-    <button id="sendBtn">Send</button>
-  </div>
+<button id="clearChat">
+Clear
+</button>
+
+</header>
+
+<div id="chatBox" class="chat-box">
+
+<div class="message bot">
+Hello 👋<br><br>
+I'm XTra Tech AI.<br>
+How can I help you today?
+</div>
+
+</div>
+
+<div class="input-area">
+
+<textarea
+id="userInput"
+rows="1"
+placeholder="Message XTra Tech AI..."
+></textarea>
+
+<button id="sendBtn">
+➤
+</button>
+
+</div>
 
 </div>
 
 <script src="ai.js"></script>
+
 </body>
 </html>

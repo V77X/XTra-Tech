@@ -221,29 +221,6 @@ window.addEventListener("scroll", () => {
 
 });
 
-// Service Worker
-
-if ("serviceWorker" in navigator) {
-
-  window.addEventListener("load", () => {
-
-    navigator.serviceWorker
-      .register("./sw.js")
-      .then(() => {
-
-        console.log("Service Worker Registered");
-
-      })
-      .catch(err => {
-
-        console.log("SW Error:", err);
-
-      });
-
-  });
-
-}
-
 // Sidebar Links
 
 document.querySelectorAll(".side-links a").forEach(link => {
@@ -257,7 +234,6 @@ document.querySelectorAll(".side-links a").forEach(link => {
   });
 
 });
-
 // Keyboard Shortcut
 
 document.addEventListener("keydown", e => {
@@ -271,14 +247,3 @@ document.addEventListener("keydown", e => {
 });
 
 console.log("XTra Tech Ready 🚀");
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./service-worker.js")
-      .then((registration) => {
-        console.log("Service Worker registered:", registration.scope);
-      })
-      .catch((error) => {
-        console.log("Service Worker registration failed:", error);
-      });
-  });
-}

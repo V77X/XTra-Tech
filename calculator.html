@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator - XTra Tech</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .tool-container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-top: 80px;
+        }
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .tool-header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        .calculator {
+            background: rgba(255,255,255,.05);
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,.08);
+        }
+        .display {
+            background: rgba(0,229,255,.1);
+            border: 2px solid rgba(0,229,255,.3);
+            border-radius: 14px;
+            padding: 20px;
+            text-align: right;
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #00e5ff;
+            word-wrap: break-word;
+            word-break: break-all;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+        .btn {
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,.08);
+            background: rgba(255,255,255,.05);
+            color: #fff;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .3s;
+        }
+        .btn:hover {
+            background: rgba(255,255,255,.1);
+            box-shadow: 0 0 15px rgba(0,229,255,.3);
+        }
+        .btn.operator {
+            background: linear-gradient(135deg,#00e5ff,#7d4dff);
+            color: #000;
+        }
+        .btn.operator:hover {
+            box-shadow: 0 0 20px #00e5ff;
+        }
+        .btn.equals {
+            background: linear-gradient(135deg,#ff00c8,#ff6d00);
+            color: #fff;
+            grid-column: span 2;
+        }
+        .btn.equals:hover {
+            box-shadow: 0 0 20px #ff00c8;
+        }
+        .btn.clear {
+            background: #ff3333;
+            color: #fff;
+            grid-column: span 2;
+        }
+        .btn.clear:hover {
+            box-shadow: 0 0 20px #ff3333;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background: rgba(255,255,255,.08);
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .back-btn:hover {
+            background: #00e5ff;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg">
+        <div class="circle c1"></div>
+        <div class="circle c2"></div>
+        <div class="circle c3"></div>
+        <div class="circle c4"></div>
+        <div class="grid"></div>
+    </div>
+
+    <div class="tool-container">
+        <button class="back-btn" onclick="window.location.href='index.html'">← Back Home</button>
+        
+        <div class="tool-header">
+            <h1>🧮 Calculator</h1>
+            <p>Scientific Calculator</p>
+        </div>
+
+        <div class="calculator">
+            <div class="display" id="display">0</div>
+            <div class="buttons">
+                <button class="btn clear" onclick="clearDisplay()">C</button>
+                <button class="btn operator" onclick="appendOperator('/')">/</button>
+                <button class="btn operator" onclick="appendOperator('*')">*</button>
+                
+                <button class="btn" onclick="appendNumber('7')">7</button>
+                <button class="btn" onclick="appendNumber('8')">8</button>
+                <button class="btn" onclick="appendNumber('9')">9</button>
+                <button class="btn operator" onclick="appendOperator('-')">-</button>
+                
+                <button class="btn" onclick="appendNumber('4')">4</button>
+                <button class="btn" onclick="appendNumber('5')">5</button>
+                <button class="btn" onclick="appendNumber('6')">6</button>
+                <button class="btn operator" onclick="appendOperator('+')">+</button>
+                
+                <button class="btn" onclick="appendNumber('1')">1</button>
+                <button class="btn" onclick="appendNumber('2')">2</button>
+                <button class="btn" onclick="appendNumber('3')">3</button>
+                <button class="btn operator" onclick="appendOperator('.')">.  </button>
+                
+                <button class="btn" onclick="appendNumber('0')" style="grid-column: span 2;">0</button>
+                <button class="btn equals" onclick="calculate()">=</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let display = document.getElementById('display');
+        let currentValue = '0';
+        let operator = null;
+        let previousValue = null;
+        let shouldResetDisplay = false;
+
+        function updateDisplay() {
+            display.textContent = currentValue;
+        }
+
+        function appendNumber(num) {
+            if (shouldResetDisplay) {
+                currentValue = num;
+                shouldResetDisplay = false;
+            } else {
+                currentValue = currentValue === '0' ? num : currentValue + num;
+            }
+            updateDisplay();
+        }
+
+        function appendOperator(op) {
+            if (operator !== null) {
+                calculate();
+            }
+            previousValue = currentValue;
+            operator = op;
+            shouldResetDisplay = true;
+        }
+
+        function calculate() {
+            if (operator === null || previousValue === null) return;
+
+            let result;
+            const prev = parseFloat(previousValue);
+            const current = parseFloat(currentValue);
+
+            switch (operator) {
+                case '+': result = prev + current; break;
+                case '-': result = prev - current; break;
+                case '*': result = prev * current; break;
+                case '/': result = prev / current; break;
+                case '.': result = prev; break;
+                default: return;
+            }
+
+            currentValue = result.toString();
+            operator = null;
+            shouldResetDisplay = true;
+            updateDisplay();
+        }
+
+        function clearDisplay() {
+            currentValue = '0';
+            operator = null;
+            previousValue = null;
+            shouldResetDisplay = false;
+            updateDisplay();
+        }
+    </script>
+</body>
+</html>

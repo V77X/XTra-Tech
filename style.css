@@ -422,6 +422,7 @@ border:1px solid rgba(255,255,255,.08);
 .category h3{
 margin:14px 0 8px;
 font-size:19px;
+  color:#000;
 }
 .category p{
 font-size:14px;

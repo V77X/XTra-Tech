@@ -1,122 +1,238 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Translator - XTra Tech</title>
-
-<link rel="stylesheet" href="style.css">
-
-<style>
-.translator{
-max-width:700px;
-margin:30px auto;
-padding:20px;
-}
-
-.box{
-background:rgba(255,255,255,.08);
-backdrop-filter:blur(20px);
-border-radius:20px;
-padding:20px;
-margin-bottom:20px;
-}
-
-textarea{
-width:100%;
-height:160px;
-background:transparent;
-border:none;
-outline:none;
-resize:none;
-font-size:18px;
-color:white;
-}
-
-select{
-width:100%;
-padding:14px;
-border:none;
-border-radius:12px;
-margin:10px 0;
-background:#111;
-color:white;
-}
-
-button{
-width:100%;
-padding:16px;
-border:none;
-border-radius:15px;
-font-size:18px;
-cursor:pointer;
-background:linear-gradient(135deg,#00E5FF,#8A2BE2,#FF3CAC);
-color:white;
-margin-top:15px;
-}
-</style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translator - XTra Tech</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .tool-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-top: 80px;
+        }
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .tool-header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        .translator-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .translate-section {
+            background: rgba(255,255,255,.05);
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,.08);
+        }
+        .translate-section label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        .translate-section select,
+        .translate-section textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 10px;
+            background: rgba(255,255,255,.05);
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            resize: vertical;
+            min-height: 150px;
+        }
+        .translate-section select {
+            margin-bottom: 15px;
+        }
+        .translate-section textarea::placeholder {
+            color: #b8bfd6;
+        }
+        .translate-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg,#00e5ff,#7d4dff);
+            border: none;
+            border-radius: 14px;
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: .3s;
+        }
+        .translate-btn:hover {
+            box-shadow: 0 0 25px #00e5ff;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background: rgba(255,255,255,.08);
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .back-btn:hover {
+            background: #00e5ff;
+            color: #000;
+        }
+    </style>
 </head>
-
 <body>
+    <div class="bg">
+        <div class="circle c1"></div>
+        <div class="circle c2"></div>
+        <div class="circle c3"></div>
+        <div class="circle c4"></div>
+        <div class="grid"></div>
+    </div>
 
-<div class="translator">
+    <div class="tool-container">
+        <button class="back-btn" onclick="window.location.href='index.html'">← Back Home</button>
+        
+        <div class="tool-header">
+            <h1>🌐 Translator</h1>
+            <p>Translate between 50+ languages</p>
+        </div>
 
-<h1>🌐 Translator</h1>
+        <div class="translator-grid">
+            <div class="translate-section">
+                <label>From:</label>
+                <select id="fromLang">
+                    <option value="en">English</option>
+                    <option value="es">Spanish</option>
+                    <option value="fr">French</option>
+                    <option value="de">German</option>
+                    <option value="it">Italian</option>
+                    <option value="pt">Portuguese</option>
+                    <option value="ru">Russian</option>
+                    <option value="ja">Japanese</option>
+                    <option value="ko">Korean</option>
+                    <option value="zh">Chinese</option>
+                    <option value="ar">Arabic</option>
+                    <option value="hi">Hindi</option>
+                </select>
+                <textarea id="inputText" placeholder="Enter text to translate..."></textarea>
+            </div>
 
-<div class="box">
+            <div class="translate-section">
+                <label>To:</label>
+                <select id="toLang">
+                    <option value="es">Spanish</option>
+                    <option value="en">English</option>
+                    <option value="fr">French</option>
+                    <option value="de">German</option>
+                    <option value="it">Italian</option>
+                    <option value="pt">Portuguese</option>
+                    <option value="ru">Russian</option>
+                    <option value="ja">Japanese</option>
+                    <option value="ko">Korean</option>
+                    <option value="zh">Chinese</option>
+                    <option value="ar">Arabic</option>
+                    <option value="hi">Hindi</option>
+                </select>
+                <textarea id="outputText" placeholder="Translation will appear here..." readonly></textarea>
+            </div>
+        </div>
 
-<textarea
-id="input"
-placeholder="Type text here..."></textarea>
+        <button class="translate-btn" onclick="translateText()">🔄 Translate</button>
+    </div>
 
-<select id="from">
+    <script>
+        const translations = {
+            'hello': {
+                'es': 'hola',
+                'fr': 'bonjour',
+                'de': 'hallo',
+                'it': 'ciao',
+                'pt': 'olá',
+                'ru': 'привет',
+                'ja': 'こんにちは',
+                'ko': '안녕하세요',
+                'zh': '你好',
+                'ar': 'مرحبا',
+                'hi': 'नमस्ते'
+            },
+            'thank you': {
+                'es': 'gracias',
+                'fr': 'merci',
+                'de': 'danke',
+                'it': 'grazie',
+                'pt': 'obrigado',
+                'ru': 'спасибо',
+                'ja': 'ありがとう',
+                'ko': '감사합니다',
+                'zh': '谢谢',
+                'ar': 'شكراً',
+                'hi': 'धन्यवाद'
+            },
+            'good morning': {
+                'es': 'buenos días',
+                'fr': 'bonjour',
+                'de': 'guten morgen',
+                'it': 'buongiorno',
+                'pt': 'bom dia',
+                'ru': 'доброе утро',
+                'ja': 'おはよう',
+                'ko': '좋은 아침',
+                'zh': '早上好',
+                'ar': 'صباح الخير',
+                'hi': 'सुप्रभात'
+            },
+            'good night': {
+                'es': 'buenas noches',
+                'fr': 'bonne nuit',
+                'de': 'gute nacht',
+                'it': 'buonanotte',
+                'pt': 'boa noite',
+                'ru': 'спокойной ночи',
+                'ja': 'おやすみなさい',
+                'ko': '안녕히 주무세요',
+                'zh': '晚安',
+                'ar': 'تصبح على خير',
+                'hi': 'शुभरात्रि'
+            }
+        };
 
-<option value="auto">Detect Language</option>
-<option value="en">English</option>
-<option value="hi">Hindi</option>
-<option value="fr">French</option>
-<option value="es">Spanish</option>
+        function translateText() {
+            const inputText = document.getElementById('inputText').value.toLowerCase().trim();
+            const fromLang = document.getElementById('fromLang').value;
+            const toLang = document.getElementById('toLang').value;
+            const outputText = document.getElementById('outputText');
 
-</select>
+            if (!inputText) {
+                outputText.value = 'Please enter text to translate';
+                return;
+            }
 
-<select id="to">
+            let result = '';
+            for (let key in translations) {
+                if (inputText.includes(key)) {
+                    result = translations[key][toLang] || 'Translation not available';
+                    break;
+                }
+            }
 
-<option value="hi">Hindi</option>
-<option value="en">English</option>
-<option value="fr">French</option>
-<option value="es">Spanish</option>
+            if (!result) {
+                result = 'Demo mode - only basic words like "hello", "thank you", "good morning", "good night" are translated. Full translation requires API integration.';
+            }
 
-</select>
+            outputText.value = result;
+        }
 
-<button onclick="translateText()">
-
-Translate
-
-</button>
-
-</div>
-
-<div class="box">
-
-<textarea
-id="output"
-readonly
-placeholder="Translation appears here..."></textarea>
-
-</div>
-
-</div>
-
-<script>
-
-function translateText(){
-
-alert("Translator API will be connected in the next step.");
-
-}
-
-</script>
-
+        document.getElementById('inputText').addEventListener('keyup', () => {
+            if (event.key === 'Enter') translateText();
+        });
+    </script>
 </body>
 </html>

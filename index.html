@@ -123,7 +123,7 @@
     /* Hero Section */
     .hero {
       text-align: center;
-      padding: 80px 20px;
+      padding: 30px 20px 60px; /* Reduced top padding to close the gap */
       position: relative;
     }
 
@@ -297,45 +297,58 @@
       color: var(--text-muted);
     }
 
-    /* Marquee Animation Classes (NEW) */
+    /* Horizontal Marquee Animation Classes */
     .marquee-container {
       overflow: hidden;
       width: 100%;
       position: relative;
-      /* Optional: Fades out the edges for a smoother look */
       -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
       mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
       margin-bottom: 40px;
-      padding: 10px 0; /* Extra padding so hover shadow isn't cut off */
+      padding: 10px 0;
     }
 
     .marquee-track {
       display: flex;
       gap: 16px;
       width: max-content;
-      /* Adjust time (30s) to make it scroll faster or slower */
       animation: marquee-scroll 30s linear infinite;
-    }
-
-    .marquee-track:hover {
-      animation-play-state: paused;
+      touch-action: pan-y; /* Allows vertical scrolling to pass through */
+      user-select: none; /* Prevents text selection on touch */
     }
 
     .category-card {
       flex: 0 0 auto;
-      width: 160px; /* Fixed width prevents stretching in horizontal flex */
+      width: 160px;
       align-items: center;
       text-align: center;
     }
 
     @keyframes marquee-scroll {
-      0% {
-        transform: translateX(0);
-      }
-      100% {
-        /* Translates exactly half the width minus half the gap for a seamless loop */
-        transform: translateX(calc(-50% - 8px)); 
-      }
+      0% { transform: translateX(0); }
+      100% { transform: translateX(calc(-50% - 8px)); }
+    }
+
+    /* Vertical Marquee Animation Classes (NEW) */
+    .trending-container {
+      overflow: hidden;
+      height: 280px; /* Adjust height based on how many you want to show */
+      position: relative;
+      -webkit-mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+      mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+      margin-bottom: 40px;
+    }
+
+    .trending-track {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      animation: marquee-vertical 15s linear infinite;
+    }
+
+    @keyframes marquee-vertical {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(calc(-50% - 8px)); } /* 8px is half the gap */
     }
 
     /* Minimal Line Cards (For Trending/Recent) */
@@ -774,32 +787,57 @@
       </div>
     </section>
 
-    <!-- Trending -->
+    <!-- Trending (Vertical Scroll) -->
     <div class="section-title">
       <h2>⭐ Trending</h2>
       <p>Most Used Today</p>
     </div>
-    <section class="grid" style="grid-template-columns: 1fr;">
-      <a href="ai-chat.html" class="line-card">
-        <div>🤖 AI Chat</div>
-        <span class="tag">HOT</span>
-      </a>
-      <a href="translator.html" class="line-card">
-        <div>🌐 Translator</div>
-        <span class="tag">NEW</span>
-      </a>
-      <div class="line-card">
-        <div>📄 PDF Converter</div>
-        <span class="tag">TOP</span>
+    <section class="trending-container">
+      <div class="trending-track">
+        <!-- Original Items -->
+        <a href="ai-chat.html" class="line-card">
+          <div>🤖 AI Chat</div>
+          <span class="tag">HOT</span>
+        </a>
+        <a href="translator.html" class="line-card">
+          <div>🌐 Translator</div>
+          <span class="tag">NEW</span>
+        </a>
+        <div class="line-card">
+          <div>📄 PDF Converter</div>
+          <span class="tag">TOP</span>
+        </div>
+        <div class="line-card">
+          <div>🖼 Image Compressor</div>
+          <span class="tag">FAST</span>
+        </div>
+        <a href="qr-generator.html" class="line-card">
+          <div>📱 QR Generator</div>
+          <span class="tag">FREE</span>
+        </a>
+
+        <!-- Duplicated Items for Seamless Scrolling -->
+        <a href="ai-chat.html" class="line-card" aria-hidden="true">
+          <div>🤖 AI Chat</div>
+          <span class="tag">HOT</span>
+        </a>
+        <a href="translator.html" class="line-card" aria-hidden="true">
+          <div>🌐 Translator</div>
+          <span class="tag">NEW</span>
+        </a>
+        <div class="line-card" aria-hidden="true">
+          <div>📄 PDF Converter</div>
+          <span class="tag">TOP</span>
+        </div>
+        <div class="line-card" aria-hidden="true">
+          <div>🖼 Image Compressor</div>
+          <span class="tag">FAST</span>
+        </div>
+        <a href="qr-generator.html" class="line-card" aria-hidden="true">
+          <div>📱 QR Generator</div>
+          <span class="tag">FREE</span>
+        </a>
       </div>
-      <div class="line-card">
-        <div>🖼 Image Compressor</div>
-        <span class="tag">FAST</span>
-      </div>
-      <a href="qr-generator.html" class="line-card">
-        <div>📱 QR Generator</div>
-        <span class="tag">FREE</span>
-      </a>
     </section>
 
 

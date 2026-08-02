@@ -114,14 +114,14 @@ to {
 
 .user {
 align-self:flex-end;
-background: linear-gradient(135deg, #000000 #3e0000 #7c0000 );
+background: linear-gradient(135deg, #000000, #3e0000, #7c0000);
 color:white;
 border-bottom-right-radius:5px;
 }
 
 .bot {
 align-self:flex-start;
-background: linear-gradient(135deg, #ba0000 #f80000  );
+background: linear-gradient(135deg, #ba0000, #f80000);
 color:white;
 border-bottom-left-radius:5px;
 }

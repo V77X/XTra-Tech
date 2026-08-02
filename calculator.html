@@ -1,421 +1,584 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head></head>
+  <body class="h-[100dvh] w-screen flex items-center justify-center p-0 md:p-6 overflow-hidden">
+    ```html
+
+    <meta charset="UTF-8" />
     <!-- Viewport fit=cover and user-scalable=no to ensure native app feel on mobile -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
     <title>Professional Modern Calculator</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #0f172a, #1e1b4b, #312e81);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            color: white;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-            /* Prevents overscroll bouncing on mobile */
-            overscroll-behavior-y: none; 
-        }
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap");
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+      body {
+        font-family: "Inter", sans-serif;
+        background: linear-gradient(135deg, #0f172a, #1e1b4b, #312e81);
+        background-size: 400% 400%;
+        animation: gradientBG 15s ease infinite;
+        color: white;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+        /* Prevents overscroll bouncing on mobile */
+        overscroll-behavior-y: none;
+      }
 
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      @keyframes gradientBG {
+        0% {
+          background-position: 0% 50%;
         }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
 
-        .calc-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.1s ease-in-out;
-            position: relative;
-            overflow: hidden;
-            width: 100%;
-            height: 100%;
-        }
-        
-        .calc-btn:active {
-            transform: scale(0.90);
-        }
+      .glass-panel {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      }
 
-        /* Ripple effect */
-        .calc-btn::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            opacity: 0;
-            transition: transform 0.3s, opacity 0.3s;
-        }
+      .calc-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.1s ease-in-out;
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+      }
 
-        .calc-btn:active::after {
-            transform: translate(-50%, -50%) scale(2);
-            opacity: 1;
-            transition: 0s;
-        }
+      .calc-btn:active {
+        transform: scale(0.9);
+      }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.4); }
+      /* Ripple effect */
+      .calc-btn::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+        transition:
+          transform 0.3s,
+          opacity 0.3s;
+      }
+
+      .calc-btn:active::after {
+        transform: translate(-50%, -50%) scale(2);
+        opacity: 1;
+        transition: 0s;
+      }
+
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.4);
+      }
     </style>
-</head>
-<!-- Use 100dvh for exact mobile screen height, preventing address bar issues -->
-<body class="h-[100dvh] w-screen flex items-center justify-center p-0 md:p-6 overflow-hidden">
+
+    <!-- Use 100dvh for exact mobile screen height, preventing address bar issues -->
 
     <!-- Main Dynamic Wrapper -->
-    <div class="glass-panel flex h-full w-full md:h-[650px] md:w-max md:rounded-[2rem] relative overflow-hidden transition-all duration-500 ease-in-out shadow-2xl">
-        
-        <!-- Calculator Section (Expands its own width naturally) -->
-        <div class="flex flex-col h-full w-full md:w-auto transition-all duration-500">
-            
-            <!-- Universal Header -->
-            <div class="flex-none px-5 pt-5 md:px-6 md:pt-6 flex justify-between items-center z-10">
-                <div class="flex space-x-1 bg-white/5 rounded-lg p-1">
-                    <button id="btn-std-mode" class="px-4 py-1.5 rounded-md bg-white/20 text-white shadow-sm text-sm font-medium transition" onclick="setMode('standard')">Standard</button>
-                    <button id="btn-sci-mode" class="px-4 py-1.5 rounded-md text-gray-400 hover:text-white hover:bg-white/10 text-sm font-medium transition" onclick="setMode('scientific')">Scientific</button>
-                </div>
-                <div class="flex items-center space-x-3">
-                    <button id="deg-rad-toggle" class="hidden px-3 py-1.5 rounded-md bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-xs font-semibold transition" onclick="toggleDegRad()">
-                        DEG
-                    </button>
-                    <button class="w-9 h-9 flex items-center justify-center rounded-full text-gray-400 hover:text-white hover:bg-white/10 transition" onclick="toggleHistory()">
-                        <i class="fas fa-history"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Display Screen -->
-            <div class="flex-none px-5 md:px-6 pt-4 pb-2">
-                <div class="glass-panel h-28 md:h-32 rounded-2xl p-4 flex flex-col justify-end items-end relative overflow-hidden">
-                    <div id="expression-display" class="text-gray-400 text-sm md:text-base mb-1 h-6 w-full text-right overflow-hidden whitespace-nowrap tracking-wider"></div>
-                    <div id="main-display" class="text-5xl md:text-6xl font-semibold text-white tracking-tight w-full text-right overflow-hidden whitespace-nowrap">0</div>
-                </div>
-            </div>
-
-            <!-- Keypads Wrapper (Flex column on mobile, row on desktop) -->
-            <div class="flex-1 flex flex-col md:flex-row p-5 md:p-6 pt-2 md:pt-4 gap-3 md:gap-4 min-h-0">
-                
-                <!-- Scientific Keypad (4 rows) -->
-                <div id="sci-keypad" class="hidden flex-[4] md:flex-none md:w-[340px] grid-cols-4 grid-rows-4 gap-2 md:gap-3 transition-all duration-300">
-                    <button class="calc-btn bg-white/5 hover:bg-white/10 rounded-xl md:rounded-2xl text-sm font-medium" onclick="appendSci('sin(')">sin</button>
-                    <button class="calc-btn bg-white/5 hover:bg-white/10 rounded-xl md:rounded-2xl text-sm font-medium" onclick="appendSci('cos(')">cos</button>
-                    <button class="calc-btn bg-white/5 hover:bg-white/10 rounded-xl md:rounded-2xl text-sm font-medium" onclick="appendSci('tan(')">tan</button>
-                    <button class="calc-btn bg-white/5 hover:bg-white/10 rounded-xl md:rounded-2xl text-sm font-medium" onclick="appendSci('π')">π</button>
-
-                    <button class="calc-btn bg-white/5 hover:bg-white/10 rounded-xl md:rounded-2xl text-sm font-medium" onclick="appendSci('asin(')">sin⁻¹</button>
-                    <button class="calc-btn bg-white/5 hover:bg-white/10 rounded-xl md:rounded-2xl text-sm font-medium" onclick="appendSci('acos(')">cos⁻¹</button>
-                    <button class="calc-btn bg-white/5 hover:bg-white/10 rounded-xl md:rounded-2xl text-sm font-medium" onclick="appendSci('atan(')">tan⁻¹</button>
-                    <button class="calc-btn bg-white/5 hover:bg-white/10 rounded-xl md:rounded-2xl text-sm font-medium" onclick="appendSci('e')">e</button>
-
-                    <button class="calc-btn bg-white/5 hover:bg-white/10 rounded-xl md:rounded-2xl text-sm font-medium" onclick="appendSci('log(')">log</button>
-                    <button class="calc-btn bg-white/5 hover:bg-white/10 rounded-xl md:rounded-2xl text-sm font-medium" onclick="appendSci('ln(')">ln</button>
-                    <button class="calc-btn bg-white/5 hover:bg-white/10 rounded-xl md:rounded-2xl text-sm font-medium" onclick="appendSci('^')">xʸ</button>
-                    <button class="calc-btn bg-white/5 hover:bg-white/10 rounded-xl md:rounded-2xl text-sm font-medium" onclick="appendSci('√(')">√</button>
-
-                    <button class="calc-btn bg-white/5 hover:bg-white/10 rounded-xl md:rounded-2xl text-sm font-medium" onclick="appendSci('(')">(</button>
-                    <button class="calc-btn bg-white/5 hover:bg-white/10 rounded-xl md:rounded-2xl text-sm font-medium" onclick="appendSci(')')">)</button>
-                    <button class="calc-btn bg-white/5 hover:bg-white/10 rounded-xl md:rounded-2xl text-sm font-medium" onclick="appendSci('abs(')">|x|</button>
-                    <button class="calc-btn bg-white/5 hover:bg-white/10 rounded-xl md:rounded-2xl text-sm font-medium" onclick="appendSci('!')">x!</button>
-                </div>
-
-                <!-- Standard Keypad (5 rows) -->
-                <!-- flex-[5] ensures exactly proportional height to the 4 rows of Sci mode on mobile -->
-                <div class="flex-[5] md:flex-none md:w-[340px] grid grid-cols-4 grid-rows-5 gap-2 md:gap-3">
-                    <button class="calc-btn bg-red-500/20 text-red-400 hover:bg-red-500/30 rounded-xl md:rounded-2xl text-lg md:text-xl font-medium" onclick="clearAll()">AC</button>
-                    <button class="calc-btn bg-white/5 hover:bg-white/10 rounded-xl md:rounded-2xl text-lg md:text-xl font-medium text-orange-300" onclick="deleteLast()"><i class="fas fa-backspace"></i></button>
-                    <button class="calc-btn bg-white/5 hover:bg-white/10 rounded-xl md:rounded-2xl text-lg md:text-xl font-medium text-indigo-300" onclick="appendVal('%')">%</button>
-                    <button class="calc-btn bg-indigo-500/20 hover:bg-indigo-500/40 text-indigo-300 rounded-xl md:rounded-2xl text-2xl md:text-3xl font-medium" onclick="appendOp('÷')">÷</button>
-                    
-                    <button class="calc-btn bg-white/10 hover:bg-white/20 rounded-xl md:rounded-2xl text-2xl font-semibold" onclick="appendVal('7')">7</button>
-                    <button class="calc-btn bg-white/10 hover:bg-white/20 rounded-xl md:rounded-2xl text-2xl font-semibold" onclick="appendVal('8')">8</button>
-                    <button class="calc-btn bg-white/10 hover:bg-white/20 rounded-xl md:rounded-2xl text-2xl font-semibold" onclick="appendVal('9')">9</button>
-                    <button class="calc-btn bg-indigo-500/20 hover:bg-indigo-500/40 text-indigo-300 rounded-xl md:rounded-2xl text-2xl md:text-3xl font-medium" onclick="appendOp('×')">×</button>
-                    
-                    <button class="calc-btn bg-white/10 hover:bg-white/20 rounded-xl md:rounded-2xl text-2xl font-semibold" onclick="appendVal('4')">4</button>
-                    <button class="calc-btn bg-white/10 hover:bg-white/20 rounded-xl md:rounded-2xl text-2xl font-semibold" onclick="appendVal('5')">5</button>
-                    <button class="calc-btn bg-white/10 hover:bg-white/20 rounded-xl md:rounded-2xl text-2xl font-semibold" onclick="appendVal('6')">6</button>
-                    <button class="calc-btn bg-indigo-500/20 hover:bg-indigo-500/40 text-indigo-300 rounded-xl md:rounded-2xl text-3xl font-medium" onclick="appendOp('-')">−</button>
-                    
-                    <button class="calc-btn bg-white/10 hover:bg-white/20 rounded-xl md:rounded-2xl text-2xl font-semibold" onclick="appendVal('1')">1</button>
-                    <button class="calc-btn bg-white/10 hover:bg-white/20 rounded-xl md:rounded-2xl text-2xl font-semibold" onclick="appendVal('2')">2</button>
-                    <button class="calc-btn bg-white/10 hover:bg-white/20 rounded-xl md:rounded-2xl text-2xl font-semibold" onclick="appendVal('3')">3</button>
-                    <button class="calc-btn bg-indigo-500/20 hover:bg-indigo-500/40 text-indigo-300 rounded-xl md:rounded-2xl text-3xl font-medium" onclick="appendOp('+')">+</button>
-                    
-                    <button class="calc-btn bg-white/10 hover:bg-white/20 rounded-xl md:rounded-2xl text-xl font-semibold" onclick="toggleSign()">±</button>
-                    <button class="calc-btn bg-white/10 hover:bg-white/20 rounded-xl md:rounded-2xl text-2xl font-semibold" onclick="appendVal('0')">0</button>
-                    <button class="calc-btn bg-white/10 hover:bg-white/20 rounded-xl md:rounded-2xl text-2xl font-semibold" onclick="appendVal('.')">.</button>
-                    <button class="calc-btn bg-gradient-to-br from-blue-500 to-indigo-600 hover:from-blue-400 hover:to-indigo-500 rounded-xl md:rounded-2xl text-3xl font-medium shadow-lg shadow-blue-500/30" onclick="calculate()">=</button>
-                </div>
-            </div>
+    <div
+      class="glass-panel flex h-full w-full md:h-[650px] md:w-max md:rounded-[2rem] relative overflow-hidden transition-all duration-500 ease-in-out shadow-2xl"
+    >
+      <!-- Calculator Section (Expands its own width naturally) -->
+      <div class="flex flex-col h-full w-full md:w-auto transition-all duration-500">
+        <!-- Universal Header -->
+        <div class="flex-none px-5 pt-5 md:px-6 md:pt-6 flex justify-between items-center z-10">
+          <div class="flex space-x-1 bg-white/5 rounded-lg p-1">
+            <button
+              id="btn-std-mode"
+              class="px-4 py-1.5 rounded-md bg-white/20 text-white shadow-sm text-sm font-medium transition"
+              onclick="setMode('standard')"
+            >
+              Standard
+            </button>
+            <button
+              id="btn-sci-mode"
+              class="px-4 py-1.5 rounded-md text-gray-400 hover:text-white hover:bg-white/10 text-sm font-medium transition"
+              onclick="setMode('scientific')"
+            >
+              Scientific
+            </button>
+          </div>
+          <div class="flex items-center space-x-3">
+            <button
+              id="deg-rad-toggle"
+              class="hidden px-3 py-1.5 rounded-md bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-xs font-semibold transition"
+              onclick="toggleDegRad()"
+            >
+              DEG
+            </button>
+            <button
+              class="w-9 h-9 flex items-center justify-center rounded-full text-gray-400 hover:text-white hover:bg-white/10 transition"
+              onclick="toggleHistory()"
+            >
+              <i class="fas fa-history"></i>
+            </button>
+          </div>
         </div>
 
-        <!-- History Panel (Slides out smoothly) -->
-        <div id="history-wrapper" class="w-0 absolute right-0 md:relative z-40 h-full overflow-hidden transition-[width] duration-500 ease-in-out bg-[#0f172a]/95 md:bg-white/5 md:backdrop-blur-none backdrop-blur-2xl md:border-l border-white/10">
-            <!-- Fixed width inner container prevents text reflow during animation -->
-            <div class="w-[100vw] md:w-[320px] h-full flex flex-col">
-                <div class="p-5 md:p-6 border-b border-white/10 flex justify-between items-center flex-none">
-                    <h2 class="text-lg font-semibold text-white/90"><i class="fas fa-history mr-2 text-indigo-400"></i> History</h2>
-                    <div class="flex items-center gap-3">
-                        <button class="text-gray-400 hover:text-red-400 transition" onclick="clearHistory()" title="Clear History">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
-                        <button class="md:hidden text-gray-400 hover:text-white transition w-8 h-8 rounded-full bg-white/10 flex items-center justify-center" onclick="toggleHistory()">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                </div>
-                <div id="history-list" class="flex-1 overflow-y-auto p-4 space-y-3 pb-8">
-                    <div class="text-center text-gray-500 mt-10 text-sm">No history yet</div>
-                </div>
+        <!-- Display Screen -->
+        <div class="flex-none px-5 md:px-6 pt-4 pb-2">
+          <div
+            class="glass-panel h-28 md:h-32 rounded-2xl p-4 flex flex-col justify-end items-end relative overflow-hidden"
+          >
+            <div
+              id="expression-display"
+              class="text-gray-400 text-sm md:text-base mb-1 h-6 w-full text-right overflow-hidden whitespace-nowrap tracking-wider"
+            ></div>
+            <div
+              id="main-display"
+              class="text-5xl md:text-6xl font-semibold text-white tracking-tight w-full text-right overflow-hidden whitespace-nowrap"
+            >
+              0
             </div>
+          </div>
         </div>
 
+        <!-- Keypads Wrapper (Flex column on mobile, row on desktop) -->
+        <div class="flex-1 flex flex-col md:flex-row p-5 md:p-6 pt-2 md:pt-4 gap-3 md:gap-4 min-h-0">
+          <!-- Scientific Keypad (4 rows) -->
+          <div
+            id="sci-keypad"
+            class="hidden flex-[4] md:flex-none md:w-[340px] grid-cols-4 grid-rows-4 gap-2 md:gap-3 transition-all duration-300"
+          >
+            <button
+              class="calc-btn bg-white/5 hover:bg-white/10 rounded-xl md:rounded-2xl text-sm font-medium"
+              onclick="appendSci('sin(')"
+            >
+              sin
+            </button>
+            <button
+              class="calc-btn bg-white/5 hover:bg-white/10 rounded-xl md:rounded-2xl text-sm font-medium"
+              onclick="appendSci('cos(')"
+            >
+              cos
+            </button>
+            <button
+              class="calc-btn bg-white/5 hover:bg-white/10 rounded-xl md:rounded-2xl text-sm font-medium"
+              onclick="appendSci('tan(')"
+            >
+              tan
+            </button>
+            <button
+              class="calc-btn bg-white/5 hover:bg-white/10 rounded-xl md:rounded-2xl text-sm font-medium"
+              onclick="appendSci('π')"
+            >
+              π
+            </button>
+
+            <button
+              class="calc-btn bg-white/5 hover:bg-white/10 rounded-xl md:rounded-2xl text-sm font-medium"
+              onclick="appendSci('asin(')"
+            >
+              sin⁻¹
+            </button>
+            <button
+              class="calc-btn bg-white/5 hover:bg-white/10 rounded-xl md:rounded-2xl text-sm font-medium"
+              onclick="appendSci('acos(')"
+            >
+              cos⁻¹
+            </button>
+            <button
+              class="calc-btn bg-white/5 hover:bg-white/10 rounded-xl md:rounded-2xl text-sm font-medium"
+              onclick="appendSci('atan(')"
+            >
+              tan⁻¹
+            </button>
+            <button
+              class="calc-btn bg-white/5 hover:bg-white/10 rounded-xl md:rounded-2xl text-sm font-medium"
+              onclick="appendSci('e')"
+            >
+              e
+            </button>
+
+            <button
+              class="calc-btn bg-white/5 hover:bg-white/10 rounded-xl md:rounded-2xl text-sm font-medium"
+              onclick="appendSci('log(')"
+            >
+              log
+            </button>
+            <button
+              class="calc-btn bg-white/5 hover:bg-white/10 rounded-xl md:rounded-2xl text-sm font-medium"
+              onclick="appendSci('ln(')"
+            >
+              ln
+            </button>
+            <button
+              class="calc-btn bg-white/5 hover:bg-white/10 rounded-xl md:rounded-2xl text-sm font-medium"
+              onclick="appendSci('^')"
+            >
+              xʸ
+            </button>
+            <button
+              class="calc-btn bg-white/5 hover:bg-white/10 rounded-xl md:rounded-2xl text-sm font-medium"
+              onclick="appendSci('√(')"
+            >
+              √
+            </button>
+
+            <button
+              class="calc-btn bg-white/5 hover:bg-white/10 rounded-xl md:rounded-2xl text-sm font-medium"
+              onclick="appendSci('(')"
+            >
+              (
+            </button>
+            <button
+              class="calc-btn bg-white/5 hover:bg-white/10 rounded-xl md:rounded-2xl text-sm font-medium"
+              onclick="appendSci(')')"
+            >
+              )
+            </button>
+            <button
+              class="calc-btn bg-white/5 hover:bg-white/10 rounded-xl md:rounded-2xl text-sm font-medium"
+              onclick="appendSci('abs(')"
+            >
+              |x|
+            </button>
+            <button
+              class="calc-btn bg-white/5 hover:bg-white/10 rounded-xl md:rounded-2xl text-sm font-medium"
+              onclick="appendSci('!')"
+            >
+              x!
+            </button>
+          </div>
+
+          <!-- Standard Keypad (5 rows) -->
+          <!-- flex-[5] ensures exactly proportional height to the 4 rows of Sci mode on mobile -->
+          <div class="flex-[5] md:flex-none md:w-[340px] grid grid-cols-4 grid-rows-5 gap-2 md:gap-3">
+            <button
+              class="calc-btn bg-red-500/20 text-red-400 hover:bg-red-500/30 rounded-xl md:rounded-2xl text-lg md:text-xl font-medium"
+              onclick="clearAll()"
+            >
+              AC
+            </button>
+            <button
+              class="calc-btn bg-white/5 hover:bg-white/10 rounded-xl md:rounded-2xl text-lg md:text-xl font-medium text-orange-300"
+              onclick="deleteLast()"
+            >
+              <i class="fas fa-backspace"></i>
+            </button>
+            <button
+              class="calc-btn bg-white/5 hover:bg-white/10 rounded-xl md:rounded-2xl text-lg md:text-xl font-medium text-indigo-300"
+              onclick="appendVal('%')"
+            >
+              %
+            </button>
+            <button
+              class="calc-btn bg-indigo-500/20 hover:bg-indigo-500/40 text-indigo-300 rounded-xl md:rounded-2xl text-2xl md:text-3xl font-medium"
+              onclick="appendOp('÷')"
+            >
+              ÷
+            </button>
+
+            <button
+              class="calc-btn bg-white/10 hover:bg-white/20 rounded-xl md:rounded-2xl text-2xl font-semibold"
+              onclick="appendVal('7')"
+            >
+              7
+            </button>
+            <button
+              class="calc-btn bg-white/10 hover:bg-white/20 rounded-xl md:rounded-2xl text-2xl font-semibold"
+              onclick="appendVal('8')"
+            >
+              8
+            </button>
+            <button
+              class="calc-btn bg-white/10 hover:bg-white/20 rounded-xl md:rounded-2xl text-2xl font-semibold"
+              onclick="appendVal('9')"
+            >
+              9
+            </button>
+            <button
+              class="calc-btn bg-indigo-500/20 hover:bg-indigo-500/40 text-indigo-300 rounded-xl md:rounded-2xl text-2xl md:text-3xl font-medium"
+              onclick="appendOp('×')"
+            >
+              ×
+            </button>
+
+            <button
+              class="calc-btn bg-white/10 hover:bg-white/20 rounded-xl md:rounded-2xl text-2xl font-semibold"
+              onclick="appendVal('4')"
+            >
+              4
+            </button>
+            <button
+              class="calc-btn bg-white/10 hover:bg-white/20 rounded-xl md:rounded-2xl text-2xl font-semibold"
+              onclick="appendVal('5')"
+            >
+              5
+            </button>
+            <button
+              class="calc-btn bg-white/10 hover:bg-white/20 rounded-xl md:rounded-2xl text-2xl font-semibold"
+              onclick="appendVal('6')"
+            >
+              6
+            </button>
+            <button
+              class="calc-btn bg-indigo-500/20 hover:bg-indigo-500/40 text-indigo-300 rounded-xl md:rounded-2xl text-3xl font-medium"
+              onclick="appendOp('-')"
+            >
+              −
+            </button>
+
+            <button
+              class="calc-btn bg-white/10 hover:bg-white/20 rounded-xl md:rounded-2xl text-2xl font-semibold"
+              onclick="appendVal('1')"
+            >
+              1
+            </button>
+            <button
+              class="calc-btn bg-white/10 hover:bg-white/20 rounded-xl md:rounded-2xl text-2xl font-semibold"
+              onclick="appendVal('2')"
+            >
+              2
+            </button>
+            <button
+              class="calc-btn bg-white/10 hover:bg-white/20 rounded-xl md:rounded-2xl text-2xl font-semibold"
+              onclick="appendVal('3')"
+            >
+              3
+            </button>
+            <button
+              class="calc-btn bg-indigo-500/20 hover:bg-indigo-500/40 text-indigo-300 rounded-xl md:rounded-2xl text-3xl font-medium"
+              onclick="appendOp('+')"
+            >
+              +
+            </button>
+
+            <button
+              class="calc-btn bg-white/10 hover:bg-white/20 rounded-xl md:rounded-2xl text-xl font-semibold"
+              onclick="toggleSign()"
+            >
+              ±
+            </button>
+            <button
+              class="calc-btn bg-white/10 hover:bg-white/20 rounded-xl md:rounded-2xl text-2xl font-semibold"
+              onclick="appendVal('0')"
+            >
+              0
+            </button>
+            <button
+              class="calc-btn bg-white/10 hover:bg-white/20 rounded-xl md:rounded-2xl text-2xl font-semibold"
+              onclick="appendVal('.')"
+            >
+              .
+            </button>
+            <button
+              class="calc-btn bg-gradient-to-br from-blue-500 to-indigo-600 hover:from-blue-400 hover:to-indigo-500 rounded-xl md:rounded-2xl text-3xl font-medium shadow-lg shadow-blue-500/30"
+              onclick="calculate()"
+            >
+              =
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- History Panel (Slides out smoothly) -->
+      <div
+        id="history-wrapper"
+        class="w-0 absolute right-0 md:relative z-40 h-full overflow-hidden transition-[width] duration-500 ease-in-out bg-[#0f172a]/95 md:bg-white/5 md:backdrop-blur-none backdrop-blur-2xl md:border-l border-white/10"
+      >
+        <!-- Fixed width inner container prevents text reflow during animation -->
+        <div class="w-[100vw] md:w-[320px] h-full flex flex-col">
+          <div class="p-5 md:p-6 border-b border-white/10 flex justify-between items-center flex-none">
+            <h2 class="text-lg font-semibold text-white/90">
+              <i class="fas fa-history mr-2 text-indigo-400"></i>
+              History
+            </h2>
+            <div class="flex items-center gap-3">
+              <button
+                class="text-gray-400 hover:text-red-400 transition"
+                onclick="clearHistory()"
+                title="Clear History"
+              >
+                <i class="fas fa-trash-alt"></i>
+              </button>
+              <button
+                class="md:hidden text-gray-400 hover:text-white transition w-8 h-8 rounded-full bg-white/10 flex items-center justify-center"
+                onclick="toggleHistory()"
+              >
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+          </div>
+          <div id="history-list" class="flex-1 overflow-y-auto p-4 space-y-3 pb-8">
+            <div class="text-center text-gray-500 mt-10 text-sm">No history yet</div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <script>
-        // DOM Elements
-        const mainDisplay = document.getElementById('main-display');
-        const exprDisplay = document.getElementById('expression-display');
-        const sciKeypad = document.getElementById('sci-keypad');
-        const btnStdMode = document.getElementById('btn-std-mode');
-        const btnSciMode = document.getElementById('btn-sci-mode');
-        const degRadToggle = document.getElementById('deg-rad-toggle');
-        const historyWrapper = document.getElementById('history-wrapper');
-        const historyList = document.getElementById('history-list');
+      // DOM Elements
+      const mainDisplay = document.getElementById('main-display');
+      const exprDisplay = document.getElementById('expression-display');
+      const sciKeypad = document.getElementById('sci-keypad');
+      const btnStdMode = document.getElementById('btn-std-mode');
+      const btnSciMode = document.getElementById('btn-sci-mode');
+      const degRadToggle = document.getElementById('deg-rad-toggle');
+      const historyWrapper = document.getElementById('history-wrapper');
+      const historyList = document.getElementById('history-list');
 
-        // State Variables
-        let currentExpression = '';
-        let currentInput = '0';
-        let isEvaluated = false;
-        let isDegrees = true;
-        let historyOpen = false;
-        let history = [];
+      // State Variables
+      let currentExpression = '';
+      let currentInput = '0';
+      let isEvaluated = false;
+      let isDegrees = true;
+      let historyOpen = false;
+      let history = [];
 
-        // Format number to fit screen nicely
-        function formatNumber(numStr) {
-            if (['Error', 'Infinity', '-Infinity', 'NaN'].includes(numStr)) return numStr;
-            let parts = numStr.toString().split('.');
-            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            if (parts[1]) {
-                parts[1] = parts[1].substring(0, 10);
-                return parts.join('.');
-            }
-            return parts[0];
-        }
+      // Format number to fit screen nicely
+      function formatNumber(numStr) {
+          if (['Error', 'Infinity', '-Infinity', 'NaN'].includes(numStr)) return numStr;
+          let parts = numStr.toString().split('.');
+          parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          if (parts[1]) {
+              parts[1] = parts[1].substring(0, 10);
+              return parts.join('.');
+          }
+          return parts[0];
+      }
 
-        // Update displays
-        function updateDisplay() {
-            mainDisplay.innerText = formatNumber(currentInput);
-            exprDisplay.innerText = currentExpression;
-            
-            // Auto resize text
-            if (currentInput.length > 11) {
-                mainDisplay.style.fontSize = Math.max(1.75, 3.75 - (currentInput.length - 11) * 0.15) + 'rem';
-            } else {
-                mainDisplay.style.fontSize = ''; 
-            }
-            exprDisplay.scrollLeft = exprDisplay.scrollWidth;
-        }
+      // Update displays
+      function updateDisplay() {
+          mainDisplay.innerText = formatNumber(currentInput);
+          exprDisplay.innerText = currentExpression;
 
-        function appendVal(val) {
-            if (isEvaluated) { currentInput = ''; currentExpression = ''; isEvaluated = false; }
-            if (currentInput === '0' && val !== '.') currentInput = val;
-            else if (val === '.' && currentInput.includes('.')) return;
-            else currentInput += val;
-            updateDisplay();
-        }
+          // Auto resize text
+          if (currentInput.length > 11) {
+              mainDisplay.style.fontSize = Math.max(1.75, 3.75 - (currentInput.length - 11) * 0.15) + 'rem';
+          } else {
+              mainDisplay.style.fontSize = '';
+          }
+          exprDisplay.scrollLeft = exprDisplay.scrollWidth;
+      }
 
-        function appendOp(op) {
-            if (isEvaluated) { currentExpression = currentInput; isEvaluated = false; } 
-            else if (currentInput !== '') currentExpression += ' ' + currentInput;
-            
-            const lastChar = currentExpression.trim().slice(-1);
-            if (['+', '−', '×', '÷'].includes(lastChar) && currentInput === '') {
-                currentExpression = currentExpression.trim().slice(0, -1) + ' ' + op;
-            } else {
-                currentExpression += ' ' + op;
-            }
-            currentInput = '';
-            updateDisplay();
-        }
+      function appendVal(val) {
+          if (isEvaluated) { currentInput = ''; currentExpression = ''; isEvaluated = false; }
+          if (currentInput === '0' && val !== '.') currentInput = val;
+          else if (val === '.' && currentInput.includes('.')) return;
+          else currentInput += val;
+          updateDisplay();
+      }
 
-        function appendSci(func) {
-            if (isEvaluated) { currentExpression = ''; isEvaluated = false; }
-            if (func.endsWith('(')) { currentExpression += ' ' + func; currentInput = ''; } 
-            else if (['π', 'e'].includes(func)) currentInput = func;
-            else if (func === '!' && currentInput !== '') currentInput += '!';
-            else if (func === '^' && currentInput !== '') { currentExpression += ' ' + currentInput + ' ^ '; currentInput = ''; }
-            updateDisplay();
-        }
+      function appendOp(op) {
+          if (isEvaluated) { currentExpression = currentInput; isEvaluated = false; }
+          else if (currentInput !== '') currentExpression += ' ' + currentInput;
 
-        function toggleSign() {
-            if (currentInput === '0' || currentInput === '') return;
-            currentInput = currentInput.startsWith('-') ? currentInput.substring(1) : '-' + currentInput;
-            updateDisplay();
-        }
+          const lastChar = currentExpression.trim().slice(-1);
+          if (['+', '−', '×', '÷'].includes(lastChar) && currentInput === '') {
+              currentExpression = currentExpression.trim().slice(0, -1) + ' ' + op;
+          } else {
+              currentExpression += ' ' + op;
+          }
+          currentInput = '';
+          updateDisplay();
+      }
 
-        function clearAll() {
-            currentInput = '0'; currentExpression = ''; isEvaluated = false; updateDisplay();
-        }
+      function appendSci(func) {
+          if (isEvaluated) { currentExpression = ''; isEvaluated = false; }
+          if (func.endsWith('(')) { currentExpression += ' ' + func; currentInput = ''; }
+          else if (['π', 'e'].includes(func)) currentInput = func;
+          else if (func === '!' && currentInput !== '') currentInput += '!';
+          else if (func === '^' && currentInput !== '') { currentExpression += ' ' + currentInput + ' ^ '; currentInput = ''; }
+          updateDisplay();
+      }
 
-        function deleteLast() {
-            if (isEvaluated) return clearAll();
-            currentInput = currentInput.length > 1 ? currentInput.slice(0, -1) : '0';
-            updateDisplay();
-        }
+      function toggleSign() {
+          if (currentInput === '0' || currentInput === '') return;
+          currentInput = currentInput.startsWith('-') ? currentInput.substring(1) : '-' + currentInput;
+          updateDisplay();
+      }
 
-        function factorial(n) {
-            if (n < 0) return NaN;
-            if (n === 0 || n === 1) return 1;
-            let result = 1; for (let i = 2; i <= n; i++) result *= i;
-            return result;
-        }
+      function clearAll() {
+          currentInput = '0'; currentExpression = ''; isEvaluated = false; updateDisplay();
+      }
 
-        function calculate() {
-            if (currentInput !== '') { currentExpression += ' ' + currentInput; currentInput = ''; }
-            if (!currentExpression.trim()) return;
+      function deleteLast() {
+          if (isEvaluated) return clearAll();
+          currentInput = currentInput.length > 1 ? currentInput.slice(0, -1) : '0';
+          updateDisplay();
+      }
 
-            const exprToStore = currentExpression;
-            let parseStr = currentExpression
-                .replace(/×/g, '*').replace(/÷/g, '/').replace(/−/g, '-')
-                .replace(/([\d.]+)\s*%/g, '($1/100)')
-                .replace(/π/g, 'Math.PI').replace(/e/g, 'Math.E')
-                .replace(/(\d+\.?\d*)!/g, 'factorial($1)')
-                .replace(/\^/g, '**');
+      function factorial(n) {
+          if (n < 0) return NaN;
+          if (n === 0 || n === 1) return 1;
+          let result = 1; for (let i = 2; i <= n; i++) result *= i;
+          return result;
+      }
 
-            const radConv = isDegrees ? '(Math.PI/180)*' : '';
-            const radInvConv = isDegrees ? '*(180/Math.PI)' : '';
-            
-            parseStr = parseStr.replace(/asin\(/g, radInvConv + 'Math.asin(').replace(/acos\(/g, radInvConv + 'Math.acos(').replace(/atan\(/g, radInvConv + 'Math.atan(')
-                .replace(/sin\(/g, 'Math.sin(' + radConv).replace(/cos\(/g, 'Math.cos(' + radConv).replace(/tan\(/g, 'Math.tan(' + radConv)
-                .replace(/log\(/g, 'Math.log10(').replace(/ln\(/g, 'Math.log(').replace(/√\(/g, 'Math.sqrt(').replace(/abs\(/g, 'Math.abs(');
+      function calculate() {
+          if (currentInput !== '') { currentExpression += ' ' + currentInput; currentInput = ''; }
+          if (!currentExpression.trim()) return;
 
-            try {
-                const open = (parseStr.match(/\(/g) || []).length, close = (parseStr.match(/\)/g) || []).length;
-                if (open > close) parseStr += ')'.repeat(open - close);
+          const exprToStore = currentExpression;
+          let parseStr = currentExpression
+              .replace(/×/g, '*').replace(/÷/g, '/').replace(/−/g, '-')
+              .replace(/([\d.]+)\s*%/g, '($1/100)')
+              .replace(/π/g, 'Math.PI').replace(/e/g, 'Math.E')
+              .replace(/(\d+\.?\d*)!/g, 'factorial($1)')
+              .replace(/\^/g, '**');
 
-                let result = new Function('factorial', 'return ' + parseStr)(factorial);
-                if (typeof result === 'number') result = parseFloat(result.toPrecision(15));
-                
-                currentInput = result.toString();
-                addToHistory(exprToStore + ' =', currentInput);
-                currentExpression += ' =';
-                isEvaluated = true;
-            } catch (e) {
-                currentInput = 'Error'; isEvaluated = true;
-            }
-            updateDisplay();
-        }
-        
-        function addToHistory(expr, result) {
-            history.unshift({ expr, result });
-            if (history.length > 20) history.pop();
-            renderHistory();
-        }
+          const radConv = isDegrees ? '(Math.PI/180)*' : '';
+          const radInvConv = isDegrees ? '*(180/Math.PI)' : '';
 
-        function renderHistory() {
-            if (history.length === 0) {
-                historyList.innerHTML = '<div class="text-center text-gray-500 mt-10 text-sm">No history yet</div>';
-                return;
-            }
-            historyList.innerHTML = history.map((item, index) => `
-                <div class="p-4 bg-white/5 rounded-xl hover:bg-white/10 transition cursor-pointer group active:scale-95" onclick="restoreHistory(${index})">
-                    <div class="text-gray-400 text-xs text-right mb-1">${item.expr.replace('=', '')}</div>
-                    <div class="text-white text-xl font-medium text-right group-hover:text-indigo-300 transition">${formatNumber(item.result)}</div>
-                </div>
-            `).join('');
-        }
+          parseStr = parseStr.replace(/asin\(/g, radInvConv + 'Math.asin(').replace(/acos\(/g, radInvConv + 'Math.acos(').replace(/atan\(/g, radInvConv + 'Math.atan(')
+              .replace(/sin\(/g, 'Math.sin(' + radConv).replace(/cos\(/g, 'Math.cos(' + radConv).replace(/tan\(/g, 'Math.tan(' + radConv)
+              .replace(/log\(/g, 'Math.log10(').replace(/ln\(/g, 'Math.log(').replace(/√\(/g, 'Math.sqrt(').replace(/abs\(/g, 'Math.abs(');
 
-        function restoreHistory(index) {
-            currentExpression = history[index].expr.replace('=', '').trim();
-            currentInput = history[index].result;
-            isEvaluated = true;
-            updateDisplay();
-            if (window.innerWidth < 768) toggleHistory();
-        }
+          try {
+              const open = (parseStr.match(/\(/g) || []).length, close = (parseStr.match(/\)/g) || []).length;
+              if (open > close) parseStr += ')'.repeat(open - close);
 
-        function clearHistory() { history = []; renderHistory(); }
+              let result = new Function('factorial', 'return ' + parseStr)(factorial);
+              if (typeof result === 'number') result = parseFloat(result.toPrecision(15));
 
-        // Layout Toggles
-        function setMode(mode) {
-            if (mode === 'scientific') {
-                btnSciMode.classList.add('bg-white/20', 'text-white', 'shadow-sm');
-                btnSciMode.classList.remove('text-gray-400', 'hover:bg-white/10');
-                btnStdMode.classList.remove('bg-white/20', 'text-white', 'shadow-sm');
-                btnStdMode.classList.add('text-gray-400', 'hover:bg-white/10');
-                
-                sciKeypad.classList.remove('hidden');
-                sciKeypad.classList.add('grid');
-                degRadToggle.classList.remove('hidden');
-            } else {
-                btnStdMode.classList.add('bg-white/20', 'text-white', 'shadow-sm');
-                btnStdMode.classList.remove('text-gray-400', 'hover:bg-white/10');
-                btnSciMode.classList.remove('bg-white/20', 'text-white', 'shadow-sm');
-                btnSciMode.classList.add('text-gray-400', 'hover:bg-white/10');
-                
-                sciKeypad.classList.add('hidden');
-                sciKeypad.classList.remove('grid');
-                degRadToggle.classList.add('hidden');
-            }
-        }
+              currentInput = result.toString();
+              addToHistory(exprToStore + ' =', currentInput);
+              currentExpression += ' =';
+              isEvaluated = true;
+          } catch (e) {
+              currentInput = 'Error'; isEvaluated = true;
+          }
+          updateDisplay();
+      }
 
-        function toggleDegRad() {
-            isDegrees = !isDegrees;
-            degRadToggle.innerText = isDegrees ? 'DEG' : 'RAD';
-            degRadToggle.classList.toggle('text-indigo-300'); degRadToggle.classList.toggle('text-green-300');
-            degRadToggle.classList.toggle('border-indigo-500/30'); degRadToggle.classList.toggle('border-green-500/30');
-            degRadToggle.classList.toggle('bg-indigo-500/20'); degRadToggle.classList.toggle('bg-green-500/20');
-        }
+      function addToHistory(expr, result) {
+          history.unshift({ expr, result });
+          if (history.length > 20) history.pop();
+          renderHistory();
+      }
 
-        function toggleHistory() {
-            historyOpen = !historyOpen;
-            if (historyOpen) {
-                historyWrapper.classList.remove('w-0');
-                historyWrapper.classList.add('w-[100vw]', 'md:w-[320px]');
-            } else {
-                historyWrapper.classList.add('w-0');
-                historyWrapper.classList.remove('w-[100vw]', 'md:w-[320px]');
-            }
-        }
-
-        // Keyboard Support
-        window.addEventListener('keydown', (e) => {
-            const key = e.key;
-            if (/[0-9]/.test(key)) appendVal(key);
-            if (key === '.') appendVal('.');
-            if (key === '+' || key === '-') appendOp(key === '-' ? '−' : '+');
-            if (key === '*') appendOp('×');
-            if (key === '/') appendOp('÷');
-            if (key === 'Enter' || key === '=') { e.preventDefault(); calculate(); }
-            if (key === 'Escape') clearAll();
-            if (key === 'Backspace') deleteLast();
-            if (key === '%') appendVal('%');
-            if (key === '(' || key === ')') appendSci(key);
-        });
+      function renderHistory() {
     </script>
-</body>
+  </body>
 </html>
-
-
-```

@@ -8,6 +8,7 @@ const clearBtn = document.getElementById("clearChat");
 function addMessage(text, type) {
     const div = document.createElement("div");
     div.className = "message " + type;
+    // Retains your line breaks
     div.innerHTML = text.replace(/\n/g, "<br>");
     chatBox.appendChild(div);
     chatBox.scrollTop = chatBox.scrollHeight;
@@ -33,16 +34,26 @@ async function sendMessage() {
         });
 
         const data = await response.json();
-
         loading.remove();
 
-        const reply = data.reply || JSON.stringify(data);
+        // Extracts only the clean text response from Gemini API
+        let reply = "";
+        
+        if (data.candidates && data.candidates.length > 0) {
+            reply = data.candidates[0].content.parts[0].text;
+        } else if (data.error) {
+            reply = "Error: " + data.error;
+        } else {
+            reply = "Sorry, I couldn't process that response.";
+            console.error("Raw response:", data);
+        }
 
         addMessage(reply, "bot");
 
     } catch (e) {
         loading.remove();
-        addMessage("Connection error.", "bot");
+        console.error("Fetch error:", e);
+        addMessage("Connection error. Please check your internet or try again.", "bot");
     }
 }
 

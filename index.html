@@ -42,7 +42,7 @@
       color: var(--text-main);
       line-height: 1.6;
       overflow-x: hidden;
-      padding-bottom: 80px;
+      padding-bottom: 80px; /* Space for bottom nav */
     }
 
     /* Background Glow Effects */
@@ -123,7 +123,7 @@
     /* Hero Section */
     .hero {
       text-align: center;
-      padding: 30px 20px 60px;
+      padding: 30px 20px 60px; /* Reduced gap */
       position: relative;
     }
 
@@ -260,13 +260,13 @@
     .grid-4 { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
 
     /* SECTION SPECIFIC GLOW COLORS */
-    .section-quick { --glow-color: #58a6ff; }       
-    .section-featured { --glow-color: #ff7b72; }    
-    .section-categories { --glow-color: #3fb950; }  
-    .section-trending { --glow-color: #ff78c6; }    
-    .section-recent { --glow-color: #bc8cff; }      
-    .section-stats { --glow-color: #00e6ff; }       
-    .section-soon { --glow-color: #e3b341; }        
+    .section-quick { --glow-color: #58a6ff; }       /* Blue */
+    .section-featured { --glow-color: #ff7b72; }    /* Red/Orange */
+    .section-categories { --glow-color: #3fb950; }  /* Green */
+    .section-trending { --glow-color: #ff78c6; }    /* Pink/Magenta */
+    .section-recent { --glow-color: #bc8cff; }      /* Light Purple */
+    .section-stats { --glow-color: #00e6ff; }       /* Bright Cyan (NEW COLOR) */
+    .section-soon { --glow-color: #e3b341; }        /* Yellow */
 
     /* Generic Cards */
     .card {
@@ -282,6 +282,20 @@
       flex-direction: column;
       gap: 8px;
       position: relative;
+    }
+
+    /* Minimal Line Cards (For Trending/Recent) */
+    .line-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      padding: 16px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--text-main);
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
     }
 
     .card .icon {
@@ -300,7 +314,16 @@
       color: var(--text-muted);
     }
 
-    /* NEW GROUPED GLOW ANIMATION */
+    .tag {
+      font-size: 10px;
+      background: rgba(88, 166, 255, 0.1);
+      color: var(--accent);
+      padding: 4px 8px;
+      border-radius: 12px;
+      border: 1px solid var(--accent);
+    }
+
+    /* SEQUENTIAL ONE-BY-ONE THIN GLOW ANIMATION (GROUPED FIX) */
     @keyframes autoGlowSequence {
       0%, 25%, 100% {
         border-color: var(--border-subtle);
@@ -321,7 +344,6 @@
       animation-delay: calc(var(--local-i, 1) * 0.25s) !important;
     }
 
-    /* Assign local index per section automatically */
     .auto-glow:nth-child(1) { --local-i: 1; }
     .auto-glow:nth-child(2) { --local-i: 2; }
     .auto-glow:nth-child(3) { --local-i: 3; }
@@ -342,15 +364,20 @@
     .auto-glow:nth-child(18) { --local-i: 18; }
     .auto-glow:nth-child(19) { --local-i: 19; }
     .auto-glow:nth-child(20) { --local-i: 20; }
+    .auto-glow:nth-child(21) { --local-i: 21; }
+    .auto-glow:nth-child(22) { --local-i: 22; }
+    .auto-glow:nth-child(23) { --local-i: 23; }
+    .auto-glow:nth-child(24) { --local-i: 24; }
 
-    /* Group Specific Durations (Adjust based on how many items are in each section) */
     .section-quick { --group-duration: 2.5s; }      
     .section-featured { --group-duration: 3.5s; }   
     .section-categories { --group-duration: 6s; }   
     .section-trending { --group-duration: 4s; }     
     .section-recent { --group-duration: 3s; }       
     .section-stats { --group-duration: 2s; }        
+    .section-soon { --group-duration: 2.5s; }       
 
+    /* Override animation entirely when user actively hovers */
     .auto-glow:hover {
       animation: none !important; 
       border-color: var(--glow-color);
@@ -367,7 +394,7 @@
       -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
       mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
       margin-bottom: 40px;
-      padding: 10px 0;
+      padding: 10px 0; /* Padding for thin glow shadow */
     }
 
     .marquee-track {
@@ -375,7 +402,7 @@
       gap: 16px;
       width: max-content;
       animation: marquee-scroll 30s linear infinite;
-      touch-action: pan-y;
+      touch-action: pan-y; /* Keeps scroll functionality on mobile */
       user-select: none; 
     }
 
@@ -389,6 +416,89 @@
     @keyframes marquee-scroll {
       0% { transform: translateX(0); }
       100% { transform: translateX(calc(-50% - 8px)); }
+    }
+
+    /* Vertical Marquee (Trending) */
+    .trending-container {
+      overflow: hidden;
+      height: 300px; 
+      position: relative;
+      -webkit-mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+      mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+      margin-bottom: 40px;
+      padding: 0 10px; /* Padding for thin glow shadows on sides */
+    }
+
+    .trending-track {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      /* Speed of the vertical loop */
+      animation: marquee-vertical 8s linear infinite;
+      touch-action: pan-x; /* Allows horizontal scrolling over it */
+    }
+
+    @keyframes marquee-vertical {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(calc(-50% - 8px)); } 
+    }
+
+    /* Stats Grid Custom */
+    .stats-card h3 {
+      font-size: 28px;
+      color: var(--text-heading);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 60px 20px 40px;
+      border-top: 1px solid var(--border-subtle);
+      margin-top: 60px;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    footer .footer-logo {
+      font-size: 20px;
+      color: var(--text-heading);
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    /* Bottom Nav (Mobile) */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: var(--bg-nav);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-around;
+      padding: 12px 10px;
+      z-index: 100;
+    }
+
+    .bottom-nav a {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 10px;
+      gap: 4px;
+      transition: 0.2s;
+      cursor: pointer;
+    }
+
+    .bottom-nav a.active, .bottom-nav a:hover {
+      color: var(--text-heading);
+    }
+
+    .bottom-nav a span {
+      font-weight: 500;
     }
 
     /* Sidebar */
@@ -464,6 +574,7 @@
     #overlay.open {
       display: block;
     }
+
   </style>
 </head>
 <body>
@@ -498,6 +609,9 @@
       <a href="qr-generator.html">📱 QR Tools</a>
       <a href="calculator.html">🧮 Calculator</a>
       <a href="text-tools.html">📝 Text Tools</a>
+      <a href="#">⭐ Favorites</a>
+      <a href="#">⚙ Settings</a>
+      <a href="#">ℹ About</a>
     </nav>
   </aside>
 
@@ -527,6 +641,7 @@
       <div class="hero-buttons">
         <button class="primary">Explore Now</button>
         <button class="secondary">View Tools</button>
+        <a href="org.bayton.gen.webapp.w352540c8f8b0fc1c_7a27c66a6279_genver-1.5.4.apk" download class="secondary">📲 Download App</a>
       </div>
     </section>
 
@@ -538,147 +653,115 @@
       </div>
     </section>
 
-    <!-- Quick Actions (Group 1 - Blue Glow) -->
+    <!-- Quick Actions (Items 1-4) -->
     <section class="grid grid-4 section-quick">
-      <a href="ai-chat.html" class="card auto-glow" style="align-items: center; text-align: center;">
+      <a href="ai-chat.html" class="card auto-glow" style="align-items: center; text-align: center; --i: 1;">
         <span style="font-size: 24px;">⚡</span>
         <h3 style="font-size: 14px;">Quick AI</h3>
       </a>
-      <a href="#" class="card auto-glow" style="align-items: center; text-align: center;">
+      <a href="#" class="card auto-glow" style="align-items: center; text-align: center; --i: 2;">
         <span style="font-size: 24px;">📄</span>
         <h3 style="font-size: 14px;">PDF</h3>
       </a>
-      <a href="translator.html" class="card auto-glow" style="align-items: center; text-align: center;">
+      <a href="translator.html" class="card auto-glow" style="align-items: center; text-align: center; --i: 3;">
         <span style="font-size: 24px;">🌐</span>
         <h3 style="font-size: 14px;">Translate</h3>
       </a>
-      <a href="#" class="card auto-glow" style="align-items: center; text-align: center;">
+      <a href="#" class="card auto-glow" style="align-items: center; text-align: center; --i: 4;">
         <span style="font-size: 24px;">🖼</span>
         <h3 style="font-size: 14px;">Image</h3>
       </a>
     </section>
 
-    <!-- Featured Tools (Group 2 - Red/Orange Glow) -->
+    <!-- Featured Tools (Items 5-11) -->
     <div class="section-title">
       <h2>🔥 Featured Tools</h2>
       <p>Most Popular</p>
     </div>
     <section class="grid grid-3 section-featured">
-      <a href="ai-chat.html" class="card auto-glow">
+      <a href="ai-chat.html" class="card auto-glow" style="--i: 5;">
         <div class="icon">🤖</div>
         <h3>AI Assistant</h3>
         <p>Ask Anything</p>
       </a>
-      <a href="translator.html" class="card auto-glow">
+      <a href="translator.html" class="card auto-glow" style="--i: 6;">
         <div class="icon">🌐</div>
         <h3>Translator</h3>
         <p>100+ Languages</p>
       </a>
-      <div class="card auto-glow">
+      <div class="card auto-glow" style="--i: 7;">
         <div class="icon">📄</div>
         <h3>PDF Tools</h3>
         <p>Convert & Edit</p>
       </div>
-      <div class="card auto-glow">
+      <div class="card auto-glow" style="--i: 8;">
         <div class="icon">🖼</div>
         <h3>Image Tools</h3>
         <p>Compress & Resize</p>
       </div>
-      <a href="qr-generator.html" class="card auto-glow">
+      <a href="qr-generator.html" class="card auto-glow" style="--i: 9;">
         <div class="icon">📱</div>
         <h3>QR Scanner</h3>
         <p>Scan & Generate</p>
       </a>
-      <a href="calculator.html" class="card auto-glow">
+      <a href="calculator.html" class="card auto-glow" style="--i: 10;">
         <div class="icon">🧮</div>
         <h3>Calculator</h3>
         <p>Smart Calculations</p>
       </a>
-      <a href="text-tools.html" class="card auto-glow">
+      <a href="text-tools.html" class="card auto-glow" style="--i: 11;">
         <div class="icon">📝</div>
         <h3>Text Tools</h3>
         <p>Case Convert, Merge, Count</p>
       </a>
     </section>
 
-    <!-- Categories (Group 3 - Green Glow) -->
+    <!-- Categories (Items 12-35) -->
     <div class="section-title">
       <h2>📂 Categories</h2>
       <p>Choose your favorite</p>
     </div>
     <section class="marquee-container section-categories">
       <div class="marquee-track">
-        <a href="ai-chat.html" class="card category-card auto-glow">
+        
+        <!-- Original 12 Items (12 to 23) -->
+        <a href="ai-chat.html" class="card category-card auto-glow" style="--i: 12;">
           <span style="font-size: 20px;">🤖</span>
           <h3>AI</h3>
           <p>Assistant & Chat</p>
         </a>
-        <a href="translator.html" class="card category-card auto-glow">
+        <a href="translator.html" class="card category-card auto-glow" style="--i: 13;">
           <span style="font-size: 20px;">🌐</span>
           <h3>Translator</h3>
           <p>Translate Instantly</p>
         </a>
-        <div class="card category-card auto-glow">
+        <div class="card category-card auto-glow" style="--i: 14;">
           <span style="font-size: 20px;">📄</span>
           <h3>PDF</h3>
           <p>Edit PDF</p>
         </div>
-        <div class="card category-card auto-glow">
+        <div class="card category-card auto-glow" style="--i: 15;">
           <span style="font-size: 20px;">🖼</span>
           <h3>Images</h3>
           <p>Resize & Compress</p>
         </div>
-        <div class="card category-card auto-glow">
+        <div class="card category-card auto-glow" style="--i: 16;">
           <span style="font-size: 20px;">🎵</span>
           <h3>Audio</h3>
           <p>Convert Audio</p>
         </div>
-        <div class="card category-card auto-glow">
+        <div class="card category-card auto-glow" style="--i: 17;">
           <span style="font-size: 20px;">🎬</span>
           <h3>Video</h3>
           <p>Basic Tools</p>
         </div>
-        <a href="qr-generator.html" class="card category-card auto-glow">
+        <a href="qr-generator.html" class="card category-card auto-glow" style="--i: 18;">
           <span style="font-size: 20px;">📱</span>
           <h3>QR</h3>
           <p>Create QR</p>
         </a>
-        <a href="calculator.html" class="card category-card auto-glow">
+        <a href="calculator.html" class="card category-card auto-glow" style="--i: 19;">
           <span style="font-size: 20px;">🧮</span>
           <h3>Math</h3>
           <p>Calculators</p>
         </a>
-        <!-- Duplicated items for smooth scrolling illusion -->
-        <a href="ai-chat.html" class="card category-card auto-glow">
-          <span style="font-size: 20px;">🤖</span>
-          <h3>AI</h3>
-          <p>Assistant & Chat</p>
-        </a>
-        <a href="translator.html" class="card category-card auto-glow">
-          <span style="font-size: 20px;">🌐</span>
-          <h3>Translator</h3>
-          <p>Translate Instantly</p>
-        </a>
-      </div>
-    </section>
-
-  </div> <!-- End Container -->
-
-  <!-- JavaScript for Menu Actions -->
-  <script>
-    const menuBtn = document.getElementById('menuBtn');
-    const closeBtn = document.getElementById('closeMenu');
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('overlay');
-
-    function toggleMenu() {
-      sidebar.classList.toggle('open');
-      overlay.classList.toggle('open');
-    }
-
-    menuBtn.addEventListener('click', toggleMenu);
-    closeBtn.addEventListener('click', toggleMenu);
-    overlay.addEventListener('click', toggleMenu);
-  </script>
-</body>
-</html>

@@ -20,7 +20,6 @@
       --text-heading: #ffffff;
       --text-muted: #8b949e;
       --border-subtle: rgba(255, 255, 255, 0.1);
-      --border-hover: rgba(255, 255, 255, 0.3);
       --btn-primary-bg: #ffffff;
       --btn-primary-text: #24292f;
       --btn-secondary-bg: transparent;
@@ -116,14 +115,14 @@
     }
 
     header button:hover {
-      border-color: var(--border-hover);
+      border-color: rgba(255, 255, 255, 0.3);
       color: var(--text-heading);
     }
 
     /* Hero Section */
     .hero {
       text-align: center;
-      padding: 30px 20px 60px; /* Reduced top padding to close the gap */
+      padding: 30px 20px 60px; /* Reduced gap */
       position: relative;
     }
 
@@ -193,7 +192,7 @@
     }
 
     .secondary:hover {
-      border-color: var(--border-hover);
+      border-color: rgba(255, 255, 255, 0.3);
       color: var(--text-heading);
     }
 
@@ -259,14 +258,23 @@
     .grid-3 { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
     .grid-4 { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
 
-    /* Cards */
+    /* SECTION SPECIFIC GLOW COLORS */
+    .section-quick { --glow-color: #58a6ff; }       /* Blue */
+    .section-featured { --glow-color: #ff7b72; }    /* Red/Orange */
+    .section-categories { --glow-color: #3fb950; }  /* Green */
+    .section-trending { --glow-color: #ff78c6; }    /* Pink/Magenta */
+    .section-recent { --glow-color: #bc8cff; }      /* Light Purple */
+    .section-stats { --glow-color: #d2a8ff; }       /* Soft Purple */
+    .section-soon { --glow-color: #e3b341; }        /* Yellow */
+
+    /* Generic Cards */
     .card {
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       border-radius: 12px;
       padding: 20px;
       backdrop-filter: blur(10px);
-      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
       text-decoration: none;
       color: var(--text-main);
       display: flex;
@@ -275,10 +283,18 @@
       position: relative;
     }
 
-    .card:hover {
-      transform: translateY(-4px);
-      border-color: var(--border-hover);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    /* Minimal Line Cards (For Trending/Recent) */
+    .line-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      padding: 16px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--text-main);
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
     }
 
     .card .icon {
@@ -297,7 +313,71 @@
       color: var(--text-muted);
     }
 
-    /* Horizontal Marquee Animation Classes */
+    .tag {
+      font-size: 10px;
+      background: rgba(88, 166, 255, 0.1);
+      color: var(--accent);
+      padding: 4px 8px;
+      border-radius: 12px;
+      border: 1px solid var(--accent);
+    }
+
+    /* SEQUENTIAL AUTO-GLOW ANIMATION */
+    @keyframes autoGlowSequence {
+      0%, 15%, 100% {
+        border-color: var(--border-subtle);
+        box-shadow: none;
+        transform: translateY(0);
+        background: var(--bg-card);
+      }
+      5%, 10% {
+        border-color: var(--glow-color);
+        box-shadow: 0 0 20px var(--glow-color);
+        transform: translateY(-4px);
+        background: rgba(255, 255, 255, 0.05);
+      }
+    }
+
+    .auto-glow {
+      animation: autoGlowSequence 20s infinite;
+    }
+
+    /* Override animation entirely when user actively hovers */
+    .auto-glow:hover {
+      animation: none !important; 
+      border-color: var(--glow-color);
+      box-shadow: 0 0 20px var(--glow-color);
+      transform: translateY(-4px);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Delays to make them glow one after another (supports up to 24 items) */
+    .auto-glow:nth-child(1) { animation-delay: 0.0s; }
+    .auto-glow:nth-child(2) { animation-delay: 0.8s; }
+    .auto-glow:nth-child(3) { animation-delay: 1.6s; }
+    .auto-glow:nth-child(4) { animation-delay: 2.4s; }
+    .auto-glow:nth-child(5) { animation-delay: 3.2s; }
+    .auto-glow:nth-child(6) { animation-delay: 4.0s; }
+    .auto-glow:nth-child(7) { animation-delay: 4.8s; }
+    .auto-glow:nth-child(8) { animation-delay: 5.6s; }
+    .auto-glow:nth-child(9) { animation-delay: 6.4s; }
+    .auto-glow:nth-child(10) { animation-delay: 7.2s; }
+    .auto-glow:nth-child(11) { animation-delay: 8.0s; }
+    .auto-glow:nth-child(12) { animation-delay: 8.8s; }
+    .auto-glow:nth-child(13) { animation-delay: 9.6s; }
+    .auto-glow:nth-child(14) { animation-delay: 10.4s; }
+    .auto-glow:nth-child(15) { animation-delay: 11.2s; }
+    .auto-glow:nth-child(16) { animation-delay: 12.0s; }
+    .auto-glow:nth-child(17) { animation-delay: 12.8s; }
+    .auto-glow:nth-child(18) { animation-delay: 13.6s; }
+    .auto-glow:nth-child(19) { animation-delay: 14.4s; }
+    .auto-glow:nth-child(20) { animation-delay: 15.2s; }
+    .auto-glow:nth-child(21) { animation-delay: 16.0s; }
+    .auto-glow:nth-child(22) { animation-delay: 16.8s; }
+    .auto-glow:nth-child(23) { animation-delay: 17.6s; }
+    .auto-glow:nth-child(24) { animation-delay: 18.4s; }
+
+    /* Horizontal Marquee (Categories) */
     .marquee-container {
       overflow: hidden;
       width: 100%;
@@ -305,16 +385,16 @@
       -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
       mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
       margin-bottom: 40px;
-      padding: 10px 0;
+      padding: 15px 0; /* Padding for glow shadow */
     }
 
     .marquee-track {
       display: flex;
       gap: 16px;
       width: max-content;
-      animation: marquee-scroll 20s linear infinite;
-      touch-action: pan-y; /* Allows vertical scrolling to pass through */
-      user-select: none; /* Prevents text selection on touch */
+      animation: marquee-scroll 30s linear infinite;
+      touch-action: pan-y; /* Keeps scroll functionality on mobile */
+      user-select: none; 
     }
 
     .category-card {
@@ -329,57 +409,32 @@
       100% { transform: translateX(calc(-50% - 8px)); }
     }
 
-    /* Vertical Marquee Animation Classes (NEW) */
+    /* Vertical Marquee (Trending) */
     .trending-container {
       overflow: hidden;
-      height: 280px; /* Adjust height based on how many you want to show */
+      height: 300px; 
       position: relative;
       -webkit-mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
       mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
       margin-bottom: 40px;
+      padding: 0 15px; /* Padding for glow shadows on sides */
     }
 
     .trending-track {
       display: flex;
       flex-direction: column;
       gap: 16px;
-      animation: marquee-vertical 10s linear infinite;
+      /* CHANGE THE '8s' BELOW TO ADJUST SPEED */
+      animation: marquee-vertical 8s linear infinite;
+      touch-action: pan-x; /* Allows horizontal scrolling over it */
     }
 
     @keyframes marquee-vertical {
       0% { transform: translateY(0); }
-      100% { transform: translateY(calc(-50% - 8px)); } /* 8px is half the gap */
+      100% { transform: translateY(calc(-50% - 8px)); } 
     }
 
-    /* Minimal Line Cards (For Trending/Recent) */
-    .line-card {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      padding: 16px 20px;
-      border-radius: 8px;
-      text-decoration: none;
-      color: var(--text-main);
-      transition: 0.2s;
-    }
-
-    .line-card:hover {
-      border-color: var(--border-hover);
-      background: rgba(255,255,255,0.05);
-    }
-
-    .tag {
-      font-size: 10px;
-      background: rgba(88, 166, 255, 0.1);
-      color: var(--accent);
-      padding: 4px 8px;
-      border-radius: 12px;
-      border: 1px solid var(--accent);
-    }
-
-    /* Stats Grid */
+    /* Stats Grid Custom */
     .stats-card h3 {
       font-size: 28px;
       color: var(--text-heading);
@@ -590,20 +645,20 @@
     </section>
 
     <!-- Quick Actions -->
-    <section class="grid grid-4">
-      <a href="ai-chat.html" class="card" style="align-items: center; text-align: center;">
+    <section class="grid grid-4 section-quick">
+      <a href="ai-chat.html" class="card auto-glow" style="align-items: center; text-align: center;">
         <span style="font-size: 24px;">⚡</span>
         <h3 style="font-size: 14px;">Quick AI</h3>
       </a>
-      <a href="#" class="card" style="align-items: center; text-align: center;">
+      <a href="#" class="card auto-glow" style="align-items: center; text-align: center;">
         <span style="font-size: 24px;">📄</span>
         <h3 style="font-size: 14px;">PDF</h3>
       </a>
-      <a href="translator.html" class="card" style="align-items: center; text-align: center;">
+      <a href="translator.html" class="card auto-glow" style="align-items: center; text-align: center;">
         <span style="font-size: 24px;">🌐</span>
         <h3 style="font-size: 14px;">Translate</h3>
       </a>
-      <a href="#" class="card" style="align-items: center; text-align: center;">
+      <a href="#" class="card auto-glow" style="align-items: center; text-align: center;">
         <span style="font-size: 24px;">🖼</span>
         <h3 style="font-size: 14px;">Image</h3>
       </a>
@@ -614,38 +669,38 @@
       <h2>🔥 Featured Tools</h2>
       <p>Most Popular</p>
     </div>
-    <section class="grid grid-3">
-      <a href="ai-chat.html" class="card">
+    <section class="grid grid-3 section-featured">
+      <a href="ai-chat.html" class="card auto-glow">
         <div class="icon">🤖</div>
         <h3>AI Assistant</h3>
         <p>Ask Anything</p>
       </a>
-      <a href="translator.html" class="card">
+      <a href="translator.html" class="card auto-glow">
         <div class="icon">🌐</div>
         <h3>Translator</h3>
         <p>100+ Languages</p>
       </a>
-      <div class="card">
+      <div class="card auto-glow">
         <div class="icon">📄</div>
         <h3>PDF Tools</h3>
         <p>Convert & Edit</p>
       </div>
-      <div class="card">
+      <div class="card auto-glow">
         <div class="icon">🖼</div>
         <h3>Image Tools</h3>
         <p>Compress & Resize</p>
       </div>
-      <a href="qr-generator.html" class="card">
+      <a href="qr-generator.html" class="card auto-glow">
         <div class="icon">📱</div>
         <h3>QR Scanner</h3>
         <p>Scan & Generate</p>
       </a>
-      <a href="calculator.html" class="card">
+      <a href="calculator.html" class="card auto-glow">
         <div class="icon">🧮</div>
         <h3>Calculator</h3>
         <p>Smart Calculations</p>
       </a>
-      <a href="text-tools.html" class="card">
+      <a href="text-tools.html" class="card auto-glow">
         <div class="icon">📝</div>
         <h3>Text Tools</h3>
         <p>Case Convert, Merge, Count</p>
@@ -657,133 +712,132 @@
       <h2>📂 Categories</h2>
       <p>Choose your favorite</p>
     </div>
-    <section class="marquee-container">
+    <section class="marquee-container section-categories">
       <div class="marquee-track">
         
         <!-- Original 12 Items -->
-        <a href="ai-chat.html" class="card category-card">
+        <a href="ai-chat.html" class="card category-card auto-glow">
           <span style="font-size: 20px;">🤖</span>
           <h3>AI</h3>
           <p>Assistant & Chat</p>
         </a>
-        <a href="translator.html" class="card category-card">
+        <a href="translator.html" class="card category-card auto-glow">
           <span style="font-size: 20px;">🌐</span>
           <h3>Translator</h3>
           <p>Translate Instantly</p>
         </a>
-        <div class="card category-card">
+        <div class="card category-card auto-glow">
           <span style="font-size: 20px;">📄</span>
           <h3>PDF</h3>
           <p>Edit PDF</p>
         </div>
-        <div class="card category-card">
+        <div class="card category-card auto-glow">
           <span style="font-size: 20px;">🖼</span>
           <h3>Images</h3>
           <p>Resize & Compress</p>
         </div>
-        <div class="card category-card">
+        <div class="card category-card auto-glow">
           <span style="font-size: 20px;">🎵</span>
           <h3>Audio</h3>
           <p>Convert Audio</p>
         </div>
-        <div class="card category-card">
+        <div class="card category-card auto-glow">
           <span style="font-size: 20px;">🎬</span>
           <h3>Video</h3>
           <p>Basic Tools</p>
         </div>
-        <a href="qr-generator.html" class="card category-card">
+        <a href="qr-generator.html" class="card category-card auto-glow">
           <span style="font-size: 20px;">📱</span>
           <h3>QR</h3>
           <p>Create QR</p>
         </a>
-        <a href="calculator.html" class="card category-card">
+        <a href="calculator.html" class="card category-card auto-glow">
           <span style="font-size: 20px;">🧮</span>
           <h3>Calculator</h3>
           <p>Math & Finance</p>
         </a>
-        <a href="text-tools.html" class="card category-card">
+        <a href="text-tools.html" class="card category-card auto-glow">
           <span style="font-size: 20px;">📝</span>
           <h3>Text</h3>
           <p>Utilities</p>
         </a> 
-        <div class="card category-card">
+        <div class="card category-card auto-glow">
           <span style="font-size: 20px;">🎓</span>
           <h3>Study</h3>
           <p>Student Tools</p>
         </div>
-        <div class="card category-card">
+        <div class="card category-card auto-glow">
           <span style="font-size: 20px;">⚙</span>
           <h3>Utilities</h3>
           <p>Daily Use</p>
         </div>
-        <div class="card category-card">
+        <div class="card category-card auto-glow">
           <span style="font-size: 20px;">⭐</span>
           <h3>More</h3>
           <p>Coming Soon</p>
         </div>
 
         <!-- Duplicated 12 Items for Seamless Scrolling -->
-        <a href="ai-chat.html" class="card category-card" aria-hidden="true">
+        <a href="ai-chat.html" class="card category-card auto-glow" aria-hidden="true">
           <span style="font-size: 20px;">🤖</span>
           <h3>AI</h3>
           <p>Assistant & Chat</p>
         </a>
-        <a href="translator.html" class="card category-card" aria-hidden="true">
+        <a href="translator.html" class="card category-card auto-glow" aria-hidden="true">
           <span style="font-size: 20px;">🌐</span>
           <h3>Translator</h3>
           <p>Translate Instantly</p>
         </a>
-        <div class="card category-card" aria-hidden="true">
+        <div class="card category-card auto-glow" aria-hidden="true">
           <span style="font-size: 20px;">📄</span>
           <h3>PDF</h3>
           <p>Edit PDF</p>
         </div>
-        <div class="card category-card" aria-hidden="true">
+        <div class="card category-card auto-glow" aria-hidden="true">
           <span style="font-size: 20px;">🖼</span>
           <h3>Images</h3>
           <p>Resize & Compress</p>
         </div>
-        <div class="card category-card" aria-hidden="true">
+        <div class="card category-card auto-glow" aria-hidden="true">
           <span style="font-size: 20px;">🎵</span>
           <h3>Audio</h3>
           <p>Convert Audio</p>
         </div>
-        <div class="card category-card" aria-hidden="true">
+        <div class="card category-card auto-glow" aria-hidden="true">
           <span style="font-size: 20px;">🎬</span>
           <h3>Video</h3>
           <p>Basic Tools</p>
         </div>
-        <a href="qr-generator.html" class="card category-card" aria-hidden="true">
+        <a href="qr-generator.html" class="card category-card auto-glow" aria-hidden="true">
           <span style="font-size: 20px;">📱</span>
           <h3>QR</h3>
           <p>Create QR</p>
         </a>
-        <a href="calculator.html" class="card category-card" aria-hidden="true">
+        <a href="calculator.html" class="card category-card auto-glow" aria-hidden="true">
           <span style="font-size: 20px;">🧮</span>
           <h3>Calculator</h3>
           <p>Math & Finance</p>
         </a>
-        <a href="text-tools.html" class="card category-card" aria-hidden="true">
+        <a href="text-tools.html" class="card category-card auto-glow" aria-hidden="true">
           <span style="font-size: 20px;">📝</span>
           <h3>Text</h3>
           <p>Utilities</p>
         </a> 
-        <div class="card category-card" aria-hidden="true">
+        <div class="card category-card auto-glow" aria-hidden="true">
           <span style="font-size: 20px;">🎓</span>
           <h3>Study</h3>
           <p>Student Tools</p>
         </div>
-        <div class="card category-card" aria-hidden="true">
+        <div class="card category-card auto-glow" aria-hidden="true">
           <span style="font-size: 20px;">⚙</span>
           <h3>Utilities</h3>
           <p>Daily Use</p>
         </div>
-        <div class="card category-card" aria-hidden="true">
+        <div class="card category-card auto-glow" aria-hidden="true">
           <span style="font-size: 20px;">⭐</span>
           <h3>More</h3>
           <p>Coming Soon</p>
         </div>
-
       </div>
     </section>
 
@@ -792,67 +846,66 @@
       <h2>⭐ Trending</h2>
       <p>Most Used Today</p>
     </div>
-    <section class="trending-container">
+    <section class="trending-container section-trending">
       <div class="trending-track">
         <!-- Original Items -->
-        <a href="ai-chat.html" class="line-card">
+        <a href="ai-chat.html" class="line-card auto-glow">
           <div>🤖 AI Chat</div>
           <span class="tag">HOT</span>
         </a>
-        <a href="translator.html" class="line-card">
+        <a href="translator.html" class="line-card auto-glow">
           <div>🌐 Translator</div>
           <span class="tag">NEW</span>
         </a>
-        <div class="line-card">
+        <div class="line-card auto-glow">
           <div>📄 PDF Converter</div>
           <span class="tag">TOP</span>
         </div>
-        <div class="line-card">
+        <div class="line-card auto-glow">
           <div>🖼 Image Compressor</div>
           <span class="tag">FAST</span>
         </div>
-        <a href="qr-generator.html" class="line-card">
+        <a href="qr-generator.html" class="line-card auto-glow">
           <div>📱 QR Generator</div>
           <span class="tag">FREE</span>
         </a>
 
         <!-- Duplicated Items for Seamless Scrolling -->
-        <a href="ai-chat.html" class="line-card" aria-hidden="true">
+        <a href="ai-chat.html" class="line-card auto-glow" aria-hidden="true">
           <div>🤖 AI Chat</div>
           <span class="tag">HOT</span>
         </a>
-        <a href="translator.html" class="line-card" aria-hidden="true">
+        <a href="translator.html" class="line-card auto-glow" aria-hidden="true">
           <div>🌐 Translator</div>
           <span class="tag">NEW</span>
         </a>
-        <div class="line-card" aria-hidden="true">
+        <div class="line-card auto-glow" aria-hidden="true">
           <div>📄 PDF Converter</div>
           <span class="tag">TOP</span>
         </div>
-        <div class="line-card" aria-hidden="true">
+        <div class="line-card auto-glow" aria-hidden="true">
           <div>🖼 Image Compressor</div>
           <span class="tag">FAST</span>
         </div>
-        <a href="qr-generator.html" class="line-card" aria-hidden="true">
+        <a href="qr-generator.html" class="line-card auto-glow" aria-hidden="true">
           <div>📱 QR Generator</div>
           <span class="tag">FREE</span>
         </a>
       </div>
     </section>
 
-
     <!-- Favorites & Recent -->
     <div class="section-title">
       <h2>🕒 Recent & Favorites</h2>
       <p>Quick access to your tools</p>
     </div>
-    <section class="grid grid-2">
-      <a href="ai-chat.html" class="line-card">🤖 AI Assistant</a>
-      <div class="line-card">📄 PDF Merge</div>
-      <a href="translator.html" class="line-card">🌐 Translate</a>
-      <a href="calculator.html" class="line-card">🧮 Calculator</a>
-      <div class="line-card">🖼 Image Resize</div>
-      <a href="qr-generator.html" class="line-card">📱 QR Scanner</a>
+    <section class="grid grid-2 section-recent">
+      <a href="ai-chat.html" class="line-card auto-glow">🤖 AI Assistant</a>
+      <div class="line-card auto-glow">📄 PDF Merge</div>
+      <a href="translator.html" class="line-card auto-glow">🌐 Translate</a>
+      <a href="calculator.html" class="line-card auto-glow">🧮 Calculator</a>
+      <div class="line-card auto-glow">🖼 Image Resize</div>
+      <a href="qr-generator.html" class="line-card auto-glow">📱 QR Scanner</a>
     </section>
 
     <!-- App Statistics -->
@@ -860,20 +913,20 @@
       <h2>📊 App Statistics</h2>
       <p>XTra Tech Overview</p>
     </div>
-    <section class="grid grid-4 text-center">
-      <div class="card stats-card" style="align-items: center;">
+    <section class="grid grid-4 text-center section-stats">
+      <div class="card stats-card auto-glow" style="align-items: center;">
         <h3>100+</h3>
         <p>Tools</p>
       </div>
-      <div class="card stats-card" style="align-items: center;">
+      <div class="card stats-card auto-glow" style="align-items: center;">
         <h3>50K+</h3>
         <p>Users</p>
       </div>
-      <div class="card stats-card" style="align-items: center;">
+      <div class="card stats-card auto-glow" style="align-items: center;">
         <h3>99%</h3>
         <p>Fast</p>
       </div>
-      <div class="card stats-card" style="align-items: center;">
+      <div class="card stats-card auto-glow" style="align-items: center;">
         <h3>24×7</h3>
         <p>Available</p>
       </div>
@@ -883,13 +936,13 @@
     <div class="section-title">
       <h2>🚀 Coming Soon</h2>
     </div>
-    <section class="grid grid-3">
-      <div class="card" style="align-items: center; text-align: center;">🎤 AI Voice</div>
-      <div class="card" style="align-items: center; text-align: center;">🧠 AI Image Gen</div>
-      <div class="card" style="align-items: center; text-align: center;">🎬 Video Editor</div>
-      <div class="card" style="align-items: center; text-align: center;">☁ Cloud Storage</div>
-      <div class="card" style="align-items: center; text-align: center;">🤝 Community</div>
-      <div class="card" style="align-items: center; text-align: center;">💬 Live Chat</div>
+    <section class="grid grid-3 section-soon">
+      <div class="card auto-glow" style="align-items: center; text-align: center;">🎤 AI Voice</div>
+      <div class="card auto-glow" style="align-items: center; text-align: center;">🧠 AI Image Gen</div>
+      <div class="card auto-glow" style="align-items: center; text-align: center;">🎬 Video Editor</div>
+      <div class="card auto-glow" style="align-items: center; text-align: center;">☁ Cloud Storage</div>
+      <div class="card auto-glow" style="align-items: center; text-align: center;">🤝 Community</div>
+      <div class="card auto-glow" style="align-items: center; text-align: center;">💬 Live Chat</div>
     </section>
 
   </div> <!-- End Container -->

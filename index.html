@@ -297,6 +297,47 @@
       color: var(--text-muted);
     }
 
+    /* Marquee Animation Classes (NEW) */
+    .marquee-container {
+      overflow: hidden;
+      width: 100%;
+      position: relative;
+      /* Optional: Fades out the edges for a smoother look */
+      -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+      mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+      margin-bottom: 40px;
+      padding: 10px 0; /* Extra padding so hover shadow isn't cut off */
+    }
+
+    .marquee-track {
+      display: flex;
+      gap: 16px;
+      width: max-content;
+      /* Adjust time (30s) to make it scroll faster or slower */
+      animation: marquee-scroll 30s linear infinite;
+    }
+
+    .marquee-track:hover {
+      animation-play-state: paused;
+    }
+
+    .category-card {
+      flex: 0 0 auto;
+      width: 160px; /* Fixed width prevents stretching in horizontal flex */
+      align-items: center;
+      text-align: center;
+    }
+
+    @keyframes marquee-scroll {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        /* Translates exactly half the width minus half the gap for a seamless loop */
+        transform: translateX(calc(-50% - 8px)); 
+      }
+    }
+
     /* Minimal Line Cards (For Trending/Recent) */
     .line-card {
       display: flex;
@@ -603,53 +644,135 @@
       <h2>📂 Categories</h2>
       <p>Choose your favorite</p>
     </div>
-    <section class="grid grid-2">
-      <a href="ai-chat.html" class="card">
-        <span style="font-size: 20px;">🤖</span>
-        <h3>AI</h3>
-        <p>Assistant & Chat</p>
-      </a>
-      <a href="translator.html" class="card">
-        <span style="font-size: 20px;">🌐</span>
-        <h3>Translator</h3>
-        <p>Translate Instantly</p>
-      </a>
-      <div class="card">
-        <span style="font-size: 20px;">📄</span>
-        <h3>PDF</h3>
-        <p>Edit PDF</p>
+    <section class="marquee-container">
+      <div class="marquee-track">
+        
+        <!-- Original 12 Items -->
+        <a href="ai-chat.html" class="card category-card">
+          <span style="font-size: 20px;">🤖</span>
+          <h3>AI</h3>
+          <p>Assistant & Chat</p>
+        </a>
+        <a href="translator.html" class="card category-card">
+          <span style="font-size: 20px;">🌐</span>
+          <h3>Translator</h3>
+          <p>Translate Instantly</p>
+        </a>
+        <div class="card category-card">
+          <span style="font-size: 20px;">📄</span>
+          <h3>PDF</h3>
+          <p>Edit PDF</p>
+        </div>
+        <div class="card category-card">
+          <span style="font-size: 20px;">🖼</span>
+          <h3>Images</h3>
+          <p>Resize & Compress</p>
+        </div>
+        <div class="card category-card">
+          <span style="font-size: 20px;">🎵</span>
+          <h3>Audio</h3>
+          <p>Convert Audio</p>
+        </div>
+        <div class="card category-card">
+          <span style="font-size: 20px;">🎬</span>
+          <h3>Video</h3>
+          <p>Basic Tools</p>
+        </div>
+        <a href="qr-generator.html" class="card category-card">
+          <span style="font-size: 20px;">📱</span>
+          <h3>QR</h3>
+          <p>Create QR</p>
+        </a>
+        <a href="calculator.html" class="card category-card">
+          <span style="font-size: 20px;">🧮</span>
+          <h3>Calculator</h3>
+          <p>Math & Finance</p>
+        </a>
+        <a href="text-tools.html" class="card category-card">
+          <span style="font-size: 20px;">📝</span>
+          <h3>Text</h3>
+          <p>Utilities</p>
+        </a> 
+        <div class="card category-card">
+          <span style="font-size: 20px;">🎓</span>
+          <h3>Study</h3>
+          <p>Student Tools</p>
+        </div>
+        <div class="card category-card">
+          <span style="font-size: 20px;">⚙</span>
+          <h3>Utilities</h3>
+          <p>Daily Use</p>
+        </div>
+        <div class="card category-card">
+          <span style="font-size: 20px;">⭐</span>
+          <h3>More</h3>
+          <p>Coming Soon</p>
+        </div>
+
+        <!-- Duplicated 12 Items for Seamless Scrolling -->
+        <a href="ai-chat.html" class="card category-card" aria-hidden="true">
+          <span style="font-size: 20px;">🤖</span>
+          <h3>AI</h3>
+          <p>Assistant & Chat</p>
+        </a>
+        <a href="translator.html" class="card category-card" aria-hidden="true">
+          <span style="font-size: 20px;">🌐</span>
+          <h3>Translator</h3>
+          <p>Translate Instantly</p>
+        </a>
+        <div class="card category-card" aria-hidden="true">
+          <span style="font-size: 20px;">📄</span>
+          <h3>PDF</h3>
+          <p>Edit PDF</p>
+        </div>
+        <div class="card category-card" aria-hidden="true">
+          <span style="font-size: 20px;">🖼</span>
+          <h3>Images</h3>
+          <p>Resize & Compress</p>
+        </div>
+        <div class="card category-card" aria-hidden="true">
+          <span style="font-size: 20px;">🎵</span>
+          <h3>Audio</h3>
+          <p>Convert Audio</p>
+        </div>
+        <div class="card category-card" aria-hidden="true">
+          <span style="font-size: 20px;">🎬</span>
+          <h3>Video</h3>
+          <p>Basic Tools</p>
+        </div>
+        <a href="qr-generator.html" class="card category-card" aria-hidden="true">
+          <span style="font-size: 20px;">📱</span>
+          <h3>QR</h3>
+          <p>Create QR</p>
+        </a>
+        <a href="calculator.html" class="card category-card" aria-hidden="true">
+          <span style="font-size: 20px;">🧮</span>
+          <h3>Calculator</h3>
+          <p>Math & Finance</p>
+        </a>
+        <a href="text-tools.html" class="card category-card" aria-hidden="true">
+          <span style="font-size: 20px;">📝</span>
+          <h3>Text</h3>
+          <p>Utilities</p>
+        </a> 
+        <div class="card category-card" aria-hidden="true">
+          <span style="font-size: 20px;">🎓</span>
+          <h3>Study</h3>
+          <p>Student Tools</p>
+        </div>
+        <div class="card category-card" aria-hidden="true">
+          <span style="font-size: 20px;">⚙</span>
+          <h3>Utilities</h3>
+          <p>Daily Use</p>
+        </div>
+        <div class="card category-card" aria-hidden="true">
+          <span style="font-size: 20px;">⭐</span>
+          <h3>More</h3>
+          <p>Coming Soon</p>
+        </div>
+
       </div>
-      <div class="card">
-        <span style="font-size: 20px;">🖼</span>
-        <h3>Images</h3>
-        <p>Resize & Compress</p>
-      </div>
-      <div class="card">
-        <span style="font-size: 20px;">🎵</span>
-        <h3>Audio</h3>
-        <p>Convert Audio</p>
-      </div>
-      <div class="card">
-        <span style="font-size: 20px;">🎬</span>
-        <h3>Video</h3>
-        <p>Basic Tools</p>
-      </div>
-      <a href="qr-generator.html" class="card">
-        <span style="font-size: 20px;">📱</span>
-        <h3>QR</h3>
-        <p>Create QR</p>
-      </a>
-      <a href="calculator.html" class="card">
-        <span style="font-size: 20px;">🧮</span>
-        <h3>Calculator</h3>
-        <p>Math & Finance</p>
-      </a>
-      <a href="text-tools.html" class="card">
-        <span style="font-size: 20px;">📝</span>
-        <h3>Text</h3>
-        <p>Utilities</p>
-      </a> 
-    </section> 
+    </section>
 
     <!-- Trending -->
     <div class="section-title">
@@ -680,6 +803,20 @@
     </section>
 
 
+    <!-- Favorites & Recent -->
+    <div class="section-title">
+      <h2>🕒 Recent & Favorites</h2>
+      <p>Quick access to your tools</p>
+    </div>
+    <section class="grid grid-2">
+      <a href="ai-chat.html" class="line-card">🤖 AI Assistant</a>
+      <div class="line-card">📄 PDF Merge</div>
+      <a href="translator.html" class="line-card">🌐 Translate</a>
+      <a href="calculator.html" class="line-card">🧮 Calculator</a>
+      <div class="line-card">🖼 Image Resize</div>
+      <a href="qr-generator.html" class="line-card">📱 QR Scanner</a>
+    </section>
+
     <!-- App Statistics -->
     <div class="section-title">
       <h2>📊 App Statistics</h2>
@@ -704,6 +841,20 @@
       </div>
     </section>
 
+    <!-- Coming Soon -->
+    <div class="section-title">
+      <h2>🚀 Coming Soon</h2>
+    </div>
+    <section class="grid grid-3">
+      <div class="card" style="align-items: center; text-align: center;">🎤 AI Voice</div>
+      <div class="card" style="align-items: center; text-align: center;">🧠 AI Image Gen</div>
+      <div class="card" style="align-items: center; text-align: center;">🎬 Video Editor</div>
+      <div class="card" style="align-items: center; text-align: center;">☁ Cloud Storage</div>
+      <div class="card" style="align-items: center; text-align: center;">🤝 Community</div>
+      <div class="card" style="align-items: center; text-align: center;">💬 Live Chat</div>
+    </section>
+
+  </div> <!-- End Container -->
 
   <!-- Footer -->
   <footer>

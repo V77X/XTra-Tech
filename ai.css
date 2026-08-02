@@ -121,7 +121,7 @@ border-bottom-right-radius:5px;
 
 .bot {
 align-self:flex-start;
-background: linear-gradient(135deg, #2d2d3a, #16161f);
+background: linear-gradient(135deg, #fc00ff, #00dbde);
 color:white;
 border-bottom-left-radius:5px;
 }

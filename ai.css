@@ -114,7 +114,7 @@ to {
 
 .user {
 align-self:flex-end;
-background: linear-gradient(135deg, #000000, #3e0000, #7c0000);
+background: linear-gradient(135deg, #000000, #3e0000);
 color:white;
 border-bottom-right-radius:5px;
 }

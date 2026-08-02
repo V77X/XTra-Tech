@@ -64,7 +64,12 @@ async function sendMessage() {
     }
 }
 
-sendBtn.addEventListener("click", sendMessage);
+sendBtn.addEventListener("click", () => {
+    sendBtn.classList.remove("clicked");
+    void sendBtn.offsetWidth; // restart animation each click
+    sendBtn.classList.add("clicked");
+    sendMessage();
+});
 
 userInput.addEventListener("keydown", e => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -73,13 +78,15 @@ userInput.addEventListener("keydown", e => {
     }
 });
 
+function resetGreeting() {
+    chatBox.innerHTML = `
+    <div class="greeting">
+        <div class="greeting-icon">🤖</div>
+        <div class="greeting-title">Hello 👋</div>
+        <div class="greeting-sub">I'm XTra Tech AI.<br>How can I help you today?</div>
+    </div>`;
+}
+
 if (clearBtn) {
-    clearBtn.addEventListener("click", () => {
-        chatBox.innerHTML = `
-        <div class="message bot">
-        Hello 👋<br><br>
-        I'm XTra Tech AI.<br>
-        How can I help you today?
-        </div>`;
-    });
+    clearBtn.addEventListener("click", resetGreeting);
 }

@@ -36,13 +36,13 @@ async function sendMessage() {
         const data = await response.json();
         loading.remove();
 
-        // Extracts only the clean text response from Gemini API
+        // Extracts only the clean text response from Groq API
         let reply = "";
-        
-        if (data.candidates && data.candidates.length > 0) {
-            reply = data.candidates[0].content.parts[0].text;
+
+        if (data.choices && data.choices.length > 0) {
+            reply = data.choices[0].message.content;
         } else if (data.error) {
-            reply = "Error: " + data.error;
+            reply = "Error: " + (data.error.message || JSON.stringify(data.error));
         } else {
             reply = "Sorry, I couldn't process that response.";
             console.error("Raw response:", data);

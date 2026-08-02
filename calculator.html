@@ -1,212 +1,689 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculator - XTra Tech</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        .tool-container {
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 20px;
-            padding-top: 80px;
-        }
-        .tool-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .tool-header h1 {
-            font-size: 32px;
-            margin-bottom: 10px;
-        }
-        .calculator {
-            background: rgba(255,255,255,.05);
-            border-radius: 20px;
-            padding: 20px;
-            border: 1px solid rgba(255,255,255,.08);
-        }
-        .display {
-            background: rgba(0,229,255,.1);
-            border: 2px solid rgba(0,229,255,.3);
-            border-radius: 14px;
-            padding: 20px;
-            text-align: right;
-            font-size: 32px;
-            margin-bottom: 20px;
-            color: #00e5ff;
-            word-wrap: break-word;
-            word-break: break-all;
-            min-height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-        }
-        .buttons {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-        }
-        .btn {
-            padding: 20px;
-            border: 1px solid rgba(255,255,255,.08);
-            background: rgba(255,255,255,.05);
-            color: #fff;
-            border-radius: 12px;
-            font-size: 18px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: .3s;
-        }
-        .btn:hover {
-            background: rgba(255,255,255,.1);
-            box-shadow: 0 0 15px rgba(0,229,255,.3);
-        }
-        .btn.operator {
-            background: linear-gradient(135deg,#00e5ff,#7d4dff);
-            color: #000;
-        }
-        .btn.operator:hover {
-            box-shadow: 0 0 20px #00e5ff;
-        }
-        .btn.equals {
-            background: linear-gradient(135deg,#ff00c8,#ff6d00);
-            color: #fff;
-            grid-column: span 2;
-        }
-        .btn.equals:hover {
-            box-shadow: 0 0 20px #ff00c8;
-        }
-        .btn.clear {
-            background: #ff3333;
-            color: #fff;
-            grid-column: span 2;
-        }
-        .btn.clear:hover {
-            box-shadow: 0 0 20px #ff3333;
-        }
-        .back-btn {
-            display: inline-block;
-            margin-bottom: 20px;
-            padding: 10px 20px;
-            background: rgba(255,255,255,.08);
-            border: none;
-            border-radius: 10px;
-            color: #fff;
-            cursor: pointer;
-            text-decoration: none;
-            font-weight: 600;
-        }
-        .back-btn:hover {
-            background: #00e5ff;
-            color: #000;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Calc // Pro</title>
+<style>
+  :root{
+    --bg:#0b0d10;
+    --panel:#14171b;
+    --display:#0e1013;
+    --amber:#ffb238;
+    --amber-dim:#8a5f1f;
+    --key:#1c2126;
+    --key-hover:#242a31;
+    --key-op:#252017;
+    --key-op-text:#ffb238;
+    --key-fn:#171b20;
+    --text:#e8e6e1;
+    --text-dim:#6b7280;
+    --danger:#ff5c5c;
+    --mono: 'SF Mono','JetBrains Mono','Courier New',monospace;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent; user-select:none;}
+  html,body{
+    margin:0; padding:0; height:100%;
+    background:var(--bg);
+    font-family:var(--mono);
+    color:var(--text);
+    overflow:hidden;
+  }
+  #app{
+    max-width:480px;
+    margin:0 auto;
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    background:var(--panel);
+    border-left:1px solid #1f242a;
+    border-right:1px solid #1f242a;
+  }
+
+  /* ---- Top bar: mode + base switch ---- */
+  #topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:10px 14px 6px;
+    font-size:11px;
+    letter-spacing:.12em;
+    color:var(--text-dim);
+  }
+  #topbar .brand{ color:var(--amber); font-weight:600; }
+  #modeToggle{
+    display:flex; gap:6px;
+  }
+  .modeBtn{
+    background:transparent;
+    border:1px solid #2a2f36;
+    color:var(--text-dim);
+    font-family:var(--mono);
+    font-size:10px;
+    letter-spacing:.08em;
+    padding:4px 8px;
+    border-radius:4px;
+    cursor:pointer;
+  }
+  .modeBtn.active{
+    color:var(--amber);
+    border-color:var(--amber-dim);
+    background:rgba(255,178,56,.08);
+  }
+
+  /* ---- Base row (programmer mode) ---- */
+  #baseRow{
+    display:none;
+    gap:6px;
+    padding:0 14px 8px;
+    font-size:11px;
+  }
+  #baseRow.show{ display:flex; }
+  .baseBtn{
+    flex:1;
+    text-align:center;
+    background:var(--key-fn);
+    border:1px solid #262b31;
+    color:var(--text-dim);
+    padding:6px 0;
+    border-radius:4px;
+    cursor:pointer;
+    font-family:var(--mono);
+    font-size:10px;
+    letter-spacing:.05em;
+  }
+  .baseBtn.active{ color:var(--amber); border-color:var(--amber-dim); }
+
+  /* ---- Base readouts (programmer mode) ---- */
+  #baseReadouts{
+    display:none;
+    flex-direction:column;
+    gap:2px;
+    padding:0 16px 8px;
+    font-size:11px;
+    color:var(--text-dim);
+  }
+  #baseReadouts.show{ display:flex; }
+  #baseReadouts div{ display:flex; justify-content:space-between; }
+  #baseReadouts span.lbl{ color:#4b5158; }
+  #baseReadouts span.val{ color:var(--text); letter-spacing:.03em; }
+
+  /* ---- Display ---- */
+  #displayWrap{
+    background:var(--display);
+    padding:14px 18px 10px;
+    border-bottom:1px solid #1f242a;
+  }
+  #history{
+    min-height:18px;
+    font-size:12px;
+    color:var(--text-dim);
+    text-align:right;
+    white-space:nowrap;
+    overflow-x:auto;
+    letter-spacing:.02em;
+  }
+  #expr{
+    min-height:16px;
+    font-size:13px;
+    color:var(--amber-dim);
+    text-align:right;
+    white-space:nowrap;
+    overflow-x:auto;
+    margin-top:2px;
+  }
+  #main{
+    font-size:44px;
+    text-align:right;
+    color:var(--text);
+    overflow-x:auto;
+    white-space:nowrap;
+    padding-top:6px;
+    font-weight:500;
+    letter-spacing:.01em;
+  }
+  #main.err{ color:var(--danger); font-size:26px; }
+
+  /* ---- Sci row toggle (scientific extras) ---- */
+  #sciRow{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:1px;
+    background:#1f242a;
+    display:none;
+  }
+  #sciRow.show{ display:grid; }
+  #sciRow button{
+    background:var(--key-fn);
+    border:none;
+    color:var(--text);
+    font-family:var(--mono);
+    font-size:13px;
+    padding:12px 0;
+    cursor:pointer;
+  }
+  #sciRow button:active{ background:var(--key-hover); }
+  #sciRow button.inv-on{ color:var(--amber); }
+
+  /* ---- Bitwise row (programmer mode) ---- */
+  #bitRow{
+    display:none;
+    grid-template-columns:repeat(5,1fr);
+    gap:1px;
+    background:#1f242a;
+  }
+  #bitRow.show{ display:grid; }
+  #bitRow button{
+    background:var(--key-fn);
+    border:none;
+    color:var(--text);
+    font-family:var(--mono);
+    font-size:13px;
+    padding:12px 0;
+    cursor:pointer;
+  }
+  #bitRow button:active{ background:var(--key-hover); }
+
+  /* ---- Keypad ---- */
+  #keypad{
+    flex:1;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    grid-template-rows:repeat(5,1fr);
+    gap:1px;
+    background:#1f242a;
+  }
+  #keypad button{
+    background:var(--key);
+    border:none;
+    color:var(--text);
+    font-family:var(--mono);
+    font-size:20px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  #keypad button:active{ background:var(--key-hover); }
+  #keypad button.op{ background:var(--key-op); color:var(--key-op-text); font-size:20px; }
+  #keypad button.fn{ background:var(--key-fn); color:var(--text-dim); font-size:15px; }
+  #keypad button.eq{ background:var(--amber); color:#1a1300; font-weight:700; font-size:22px; }
+  #keypad button.eq:active{ background:#e6a02f; }
+  #keypad button.zero{ grid-column:span 2; }
+  #keypad button:disabled{ color:#33383e; cursor:default; }
+
+  #memRow{
+    display:flex;
+    gap:1px;
+    background:#1f242a;
+  }
+  #memRow button{
+    flex:1;
+    background:var(--key-fn);
+    border:none;
+    color:var(--text-dim);
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.05em;
+    padding:9px 0;
+    cursor:pointer;
+  }
+  #memRow button:active{ background:var(--key-hover); }
+  #memRow button.hasval{ color:var(--amber); }
+
+  ::-webkit-scrollbar{ display:none; }
+</style>
 </head>
 <body>
-    <div class="bg">
-        <div class="circle c1"></div>
-        <div class="circle c2"></div>
-        <div class="circle c3"></div>
-        <div class="circle c4"></div>
-        <div class="grid"></div>
+<div id="app">
+
+  <div id="topbar">
+    <span class="brand">CALC // PRO</span>
+    <div id="modeToggle">
+      <button class="modeBtn active" data-mode="sci">SCI</button>
+      <button class="modeBtn" data-mode="prog">PROG</button>
     </div>
+  </div>
 
-    <div class="tool-container">
-        <button class="back-btn" onclick="window.location.href='index.html'">← Back Home</button>
-        
-        <div class="tool-header">
-            <h1>🧮 Calculator</h1>
-            <p>Scientific Calculator</p>
-        </div>
+  <div id="baseRow">
+    <button class="baseBtn active" data-base="16">HEX</button>
+    <button class="baseBtn" data-base="10">DEC</button>
+    <button class="baseBtn" data-base="8">OCT</button>
+    <button class="baseBtn" data-base="2">BIN</button>
+  </div>
 
-        <div class="calculator">
-            <div class="display" id="display">0</div>
-            <div class="buttons">
-                <button class="btn clear" onclick="clearDisplay()">C</button>
-                <button class="btn operator" onclick="appendOperator('/')">/</button>
-                <button class="btn operator" onclick="appendOperator('*')">*</button>
-                
-                <button class="btn" onclick="appendNumber('7')">7</button>
-                <button class="btn" onclick="appendNumber('8')">8</button>
-                <button class="btn" onclick="appendNumber('9')">9</button>
-                <button class="btn operator" onclick="appendOperator('-')">-</button>
-                
-                <button class="btn" onclick="appendNumber('4')">4</button>
-                <button class="btn" onclick="appendNumber('5')">5</button>
-                <button class="btn" onclick="appendNumber('6')">6</button>
-                <button class="btn operator" onclick="appendOperator('+')">+</button>
-                
-                <button class="btn" onclick="appendNumber('1')">1</button>
-                <button class="btn" onclick="appendNumber('2')">2</button>
-                <button class="btn" onclick="appendNumber('3')">3</button>
-                <button class="btn operator" onclick="appendOperator('.')">.  </button>
-                
-                <button class="btn" onclick="appendNumber('0')" style="grid-column: span 2;">0</button>
-                <button class="btn equals" onclick="calculate()">=</button>
-            </div>
-        </div>
-    </div>
+  <div id="baseReadouts">
+    <div><span class="lbl">HEX</span><span class="val" id="rHex">0</span></div>
+    <div><span class="lbl">DEC</span><span class="val" id="rDec">0</span></div>
+    <div><span class="lbl">OCT</span><span class="val" id="rOct">0</span></div>
+    <div><span class="lbl">BIN</span><span class="val" id="rBin">0</span></div>
+  </div>
 
-    <script>
-        let display = document.getElementById('display');
-        let currentValue = '0';
-        let operator = null;
-        let previousValue = null;
-        let shouldResetDisplay = false;
+  <div id="displayWrap">
+    <div id="history"></div>
+    <div id="expr"></div>
+    <div id="main">0</div>
+  </div>
 
-        function updateDisplay() {
-            display.textContent = currentValue;
-        }
+  <div id="memRow">
+    <button data-mem="mc">MC</button>
+    <button data-mem="mr">MR</button>
+    <button data-mem="mplus">M+</button>
+    <button data-mem="mminus">M-</button>
+    <button data-mem="ms">MS</button>
+  </div>
 
-        function appendNumber(num) {
-            if (shouldResetDisplay) {
-                currentValue = num;
-                shouldResetDisplay = false;
-            } else {
-                currentValue = currentValue === '0' ? num : currentValue + num;
-            }
-            updateDisplay();
-        }
+  <div id="sciRow">
+    <button data-fn="inv" id="invBtn">INV</button>
+    <button data-fn="sin">sin</button>
+    <button data-fn="cos">cos</button>
+    <button data-fn="tan">tan</button>
+    <button data-fn="pi">π</button>
+    <button data-fn="log">log</button>
+    <button data-fn="ln">ln</button>
+    <button data-fn="pow">xʸ</button>
+    <button data-fn="sqrt">√x</button>
+    <button data-fn="e">e</button>
+    <button data-fn="fact">x!</button>
+    <button data-fn="inv1x">1/x</button>
+    <button data-fn="exp">EXP</button>
+    <button data-fn="paren-open">(</button>
+    <button data-fn="paren-close">)</button>
+  </div>
 
-        function appendOperator(op) {
-            if (operator !== null) {
-                calculate();
-            }
-            previousValue = currentValue;
-            operator = op;
-            shouldResetDisplay = true;
-        }
+  <div id="bitRow">
+    <button data-bit="and">AND</button>
+    <button data-bit="or">OR</button>
+    <button data-bit="xor">XOR</button>
+    <button data-bit="not">NOT</button>
+    <button data-bit="lsh">&lt;&lt;</button>
+    <button data-bit="rsh">&gt;&gt;</button>
+    <button data-bit="a">A</button>
+    <button data-bit="b">B</button>
+    <button data-bit="c">C</button>
+    <button data-bit="d">D</button>
+    <button data-bit="e2">E</button>
+    <button data-bit="f">F</button>
+  </div>
 
-        function calculate() {
-            if (operator === null || previousValue === null) return;
+  <div id="keypad">
+    <button class="fn" data-act="clear">AC</button>
+    <button class="fn" data-act="back">⌫</button>
+    <button class="fn" data-act="percent">%</button>
+    <button class="op" data-act="div">÷</button>
 
-            let result;
-            const prev = parseFloat(previousValue);
-            const current = parseFloat(currentValue);
+    <button data-act="7">7</button>
+    <button data-act="8">8</button>
+    <button data-act="9">9</button>
+    <button class="op" data-act="mul">×</button>
 
-            switch (operator) {
-                case '+': result = prev + current; break;
-                case '-': result = prev - current; break;
-                case '*': result = prev * current; break;
-                case '/': result = prev / current; break;
-                case '.': result = prev; break;
-                default: return;
-            }
+    <button data-act="4">4</button>
+    <button data-act="5">5</button>
+    <button data-act="6">6</button>
+    <button class="op" data-act="sub">−</button>
 
-            currentValue = result.toString();
-            operator = null;
-            shouldResetDisplay = true;
-            updateDisplay();
-        }
+    <button data-act="1">1</button>
+    <button data-act="2">2</button>
+    <button data-act="3">3</button>
+    <button class="op" data-act="add">+</button>
 
-        function clearDisplay() {
-            currentValue = '0';
-            operator = null;
-            previousValue = null;
-            shouldResetDisplay = false;
-            updateDisplay();
-        }
-    </script>
-</body>
-</html>
+    <button class="zero" data-act="0">0</button>
+    <button data-act="dot">.</button>
+    <button class="eq" data-act="equals">=</button>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  const mainEl = document.getElementById('main');
+  const exprEl = document.getElementById('expr');
+  const historyEl = document.getElementById('history');
+  const sciRow = document.getElementById('sciRow');
+  const bitRow = document.getElementById('bitRow');
+  const baseRow = document.getElementById('baseRow');
+  const baseReadouts = document.getElementById('baseReadouts');
+  const keypad = document.getElementById('keypad');
+  const invBtn = document.getElementById('invBtn');
+
+  let mode = 'sci';       // sci | prog
+  let base = 10;          // 2,8,10,16 (prog mode)
+  let curExpr = '';        // running expression string (display form)
+  let evalExpr = '';        // parallel string used for eval (JS-safe)
+  let justEvaluated = false;
+  let invOn = false;
+  let memory = 0;
+
+  // ---------- Mode switching ----------
+  document.getElementById('modeToggle').addEventListener('click', (e)=>{
+    const btn = e.target.closest('.modeBtn');
+    if(!btn) return;
+    document.querySelectorAll('.modeBtn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    mode = btn.dataset.mode;
+    clearAll();
+    if(mode === 'sci'){
+      sciRow.classList.add('show');
+      bitRow.classList.remove('show');
+      baseRow.classList.remove('show');
+      baseReadouts.classList.remove('show');
+      setNumpadEnabled(10);
+    } else {
+      sciRow.classList.remove('show');
+      bitRow.classList.add('show');
+      baseRow.classList.add('show');
+      baseReadouts.classList.add('show');
+      base = 16;
+      updateBaseButtons();
+      setNumpadEnabled(16);
+    }
+  });
+
+  baseRow.addEventListener('click', (e)=>{
+    const btn = e.target.closest('.baseBtn');
+    if(!btn) return;
+    // convert current value to new base before switching
+    const curVal = parseCurrentAsInt();
+    base = parseInt(btn.dataset.base,10);
+    updateBaseButtons();
+    setNumpadEnabled(base);
+    curExpr = curVal.toString(base).toUpperCase();
+    evalExpr = curExpr;
+    render();
+  });
+
+  function updateBaseButtons(){
+    document.querySelectorAll('.baseBtn').forEach(b=>{
+      b.classList.toggle('active', parseInt(b.dataset.base,10)===base);
+    });
+  }
+
+  function setNumpadEnabled(b){
+    // enable/disable 0-9 depending on base; digits beyond base are grey (still usable via bitRow A-F)
+    keypad.querySelectorAll('button[data-act]').forEach(btn=>{
+      const d = btn.dataset.act;
+      if(/^[0-9]$/.test(d)){
+        const val = parseInt(d,10);
+        btn.disabled = val >= b;
+      }
+    });
+  }
+
+  // ---------- Rendering ----------
+  function render(){
+    mainEl.classList.remove('err');
+    mainEl.textContent = curExpr === '' ? '0' : curExpr;
+    exprEl.textContent = invOn ? '[INV] ' : '';
+    if(mode === 'prog') updateReadouts();
+  }
+
+  function parseCurrentAsInt(){
+    if(!curExpr) return 0;
+    const n = parseInt(curExpr, base) ;
+    return isNaN(n) ? 0 : n;
+  }
+
+  function updateReadouts(){
+    const n = parseCurrentAsInt();
+    document.getElementById('rHex').textContent = (n>>>0).toString(16).toUpperCase();
+    document.getElementById('rDec').textContent = n.toString(10);
+    document.getElementById('rOct').textContent = (n>>>0).toString(8);
+    document.getElementById('rBin').textContent = (n>>>0).toString(2);
+  }
+
+  function clearAll(){
+    curExpr = '';
+    evalExpr = '';
+    historyEl.textContent = '';
+    invOn = false;
+    invBtn.classList.remove('inv-on');
+    render();
+  }
+
+  // ---------- Digit / operator input ----------
+  function inputDigit(d){
+    if(justEvaluated){ curExpr=''; evalExpr=''; justEvaluated=false; }
+    curExpr += d;
+    evalExpr += d;
+    render();
+  }
+
+  function inputDot(){
+    if(mode==='prog') return;
+    if(justEvaluated){ curExpr=''; evalExpr=''; justEvaluated=false; }
+    // avoid multiple dots in current number segment
+    const seg = curExpr.split(/[\+\-×÷\(\)\^]/).pop();
+    if(seg.includes('.')) return;
+    curExpr += curExpr==='' ? '0.' : '.';
+    evalExpr += evalExpr==='' ? '0.' : '.';
+    render();
+  }
+
+  function inputOp(sym, jsOp){
+    if(justEvaluated){ justEvaluated=false; }
+    if(curExpr==='' && sym!=='(' && sym!=='-') return;
+    curExpr += sym;
+    evalExpr += jsOp;
+    render();
+  }
+
+  function backspace(){
+    curExpr = curExpr.slice(0,-1);
+    evalExpr = evalExpr.slice(0,-1);
+    render();
+  }
+
+  // ---------- Scientific functions ----------
+  function factorial(n){
+    n = Math.round(n);
+    if(n<0) return NaN;
+    let r=1;
+    for(let i=2;i<=n;i++) r*=i;
+    return r;
+  }
+
+  function applySciFn(fn){
+    try{
+      let cur = curExpr==='' ? 0 : evaluateExpr(evalExpr);
+      let result;
+      switch(fn){
+        case 'sin': result = invOn ? Math.asin(cur)*180/Math.PI : Math.sin(cur*Math.PI/180); break;
+        case 'cos': result = invOn ? Math.acos(cur)*180/Math.PI : Math.cos(cur*Math.PI/180); break;
+        case 'tan': result = invOn ? Math.atan(cur)*180/Math.PI : Math.tan(cur*Math.PI/180); break;
+        case 'log': result = invOn ? Math.pow(10,cur) : Math.log10(cur); break;
+        case 'ln':  result = invOn ? Math.exp(cur) : Math.log(cur); break;
+        case 'sqrt': result = invOn ? cur*cur : Math.sqrt(cur); break;
+        case 'inv1x': result = 1/cur; break;
+        case 'fact': result = factorial(cur); break;
+        case 'pi': appendConst(Math.PI, 'π'); return;
+        case 'e': appendConst(Math.E, 'e'); return;
+        case 'pow':
+          evalExpr += '**'; curExpr += '^'; render(); return;
+        case 'exp':
+          evalExpr += 'e'; curExpr += 'E'; render(); return;
+        case 'paren-open':
+          evalExpr += '('; curExpr += '('; render(); return;
+        case 'paren-close':
+          evalExpr += ')'; curExpr += ')'; render(); return;
+      }
+      if(typeof result === 'number'){
+        curExpr = formatNum(result);
+        evalExpr = curExpr;
+        justEvaluated = true;
+        render();
+      }
+    }catch(err){
+      showError();
+    }
+    if(invOn){ invOn=false; invBtn.classList.remove('inv-on'); }
+  }
+
+  function appendConst(val, label){
+    if(justEvaluated){ curExpr=''; evalExpr=''; justEvaluated=false; }
+    curExpr += label;
+    evalExpr += '('+val+')';
+    render();
+  }
+
+  function formatNum(n){
+    if(!isFinite(n)) throw new Error('inf');
+    if(Number.isInteger(n)) return n.toString();
+    return parseFloat(n.toPrecision(12)).toString();
+  }
+
+  function evaluateExpr(s){
+    // Safe-ish eval: only digits, operators, parens, decimal points allowed
+    if(!/^[0-9+\-*/%().e\s]*$/i.test(s)) throw new Error('bad expr');
+    // eslint-disable-next-line no-new-func
+    const val = Function('"use strict"; return (' + s + ')')();
+    if(typeof val !== 'number' || isNaN(val)) throw new Error('nan');
+    return val;
+  }
+
+  function showError(){
+    mainEl.textContent = 'Error';
+    mainEl.classList.add('err');
+    curExpr=''; evalExpr='';
+  }
+
+  function doEquals(){
+    if(mode==='prog') return; // programmer mode evaluates live via bit ops
+    if(curExpr==='') return;
+    try{
+      const result = evaluateExpr(evalExpr);
+      historyEl.textContent = curExpr + ' =';
+      curExpr = formatNum(result);
+      evalExpr = curExpr;
+      justEvaluated = true;
+      render();
+    }catch(err){
+      showError();
+    }
+  }
+
+  function doPercent(){
+    if(curExpr==='') return;
+    try{
+      const val = evaluateExpr(evalExpr) / 100;
+      curExpr = formatNum(val);
+      evalExpr = curExpr;
+      render();
+    }catch(e){ showError(); }
+  }
+
+  // ---------- Programmer bitwise ----------
+  function applyBit(op){
+    const cur = parseCurrentAsInt();
+    if(op==='not'){
+      const r = (~cur) >>> 0;
+      curExpr = r.toString(base).toUpperCase();
+      evalExpr = curExpr;
+      render();
+      return;
+    }
+    if(['a','b','c','d','e2','f'].includes(op)){
+      if(base!==16) return;
+      const map = {a:'A',b:'B',c:'C',d:'D',e2:'E',f:'F'};
+      if(justEvaluated){ curExpr=''; justEvaluated=false; }
+      curExpr += map[op];
+      evalExpr = curExpr;
+      render();
+      return;
+    }
+    // and/or/xor/lsh/rsh -> store pending, wait for second operand entry then equals
+    pendingBitOp = op;
+    pendingBitVal = cur;
+    curExpr = '';
+    evalExpr = '';
+    historyEl.textContent = pendingBitVal.toString(base).toUpperCase() + ' ' + op.toUpperCase();
+    render();
+  }
+
+  let pendingBitOp = null, pendingBitVal = null;
+
+  function finishBitOp(){
+    if(pendingBitOp === null) return;
+    const b = parseCurrentAsInt();
+    let r;
+    switch(pendingBitOp){
+      case 'and': r = (pendingBitVal & b) >>> 0; break;
+      case 'or':  r = (pendingBitVal | b) >>> 0; break;
+      case 'xor': r = (pendingBitVal ^ b) >>> 0; break;
+      case 'lsh': r = (pendingBitVal << b) >>> 0; break;
+      case 'rsh': r = (pendingBitVal >>> b) >>> 0; break;
+      default: return;
+    }
+    curExpr = r.toString(base).toUpperCase();
+    evalExpr = curExpr;
+    pendingBitOp = null; pendingBitVal = null;
+    justEvaluated = true;
+    render();
+  }
+
+  // ---------- Memory ----------
+  function memAction(act){
+    const val = curExpr==='' ? 0 : (mode==='prog' ? parseCurrentAsInt() : evaluateExpr(evalExpr||'0'));
+    switch(act){
+      case 'mc': memory = 0; updateMemUI(); break;
+      case 'mr':
+        if(justEvaluated){ curExpr=''; evalExpr=''; justEvaluated=false; }
+        curExpr = mode==='prog' ? memory.toString(base).toUpperCase() : formatNum(memory);
+        evalExpr = curExpr;
+        render();
+        break;
+      case 'mplus': memory += val; updateMemUI(); break;
+      case 'mminus': memory -= val; updateMemUI(); break;
+      case 'ms': memory = val; updateMemUI(); break;
+    }
+  }
+  function updateMemUI(){
+    document.querySelectorAll('#memRow button').forEach(b=>{
+      if(b.dataset.mem==='mr' || b.dataset.mem==='mc'){
+        b.classList.toggle('hasval', memory!==0);
+      }
+    });
+  }
+
+  // ---------- Event wiring ----------
+  keypad.addEventListener('click', (e)=>{
+    const btn = e.target.closest('button');
+    if(!btn || btn.disabled) return;
+    const act = btn.dataset.act;
+    if(act===undefined) return;
+    if(/^[0-9]$/.test(act)) return inputDigit(act);
+    switch(act){
+      case 'clear': return clearAll();
+      case 'back': return backspace();
+      case 'percent': return doPercent();
+      case 'div': return inputOp('÷','/');
+      case 'mul': return inputOp('×','*');
+      case 'sub': return inputOp('−','-');
+      case 'add': return inputOp('+','+');
+      case 'dot': return inputDot();
+      case 'equals':
+        if(mode==='prog' && pendingBitOp!==null) return finishBitOp();
+        return doEquals();
+    }
+  });
+
+  sciRow.addEventListener('click', (e)=>{
+    const btn = e.target.closest('button');
+    if(!btn) return;
+    const fn = btn.dataset.fn;
+    if(fn==='inv'){
+      invOn = !invOn;
+      invBtn.classList.toggle('inv-on', invOn);
+      return;
+    }
+    applySciFn(fn);
+  });
+
+  bitRow.addEventListener('click', (e)=>{
+    const btn = e.target.closest('button');
+    if(!btn) return;
+    applyBit(btn.dataset.bit);
+  });
+
+  document.getElementById('memRow').addEventListener('click', (e)=>{
+    const btn = e.target.closest('button');
+    if(!btn) retu

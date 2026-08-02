@@ -1,4 +1,4 @@
-ko* {
+* {
 margin:0;
 padding:0;
 box-sizing:border-box;
@@ -121,7 +121,7 @@ border-bottom-right-radius:5px;
 
 .bot {
 align-self:flex-start;
-background: linear-gradient(135deg, #ba0000 #j80000  );
+background: linear-gradient(135deg, #ba0000 #f80000  );
 color:white;
 border-bottom-left-radius:5px;
 }

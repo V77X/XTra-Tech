@@ -6,7 +6,7 @@ font-family:'Poppins',sans-serif;
 }
 
 body {
-background:#0b1020;
+background:#050505;
 height:100dvh;
 overflow:hidden;
 }
@@ -19,7 +19,7 @@ height:100dvh;
 
 .topbar {
 height:65px;
-background:#111827;
+background:#0a0a0a;
 display:flex;
 justify-content:space-between;
 align-items:center;
@@ -27,7 +27,7 @@ padding:0 18px;
 color:white;
 font-size:20px;
 font-weight:600;
-border-bottom:1px solid #1f2937;
+border-bottom:1px solid #1a1a1a;
 }
 
 .logo {
@@ -62,7 +62,6 @@ gap:15px;
 scroll-behavior: smooth;
 }
 
-/* Centered welcome greeting */
 .greeting {
 align-self: center;
 text-align: center;
@@ -97,7 +96,7 @@ border-radius:16px;
 font-size:15px;
 line-height:1.5;
 word-wrap:break-word;
-box-shadow: 0 3px 10px rgba(0,0,0,0.25);
+box-shadow: 0 3px 10px rgba(0,0,0,0.4);
 animation: messageIn .28s ease forwards;
 opacity: 0;
 }
@@ -122,7 +121,7 @@ border-bottom-right-radius:5px;
 
 .bot {
 align-self:flex-start;
-background: linear-gradient(135deg, #1e293b, #0f172a);
+background: linear-gradient(135deg, #1a1a1a, #0d0d0d);
 color:white;
 border-bottom-left-radius:5px;
 }
@@ -156,8 +155,8 @@ display:flex;
 align-items:flex-end;
 gap:10px;
 padding:15px;
-background:#111827;
-border-top:1px solid #1f2937;
+background:#0a0a0a;
+border-top:1px solid #1a1a1a;
 }
 
 #userInput {
@@ -165,7 +164,7 @@ flex:1;
 resize:none;
 border:none;
 outline:none;
-background:#1f2937;
+background:#161616;
 color:white;
 padding:14px;
 border-radius:14px;

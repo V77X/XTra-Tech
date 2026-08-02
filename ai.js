@@ -8,10 +8,18 @@ const clearBtn = document.getElementById("clearChat");
 function addMessage(text, type) {
     const div = document.createElement("div");
     div.className = "message " + type;
-    // Retains your line breaks
     div.innerHTML = text.replace(/\n/g, "<br>");
     chatBox.appendChild(div);
-    chatBox.scrollTop = chatBox.scrollHeight;
+    chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: "smooth" });
+    return div;
+}
+
+function addTypingIndicator() {
+    const div = document.createElement("div");
+    div.className = "message bot";
+    div.innerHTML = `<div class="typing-dots"><span></span><span></span><span></span></div>`;
+    chatBox.appendChild(div);
+    chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: "smooth" });
     return div;
 }
 
@@ -22,7 +30,7 @@ async function sendMessage() {
     addMessage(message, "user");
     userInput.value = "";
 
-    const loading = addMessage("Thinking...", "bot");
+    const loading = addTypingIndicator();
 
     try {
         const response = await fetch(WORKER_URL, {
@@ -36,7 +44,6 @@ async function sendMessage() {
         const data = await response.json();
         loading.remove();
 
-        // Extracts only the clean text response from Groq API
         let reply = "";
 
         if (data.choices && data.choices.length > 0) {

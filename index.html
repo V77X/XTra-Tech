@@ -1,1001 +1,800 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>XTra Tech - Tech Made Simple By Vaibhav ❤️‍🩹</title>
+  <meta name="theme-color" content="#0d1117">
+  <meta name="description" content="All-in-One Tech Toolkit">
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
+  <style>
+    /* Base Variables & Reset */
+    :root {
+      --bg-base: #0d1117;
+      --bg-card: rgba(22, 27, 34, 0.5);
+      --bg-nav: rgba(13, 17, 23, 0.8);
+      --text-main: #c9d1d9;
+      --text-heading: #ffffff;
+      --text-muted: #8b949e;
+      --border-subtle: rgba(255, 255, 255, 0.1);
+      --border-hover: rgba(255, 255, 255, 0.3);
+      --btn-primary-bg: #ffffff;
+      --btn-primary-text: #24292f;
+      --btn-secondary-bg: transparent;
+      --btn-secondary-text: #c9d1d9;
+      --glow-purple: rgba(138, 43, 226, 0.15);
+      --glow-blue: rgba(43, 116, 226, 0.15);
+      --accent: #58a6ff;
+    }
 
-<title>XTra Tech- Tech Made Simple By Vaibhav ❤️‍🩹 </title>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
 
-<meta name="theme-color" content="#0b1020">
-<meta name="description" content="All-in-One Tech Toolkit">
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      line-height: 1.6;
+      overflow-x: hidden;
+      padding-bottom: 80px; /* Space for bottom nav */
+    }
 
-<link rel="manifest" href="manifest.json?v=1.1">
-<link rel="stylesheet" href="style.css?v=1.1">
+    /* Background Glow Effects */
+    .bg-glow {
+      position: fixed;
+      top: -10%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100vw;
+      height: 800px;
+      background: radial-gradient(ellipse at top, var(--glow-purple) 0%, transparent 50%),
+                  radial-gradient(ellipse at center, var(--glow-blue) 0%, transparent 50%);
+      z-index: -1;
+      pointer-events: none;
+    }
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    /* Layout Wrapper */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    /* Header & Navigation */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-subtle);
+      backdrop-filter: blur(10px);
+      background: var(--bg-nav);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
 
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-box {
+      font-size: 24px;
+      background: rgba(255,255,255,0.1);
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .brand h1 {
+      font-size: 18px;
+      color: var(--text-heading);
+      line-height: 1.2;
+    }
+
+    .brand p {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    header button {
+      background: transparent;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      border-radius: 6px;
+      padding: 8px 12px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    header button:hover {
+      border-color: var(--border-hover);
+      color: var(--text-heading);
+    }
+
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      padding: 80px 20px;
+      position: relative;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      background: rgba(88, 166, 255, 0.1);
+    }
+
+    .hero h2 {
+      font-size: clamp(32px, 5vw, 56px);
+      color: var(--text-heading);
+      line-height: 1.1;
+      letter-spacing: -1px;
+      margin-bottom: 24px;
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+      max-width: 600px;
+      margin-inline: auto;
+    }
+
+    /* Buttons */
+    .hero-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn, .hero-buttons button, .hero-buttons a {
+      padding: 12px 24px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .primary {
+      background-color: var(--btn-primary-bg);
+      color: var(--btn-primary-text);
+      border: none;
+    }
+
+    .primary:hover {
+      background-color: #e0e4e8;
+    }
+
+    .secondary {
+      background-color: var(--btn-secondary-bg);
+      color: var(--btn-secondary-text);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .secondary:hover {
+      border-color: var(--border-hover);
+      color: var(--text-heading);
+    }
+
+    /* Search Bar */
+    .search {
+      margin: -20px auto 40px;
+      max-width: 600px;
+      padding: 0 20px;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 12px 16px;
+      backdrop-filter: blur(10px);
+      transition: border-color 0.2s;
+    }
+
+    .search-box:focus-within {
+      border-color: var(--accent);
+    }
+
+    .search-box input {
+      background: transparent;
+      border: none;
+      color: var(--text-heading);
+      font-size: 16px;
+      width: 100%;
+      outline: none;
+      margin-left: 12px;
+    }
+
+    .search-box input::placeholder {
+      color: var(--text-muted);
+    }
+
+    /* Section Titles */
+    .section-title {
+      margin: 40px 0 20px;
+    }
+
+    .section-title h2 {
+      font-size: 20px;
+      color: var(--text-heading);
+    }
+
+    .section-title p {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    /* Bento Box Grids */
+    .grid {
+      display: grid;
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .grid-2 { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+    .grid-4 { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+
+    /* Cards */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 20px;
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+      text-decoration: none;
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-hover);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+
+    .card .icon {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .card h3 {
+      color: var(--text-heading);
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .card p {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Minimal Line Cards (For Trending/Recent) */
+    .line-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      padding: 16px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--text-main);
+      transition: 0.2s;
+    }
+
+    .line-card:hover {
+      border-color: var(--border-hover);
+      background: rgba(255,255,255,0.05);
+    }
+
+    .tag {
+      font-size: 10px;
+      background: rgba(88, 166, 255, 0.1);
+      color: var(--accent);
+      padding: 4px 8px;
+      border-radius: 12px;
+      border: 1px solid var(--accent);
+    }
+
+    /* Stats Grid */
+    .stats-card h3 {
+      font-size: 28px;
+      color: var(--text-heading);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 60px 20px 40px;
+      border-top: 1px solid var(--border-subtle);
+      margin-top: 60px;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    footer .footer-logo {
+      font-size: 20px;
+      color: var(--text-heading);
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    /* Bottom Nav (Mobile) */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: var(--bg-nav);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-around;
+      padding: 12px 10px;
+      z-index: 100;
+    }
+
+    .bottom-nav a {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 10px;
+      gap: 4px;
+      transition: 0.2s;
+      cursor: pointer;
+    }
+
+    .bottom-nav a.active, .bottom-nav a:hover {
+      color: var(--text-heading);
+    }
+
+    .bottom-nav a span {
+      font-weight: 500;
+    }
+
+    /* Sidebar */
+    #sidebar {
+      position: fixed;
+      top: 0;
+      left: -300px;
+      width: 280px;
+      height: 100%;
+      background: var(--bg-base);
+      border-right: 1px solid var(--border-subtle);
+      z-index: 1000;
+      transition: 0.3s ease;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    #sidebar.open {
+      left: 0;
+    }
+
+    .side-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .side-header button {
+      background: transparent;
+      border: none;
+      color: var(--text-main);
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .profile-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+
+    .side-links a {
+      display: block;
+      padding: 12px 16px;
+      color: var(--text-main);
+      text-decoration: none;
+      border-radius: 6px;
+      margin-bottom: 8px;
+      transition: 0.2s;
+    }
+
+    .side-links a:hover {
+      background: rgba(255,255,255,0.05);
+      color: var(--text-heading);
+    }
+
+    #overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(2px);
+      z-index: 999;
+      display: none;
+    }
+
+    #overlay.open {
+      display: block;
+    }
+
+  </style>
 </head>
-
-
-  <body>
-
-<div class="bg">
-
-<div class="circle c1"></div>
-<div class="circle c2"></div>
-<div class="circle c3"></div>
-<div class="circle c4"></div>
-
-<div class="grid"></div>
-</div> 
-<!-- Sidebar -->
-
-<aside id="sidebar">
-
-<div class="side-header">
-
-<div class="logo">
-
-<div class="logo-icon">
-⚡
-</div>
-
-<div>
-
-<h2>XTra Tech</h2>
-
-<p>Tech Made Simple By Vaibhav 💀</p>
-
-</div>
-
-</div>
-
-<button id="closeMenu">
-✕
-</button>
-
-</div>
-
-<div class="profile-card">
-
-<div class="avatar">
-👤
-</div>
-
-<h3>Guest User</h3>
-
-<p>Welcome Back</p>
-
-</div>
-
-<nav class="side-links">
-
-<a href="index.html">
-🏠 Home
-</a>
-
-<a href="ai-chat.html">
-🤖 AI Tools
-</a>
-
-<a href="translator.html">
-🌐 Translator
-</a>
-
-<a href="#">
-📄 PDF Tools
-</a>
-
-<a href="#">
-🖼 Image Tools
-</a>
-
-<a href="qr-generator.html">
-📱 QR Tools
-</a>
-
-<a href="calculator.html">
-🧮 Calculator
-</a>
-
-<a href="text-tools.html">
-📝 Text Tools
-</a>
-
-<a href="#">
-⭐ Favorites
-</a>
-
-<a href="#">
-⚙ Settings
-</a>
-
-<a href="#">
-ℹ About
-</a>
-
-</nav>
-
-</aside>
-
-<div id="overlay"></div>
-
-<header>
-
-<button id="menuBtn">
-
-☰
-
-</button>
-
-<div class="brand">
-
-<div class="logo-box">
-
-⚡
-
-</div>
-
-<div>
-
-<h1>
-
-XTra Tech
-
-</h1>
-
-<p>
-
-Tech Made Simple
-
-</p>
-
-</div>
-
-</div>
-
-<button class="notify">
-
-🔔
-
-</button>
-
-</header>
-
-<section class="hero">
-
-<div class="hero-left">
-
-<span class="badge">
-  
- NEW 2026
-  
-</span>
-
-<h2>
-
-Everything You Need
-
-In One App
-
-</h2>
-
-<p>
-
-AI Chat
-
-Translator
-
-PDF
-
-Image
-
-QR
-
-Calculator
-
-Text Tools
-
-Utilities
-
-and more.
-
-</p>
-
-<div class="hero-buttons">
-
-<button class="primary">
-
-Explore Now
-
-</button>
-
-<button class="secondary">
-
-View Tools
-
-</button>
-
-<a href="org.bayton.gen.webapp.w352540c8f8b0fc1c_7a27c66a6279_genver-1.5.4.apk" download class="secondary" style="text-decoration:none; display:inline-flex; align-items:center; justify-content:center;">📲 Download App</a>
-
-</div>
-
-</div>
-
-<div class="hero-right">
-
-<div class="phone">
-
-<div class="screen">
-
-<div class="glow"></div>
-
-<div class="mini-card">
-
-🤖 AI
-
-</div>
-
-<div class="mini-card">
-
-📄 PDF
-
-</div>
-
-<div class="mini-card">
-
-🌐 Translate
-
-</div>
-
-<div class="mini-card">
-
-🧮 Calculator
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-<section class="search">
-
-<div class="search-box">
-
-<span>
-
-🔍
-
-</span>
-
-<input
-
-type="text"
-
-placeholder="Search anything...">
-
-</div>
-
-</section>
-
-<section class="quick-actions">
-
-<a href="ai-chat.html" class="quick-card" style="text-decoration: none; color: inherit;">
-
-⚡
-
-<h3>
-
-Quick AI
-
-</h3>
-
-</a>
-
-<a href="#" class="quick-card" style="text-decoration: none; color: inherit;">
-
-📄
-
-<h3>
-
-PDF
-
-</h3>
-
-</a>
-
-<a href="translator.html" class="quick-card" style="text-decoration: none; color: inherit;">
-
-🌐
-
-<h3>
-
-Translate
-
-</h3>
-
-</a>
-
-<a href="#" class="quick-card" style="text-decoration: none; color: inherit;">
-
-🖼
-
-<h3>
-
-Image
-
-</h3>
-
-</a>
-
-</section>
-
-<section class="section-title">
-
-<h2>
-
-🔥 Featured Tools
-
-</h2>
-
-<p>
-
-Most Popular
-
-</p>
-
-</section>
-
-<section class="featured-grid">
-
-<a href="ai-chat.html" class="feature-card" style="text-decoration: none; color: inherit;">
-
-<div class="icon">
-
-🤖
-
-</div>
-
-<h3>
-
-AI Assistant
-
-</h3>
-
-<p>
-
-Ask Anything
-
-</p>
-
-</a>
-
-<a href="translator.html" class="feature-card" style="text-decoration: none; color: inherit;">
-
-<div class="icon">
-
-🌐
-
-</div>
-
-<h3>
-
-Translator
-
-</h3>
-
-<p>
-
-100+ Languages
-
-</p>
-
-</a>
-
-<div class="feature-card">
-
-<div class="icon">
-
-📄
-
-</div>
-
-<h3>
-
-PDF Tools
-
-</h3>
-
-<p>
-
-Convert & Edit
-
-</p>
-
-</div>
-
-<div class="feature-card">
-
-<div class="icon">
-
-🖼
-
-</div>
-
-<h3>
-
-Image Tools
-
-</h3>
-
-<p>
-
-Compress & Resize
-
-</p>
-
-</div>
-
-<a href="qr-generator.html" class="feature-card" style="text-decoration: none; color: inherit;">
-
-<div class="icon">
-
-📱
-
-</div>
-
-<h3>
-
-QR Scanner
-
-</h3>
-
-<p>
-
-Scan & Generate
-
-</p>
-
-</a>
-
-<a href="calculator.html" class="feature-card" style="text-decoration: none; color: inherit;">
-
-<div class="icon">
-
-🧮
-
-</div>
-
-<h3>
-
-Calculator
-
-</h3>
-
-<p>
-
-Smart Calculations
-
-</p>
-
-</a>
-
-<a href="text-tools.html" class="feature-card" style="text-decoration: none; color: inherit;">
-
-<div class="icon">
-
-📝
-
-</div>
-
-<h3>
-
-Text Tools
-
-</h3>
-
-<p>
-
-Case Convert
-
-Merge
-
-Count
-
-</p>
-
-</a>
-
-</section>
-
-<section class="section-title">
-
-<h2>
-
-📂 Categories
-
-</h2>
-
-<p>
-
-Choose your favorite
-
-</p>
-
-</section>
-
-<section class="category-grid">
-
-<a href="ai-chat.html" class="category" style="text-decoration: none; color: inherit;">
-
-🤖
-
-<h3>AI</h3>
-
-<p>Assistant & Chat</p>
-
-</a>
-
-<a href="translator.html" class="category" style="text-decoration: none; color: inherit;">
-
-🌐
-
-<h3>Translator</h3>
-
-<p>Translate Instantly</p>
-
-</a>
-
-<div class="category">
-
-📄
-
-<h3>PDF</h3>
-
-<p>Edit PDF</p>
-
-</div>
-
-<div class="category">
-
-🖼
-
-<h3>Images</h3>
-
-<p>Resize & Compress</p>
-
-</div>
-
-<div class="category">
-
-🎵
-
-<h3>Audio</h3>
-
-<p>Convert Audio</p>
-
-</div>
-
-<div class="category">
-
-🎬
-
-<h3>Video</h3>
-
-<p>Basic Tools</p>
-
-</div>
-
-<a href="qr-generator.html" class="category" style="text-decoration: none; color: inherit;">
-
-📱
-
-<h3>QR</h3>
-
-<p>Create QR</p>
-
-</a>
-
-<a href="calculator.html" class="category" style="text-decoration: none; color: inherit;">
-
-🧮
-
-<h3>Calculator</h3>
-
-<p>Math & Finance</p>
-
-</a>
-
-<a href="text-tools.html" class="category" style="text-decoration: none; color: inherit;">
-
-📝
-
-<h3>Text</h3>
-
-<p>Utilities</p>
-
-</a>
-
-<div class="category">
-
-🎓
-
-<h3>Study</h3>
-
-<p>Student Tools</p>
-
-</div>
-
-<div class="category">
-
-⚙
-
-<h3>Utilities</h3>
-
-<p>Daily Use</p>
-
-</div>
-
-<div class="category">
-
-⭐
-
-<h3>More</h3>
-
-<p>Coming Soon</p>
-
-</div>
-
-</section>
-
-<section class="section-title">
-
-<h2>
-
-⭐ Trending
-
-</h2>
-
-<p>
-
-Most Used Today
-
-</p>
-
-</section>
-
-<section class="trending-list">
-
-<a href="ai-chat.html" class="trend-card" style="text-decoration: none; color: inherit;">
-
-<div>
-
-🤖 AI Chat
-
-</div>
-
-<span>
-
-HOT
-
-</span>
-
-</a>
-
-<a href="translator.html" class="trend-card" style="text-decoration: none; color: inherit;">
-
-<div>
-
-🌐 Translator
-
-</div>
-
-<span>
-
-NEW
-
-</span>
-
-</a>
-
-<div class="trend-card">
-
-<div>
-
-📄 PDF Converter
-
-</div>
-
-<span>
-
-TOP
-
-</span>
-
-</div>
-
-<div class="trend-card">
-
-<div>
-
-🖼 Image Compressor
-
-</div>
-
-<span>
-
-FAST
-
-</span>
-
-</div>
-
-<a href="qr-generator.html" class="trend-card" style="text-decoration: none; color: inherit;">
-
-<div>
-
-📱 QR Generator
-
-</div>
-
-<span>
-
-FREE
-
-</span>
-
-</a>
-
-</section>
-
-<section class="section-title">
-
-<h2>
-
-❤️ Favorites
-
-</h2>
-
-<p>
-
-Recently Saved
-
-</p>
-
-</section>
-
-<section class="favorites">
-
-<a href="ai-chat.html" class="favorite-card" style="text-decoration: none; color: inherit;">
-
-🤖 AI Assistant
-
-</a>
-
-<div class="favorite-card">
-
-📄 PDF Merge
-
-</div>
-
-<a href="translator.html" class="favorite-card" style="text-decoration: none; color: inherit;">
-
-🌐 Translate
-
-</a>
-
-<a href="calculator.html" class="favorite-card" style="text-decoration: none; color: inherit;">
-
-🧮 Calculator
-
-</a>
-
-</section>
-
-<section class="section-title">
-
-<h2>🕒 Recent Tools</h2>
-
-<p>Your last used tools</p>
-
-</section>
-
-<section class="recent-tools">
-
-<a href="ai-chat.html" class="recent-card" style="text-decoration: none; color: inherit;">
-🤖 AI Chat
-</a>
-
-<div class="recent-card">
-📄 PDF Merge
-</div>
-
-<a href="translator.html" class="recent-card" style="text-decoration: none; color: inherit;">
-🌐 Translator
-</a>
-
-<div class="recent-card">
-🖼 Image Resize
-</div>
-
-<a href="qr-generator.html" class="recent-card" style="text-decoration: none; color: inherit;">
-📱 QR Scanner
-</a>
-
-<a href="calculator.html" class="recent-card" style="text-decoration: none; color: inherit;">
-🧮 Scientific Calculator
-</a>
-
-</section>
-
-<section class="section-title">
-
-<h2>📊 App Statistics</h2>
-
-<p>XTra Tech Overview</p>
-
-</section>
-
-<section class="stats-grid">
-
-<div class="stat-card">
-
-<h3>100+</h3>
-
-<p>Tools</p>
-
-</div>
-
-<div class="stat-card">
-
-<h3>50K+</h3>
-
-<p>Users</p>
-
-</div>
-
-<div class="stat-card">
-
-<h3>99%</h3>
-
-<p>Fast</p>
-
-</div>
-
-<div class="stat-card">
-
-<h3>24×7</h3>
-
-<p>Available</p>
-
-</div>
-
-</section>
-
-<section class="section-title">
-
-<h2>🚀 Coming Soon</h2>
-
-</section>
-
-<section class="coming-soon">
-
-<div class="coming-card">
-🎤 AI Voice
-</div>
-
-<div class="coming-card">
-🧠 AI Image Generator
-</div>
-
-<div class="coming-card">
-🎬 Video Editor
-</div>
-
-<div class="coming-card">
-☁ Cloud Storage
-</div>
-
-<div class="coming-card">
-🤝 Community
-</div>
-
-<div class="coming-card">
-💬 Live Chat
-</div>
-
-</section>
-
-<footer>
-
-<div class="footer-logo">
-
-⚡ XTra Tech
-
-</div>
-
-<p>
-
-Tech Made Simple
-
-</p>
-
-<p>
-
-Version 1.0
-
-</p>
-
-<p>
-
-Made with ❤️Love 💕 ❤️ by Vaibhav
-
-</p>
-
-</footer>
-
-<button class="fab">
-
-⚡
-
-</button>
-
-<nav class="bottom-nav">
-
-<a class="active">
-
-🏠
-
-<span>Home</span>
-
-</a>
-
-<a>
-
-🔍
-
-<span>Explore</span>
-
-</a>
-
-<a>
-
-❤️
-
-<span>Saved</span>
-
-</a>
-
-<a>
-
-⚙
-
-<span>Settings</span>
-
-</a>
-
-<a>
-
-👤
-
-<span>Profile</span>
-
-</a>
-
-</nav>
-
-<script src="script.js?v=1.1"></script>
+<body>
+
+  <div class="bg-glow"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar">
+    <div class="side-header">
+      <div class="brand">
+        <div class="logo-box">⚡</div>
+        <div>
+          <h1>XTra Tech</h1>
+          <p>By Vaibhav 💀</p>
+        </div>
+      </div>
+      <button id="closeMenu">✕</button>
+    </div>
+
+    <div class="profile-card">
+      <div class="avatar" style="font-size: 32px; margin-bottom: 8px;">👤</div>
+      <h3 style="color: var(--text-heading);">Guest User</h3>
+      <p style="font-size: 12px; color: var(--text-muted);">Welcome Back</p>
+    </div>
+
+    <nav class="side-links">
+      <a href="index.html">🏠 Home</a>
+      <a href="ai-chat.html">🤖 AI Tools</a>
+      <a href="translator.html">🌐 Translator</a>
+      <a href="#">📄 PDF Tools</a>
+      <a href="#">🖼 Image Tools</a>
+      <a href="qr-generator.html">📱 QR Tools</a>
+      <a href="calculator.html">🧮 Calculator</a>
+      <a href="text-tools.html">📝 Text Tools</a>
+      <a href="#">⭐ Favorites</a>
+      <a href="#">⚙ Settings</a>
+      <a href="#">ℹ About</a>
+    </nav>
+  </aside>
+
+  <div id="overlay"></div>
+
+  <!-- Header -->
+  <header>
+    <button id="menuBtn">☰</button>
+    <div class="brand">
+      <div class="logo-box">⚡</div>
+      <div>
+        <h1>XTra Tech</h1>
+        <p>Tech Made Simple</p>
+      </div>
+    </div>
+    <button class="notify">🔔</button>
+  </header>
+
+  <!-- Main Content Wrapper -->
+  <div class="container">
+    
+    <!-- Hero -->
+    <section class="hero">
+      <span class="badge">NEW 2026</span>
+      <h2>Everything You Need<br>In One App</h2>
+      <p>AI Chat, Translator, PDF, Image, QR, Calculator, Text Tools, Utilities and more.</p>
+      <div class="hero-buttons">
+        <button class="primary">Explore Now</button>
+        <button class="secondary">View Tools</button>
+        <a href="org.bayton.gen.webapp.w352540c8f8b0fc1c_7a27c66a6279_genver-1.5.4.apk" download class="secondary">📲 Download App</a>
+      </div>
+    </section>
+
+    <!-- Search -->
+    <section class="search">
+      <div class="search-box">
+        <span>🔍</span>
+        <input type="text" placeholder="Search anything...">
+      </div>
+    </section>
+
+    <!-- Quick Actions -->
+    <section class="grid grid-4">
+      <a href="ai-chat.html" class="card" style="align-items: center; text-align: center;">
+        <span style="font-size: 24px;">⚡</span>
+        <h3 style="font-size: 14px;">Quick AI</h3>
+      </a>
+      <a href="#" class="card" style="align-items: center; text-align: center;">
+        <span style="font-size: 24px;">📄</span>
+        <h3 style="font-size: 14px;">PDF</h3>
+      </a>
+      <a href="translator.html" class="card" style="align-items: center; text-align: center;">
+        <span style="font-size: 24px;">🌐</span>
+        <h3 style="font-size: 14px;">Translate</h3>
+      </a>
+      <a href="#" class="card" style="align-items: center; text-align: center;">
+        <span style="font-size: 24px;">🖼</span>
+        <h3 style="font-size: 14px;">Image</h3>
+      </a>
+    </section>
+
+    <!-- Featured Tools -->
+    <div class="section-title">
+      <h2>🔥 Featured Tools</h2>
+      <p>Most Popular</p>
+    </div>
+    <section class="grid grid-3">
+      <a href="ai-chat.html" class="card">
+        <div class="icon">🤖</div>
+        <h3>AI Assistant</h3>
+        <p>Ask Anything</p>
+      </a>
+      <a href="translator.html" class="card">
+        <div class="icon">🌐</div>
+        <h3>Translator</h3>
+        <p>100+ Languages</p>
+      </a>
+      <div class="card">
+        <div class="icon">📄</div>
+        <h3>PDF Tools</h3>
+        <p>Convert & Edit</p>
+      </div>
+      <div class="card">
+        <div class="icon">🖼</div>
+        <h3>Image Tools</h3>
+        <p>Compress & Resize</p>
+      </div>
+      <a href="qr-generator.html" class="card">
+        <div class="icon">📱</div>
+        <h3>QR Scanner</h3>
+        <p>Scan & Generate</p>
+      </a>
+      <a href="calculator.html" class="card">
+        <div class="icon">🧮</div>
+        <h3>Calculator</h3>
+        <p>Smart Calculations</p>
+      </a>
+      <a href="text-tools.html" class="card">
+        <div class="icon">📝</div>
+        <h3>Text Tools</h3>
+        <p>Case Convert, Merge, Count</p>
+      </a>
+    </section>
+
+    <!-- Categories -->
+    <div class="section-title">
+      <h2>📂 Categories</h2>
+      <p>Choose your favorite</p>
+    </div>
+    <section class="grid grid-2">
+      <a href="ai-chat.html" class="card">
+        <span style="font-size: 20px;">🤖</span>
+        <h3>AI</h3>
+        <p>Assistant & Chat</p>
+      </a>
+      <a href="translator.html" class="card">
+        <span style="font-size: 20px;">🌐</span>
+        <h3>Translator</h3>
+        <p>Translate Instantly</p>
+      </a>
+      <div class="card">
+        <span style="font-size: 20px;">📄</span>
+        <h3>PDF</h3>
+        <p>Edit PDF</p>
+      </div>
+      <div class="card">
+        <span style="font-size: 20px;">🖼</span>
+        <h3>Images</h3>
+        <p>Resize & Compress</p>
+      </div>
+      <div class="card">
+        <span style="font-size: 20px;">🎵</span>
+        <h3>Audio</h3>
+        <p>Convert Audio</p>
+      </div>
+      <div class="card">
+        <span style="font-size: 20px;">🎬</span>
+        <h3>Video</h3>
+        <p>Basic Tools</p>
+      </div>
+      <a href="qr-generator.html" class="card">
+        <span style="font-size: 20px;">📱</span>
+        <h3>QR</h3>
+        <p>Create QR</p>
+      </a>
+      <a href="calculator.html" class="card">
+        <span style="font-size: 20px;">🧮</span>
+        <h3>Calculator</h3>
+        <p>Math & Finance</p>
+      </a>
+      <a href="text-tools.html" class="card">
+        <span style="font-size: 20px;">📝</span>
+        <h3>Text</h3>
+        <p>Utilities</p>
+      </div>
+      <div class="card">
+        <span style="font-size: 20px;">🎓</span>
+        <h3>Study</h3>
+        <p>Student Tools</p>
+      </div>
+      <div class="card">
+        <span style="font-size: 20px;">⚙</span>
+        <h3>Utilities</h3>
+        <p>Daily Use</p>
+      </div>
+      <div class="card">
+        <span style="font-size: 20px;">⭐</span>
+        <h3>More</h3>
+        <p>Coming Soon</p>
+      </div>
+    </section>
+
+    <!-- Trending -->
+    <div class="section-title">
+      <h2>⭐ Trending</h2>
+      <p>Most Used Today</p>
+    </div>
+    <section class="grid" style="grid-template-columns: 1fr;">
+      <a href="ai-chat.html" class="line-card">
+        <div>🤖 AI Chat</div>
+        <span class="tag">HOT</span>
+      </a>
+      <a href="translator.html" class="line-card">
+        <div>🌐 Translator</div>
+        <span class="tag">NEW</span>
+      </a>
+      <div class="line-card">
+        <div>📄 PDF Converter</div>
+        <span class="tag">TOP</span>
+      </div>
+      <div class="line-card">
+        <div>🖼 Image Compressor</div>
+        <span class="tag">FAST</span>
+      </div>
+      <a href="qr-generator.html" class="line-card">
+        <div>📱 QR Generator</div>
+        <span class="tag">FREE</span>
+      </a>
+    </section>
+
+    <!-- Favorites & Recent -->
+    <div class="section-title">
+      <h2>🕒 Recent & Favorites</h2>
+      <p>Quick access to your tools</p>
+    </div>
+    <section class="grid grid-2">
+      <a href="ai-chat.html" class="line-card">🤖 AI Assistant</a>
+      <div class="line-card">📄 PDF Merge</div>
+      <a href="translator.html" class="line-card">🌐 Translate</a>
+      <a href="calculator.html" class="line-card">🧮 Calculator</a>
+      <div class="line-card">🖼 Image Resize</div>
+      <a href="qr-generator.html" class="line-card">📱 QR Scanner</a>
+    </section>
+
+    <!-- App Statistics -->
+    <div class="section-title">
+      <h2>📊 App Statistics</h2>
+      <p>XTra Tech Overview</p>
+    </div>
+    <section class="grid grid-4 text-center">
+      <div class="card stats-card" style="align-items: center;">
+        <h3>100+</h3>
+        <p>Tools</p>
+      </div>
+      <div class="card stats-card" style="align-items: center;">
+        <h3>50K+</h3>
+        <p>Users</p>
+      </div>
+      <div class="card stats-card" style="align-items: center;">
+        <h3>99%</h3>
+        <p>Fast</p>
+      </div>
+      <div class="card stats-card" style="align-items: center;">
+        <h3>24×7</h3>
+        <p>Available</p>
+      </div>
+    </section>
+
+    <!-- Coming Soon -->
+    <div class="section-title">
+      <h2>🚀 Coming Soon</h2>
+    </div>
+    <section class="grid grid-3">
+      <div class="card" style="align-items: center; text-align: center;">🎤 AI Voice</div>
+      <div class="card" style="align-items: center; text-align: center;">🧠 AI Image Gen</div>
+      <div class="card" style="align-items: center; text-align: center;">🎬 Video Editor</div>
+      <div class="card" style="align-items: center; text-align: center;">☁ Cloud Storage</div>
+      <div class="card" style="align-items: center; text-align: center;">🤝 Community</div>
+      <div class="card" style="align-items: center; text-align: center;">💬 Live Chat</div>
+    </section>
+
+  </div> <!-- End Container -->
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-logo">⚡ XTra Tech</div>
+    <p>Tech Made Simple</p>
+    <p>Version 1.0</p>
+    <p style="margin-top: 16px;">Made with ❤️Love 💕 ❤️ by Vaibhav</p>
+  </footer>
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <a class="active">
+      <span style="font-size: 20px;">🏠</span>
+      <span>Home</span>
+    </a>
+    <a>
+      <span style="font-size: 20px;">🔍</span>
+      <span>Explore</span>
+    </a>
+    <a>
+      <span style="font-size: 20px;">❤️</span>
+      <span>Saved</span>
+    </a>
+    <a>
+      <span style="font-size: 20px;">⚙</span>
+      <span>Settings</span>
+    </a>
+    <a>
+      <span style="font-size: 20px;">👤</span>
+      <span>Profile</span>
+    </a>
+  </nav>
+
+  <!-- Sidebar Script -->
+  <script>
+    const menuBtn = document.getElementById('menuBtn');
+    const closeMenu = document.getElementById('closeMenu');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+
+    function toggleMenu() {
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('open');
+    }
+
+    menuBtn.addEventListener('click', toggleMenu);
+    closeMenu.addEventListener('click', toggleMenu);
+    overlay.addEventListener('click', toggleMenu);
+  </script>
 
 </body>
 </html>

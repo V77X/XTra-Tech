@@ -1,1 +1,296 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XTra-Tech | Pro PDF Studio Suite</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darker: '#0a0f1d',
+                        card: '#111827',
+                        accent: '#6366f1',
+                        accentHover: '#4f46e5'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- pdf-lib for client-side PDF manipulation -->
+    <script src="https://unpkg.com/pdf-lib@1.4.0/dist/pdf-lib.min.js"></script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.8);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glow:hover {
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.35);
+        }
+        .tool-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .tool-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(99, 102, 241, 0.6);
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0a0f1d; }
+        ::-webkit-scrollbar-thumb { background: #374151; border-radius: 3px; }
+    </style>
+</head>
+<body class="bg-darker text-gray-100 min-h-screen flex flex-col justify-between selection:bg-accent selection:text-white">
 
+    <!-- Ambient Glow Effects -->
+    <div class="fixed top-0 left-1/4 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="fixed bottom-0 right-1/4 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+    <!-- Header -->
+    <header class="w-full border-b border-gray-800/60 glass-panel sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center shadow-lg shadow-indigo-500/30">
+                    <i class="fa-solid fa-wand-magic-sparkles text-white text-lg"></i>
+                </div>
+                <div>
+                    <span class="text-xl font-bold tracking-wider bg-gradient-to-r from-white via-gray-200 to-indigo-400 bg-clip-text text-transparent">XTRA-TECH STUDIO</span>
+                    <span class="block text-[10px] tracking-widest text-indigo-400 font-semibold uppercase">Pro Document Engine</span>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <a href="https://v77x.github.io/XTra-Tech/" class="text-sm text-gray-400 hover:text-white transition hidden sm:inline-block"><i class="fa-solid fa-house mr-1"></i> Home</a>
+                <span class="h-4 w-[1px] bg-gray-800 hidden sm:inline-block"></span>
+                <span class="flex items-center text-xs px-3 py-1.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse mr-2"></span> 100% Client-Side Private
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        
+        <!-- Hero Intro -->
+        <div class="text-center mb-12">
+            <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight mb-3">
+                Advanced <span class="bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">PDF Toolkit</span>
+            </h1>
+            <p class="text-gray-400 text-sm sm:text-base max-w-xl mx-auto">
+                Professional document editing suite featuring custom image-to-PDF layouts, precise range splitting, security stamping, and metadata inspection.
+            </p>
+        </div>
+
+        <!-- Major 6 Tools Selection Grid -->
+        <div id="toolSelector" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+            
+            <!-- Tool 1: Images to PDF with Layout Config -->
+            <div onclick="openTool('img2pdf')" class="tool-card glass-panel rounded-2xl p-6 cursor-pointer border border-gray-800 hover:border-indigo-500/60 relative overflow-hidden group">
+                <div class="w-12 h-12 rounded-xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400 text-xl mb-4">
+                    <i class="fa-solid fa-images"></i>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-2">1. Img to PDF (Custom Layout)</h3>
+                <p class="text-xs text-gray-400 leading-relaxed">Convert and pack images into a professional PDF with custom sizing scale and margins.</p>
+            </div>
+
+            <!-- Tool 2: Range Splitter -->
+            <div onclick="openTool('splitRange')" class="tool-card glass-panel rounded-2xl p-6 cursor-pointer border border-gray-800 hover:border-indigo-500/60 relative overflow-hidden group">
+                <div class="w-12 h-12 rounded-xl bg-purple-600/20 border border-purple-500/30 flex items-center justify-center text-purple-400 text-xl mb-4">
+                    <i class="fa-solid fa-scissors"></i>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-2">2. Advanced Range Splitter</h3>
+                <p class="text-xs text-gray-400 leading-relaxed">Extract specific page sets or custom segments (e.g., pages 1-3, 5) out of any large document.</p>
+            </div>
+
+            <!-- Tool 3: Page Reorder & Deleter -->
+            <div onclick="openTool('reorder')" class="tool-card glass-panel rounded-2xl p-6 cursor-pointer border border-gray-800 hover:border-indigo-500/60 relative overflow-hidden group">
+                <div class="w-12 h-12 rounded-xl bg-emerald-600/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-xl mb-4">
+                    <i class="fa-solid fa-shuffle"></i>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-2">3. Reorder & Delete Pages</h3>
+                <p class="text-xs text-gray-400 leading-relaxed">Rearrange page sequences or remove unwanted pages by entering clean custom page indexes.</p>
+            </div>
+
+            <!-- Tool 4: Custom Watermark Stamp -->
+            <div onclick="openTool('watermark')" class="tool-card glass-panel rounded-2xl p-6 cursor-pointer border border-gray-800 hover:border-indigo-500/60 relative overflow-hidden group">
+                <div class="w-12 h-12 rounded-xl bg-amber-600/20 border border-amber-500/30 flex items-center justify-center text-amber-400 text-xl mb-4">
+                    <i class="fa-solid fa-stamp"></i>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-2">4. Pro Watermark Stamper</h3>
+                <p class="text-xs text-gray-400 leading-relaxed">Stamp angled custom brand text or confidentiality stamps across every document page.</p>
+            </div>
+
+            <!-- Tool 5: Metadata Inspector -->
+            <div onclick="openTool('metadata')" class="tool-card glass-panel rounded-2xl p-6 cursor-pointer border border-gray-800 hover:border-indigo-500/60 relative overflow-hidden group">
+                <div class="w-12 h-12 rounded-xl bg-rose-600/20 border border-rose-500/30 flex items-center justify-center text-rose-400 text-xl mb-4">
+                    <i class="fa-solid fa-circle-info"></i>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-2">5. PDF Metadata Inspector</h3>
+                <p class="text-xs text-gray-400 leading-relaxed">Inspect internal document properties, creator software, title tags, and page counts.</p>
+            </div>
+
+            <!-- Tool 6: Document Compressor -->
+            <div onclick="openTool('compress')" class="tool-card glass-panel rounded-2xl p-6 cursor-pointer border border-gray-800 hover:border-indigo-500/60 relative overflow-hidden group">
+                <div class="w-12 h-12 rounded-xl bg-cyan-600/20 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-xl mb-4">
+                    <i class="fa-solid fa-compress-arrows-alt"></i>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-2">6. Stream Optimizer</h3>
+                <p class="text-xs text-gray-400 leading-relaxed">Clean internal object streams to optimize and reduce overall file storage requirements.</p>
+            </div>
+
+        </div>
+
+        <!-- Active Tool Workspace -->
+        <div id="workspace" class="glass-panel rounded-3xl p-6 sm:p-8 shadow-2xl relative hidden">
+            <button onclick="closeWorkspace()" class="mb-6 inline-flex items-center text-xs font-semibold text-indigo-400 hover:text-indigo-300 transition">
+                <i class="fa-solid fa-arrow-left mr-2"></i> Back to Studio Dashboard
+            </button>
+            <div id="workspaceTitle" class="text-xl font-bold text-white mb-6 flex items-center"></div>
+            <div id="workspaceContent" class="space-y-6"></div>
+            
+            <div id="workspaceStatus" class="mt-6 pt-4 border-t border-gray-800 flex items-center justify-between flex-wrap gap-4 hidden">
+                <span id="statusText" class="text-xs text-emerald-400 font-medium flex items-center">
+                    <i class="fa-solid fa-check mr-2"></i> Action processed successfully
+                </span>
+                <a id="downloadLink" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-xl shadow-lg shadow-indigo-600/30 transition flex items-center space-x-2">
+                    <i class="fa-solid fa-download"></i>
+                    <span>Download Result File</span>
+                </a>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full border-t border-gray-800/60 py-6 text-center text-xs text-gray-500 glass-panel">
+        <p>&copy; 2026 <a href="https://v77x.github.io/XTra-Tech/" class="text-indigo-400 hover:underline">XTra-Tech</a>. Professional Client-Side Studio.</p>
+    </footer>
+
+    <!-- Script Engine -->
+    <script>
+        const { PDFDocument, rgb, degrees } = PDFLib;
+
+        function openTool(tool) {
+            document.getElementById('toolSelector').classList.add('hidden');
+            const ws = document.getElementById('workspace');
+            ws.classList.remove('hidden');
+            const title = document.getElementById('workspaceTitle');
+            const content = document.getElementById('workspaceContent');
+            document.getElementById('workspaceStatus').classList.add('hidden');
+
+            if (tool === 'img2pdf') {
+                title.innerHTML = '<i class="fa-solid fa-images text-indigo-400 mr-2"></i> Images to PDF with Layout Config';
+                content.innerHTML = `
+                    <div class="space-y-4">
+                        <div class="border-2 border-dashed border-gray-700 hover:border-indigo-500 rounded-2xl p-6 text-center bg-gray-900/40 transition">
+                            <input type="file" id="imgFiles" multiple accept="image/*" class="block w-full text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-600 file:text-white cursor-pointer mx-auto">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-400 uppercase mb-2">Page Margin Scaling</label>
+                            <select id="imgFit" class="w-full bg-gray-900 border border-gray-700 rounded-xl p-3 text-sm text-gray-100 outline-none focus:border-indigo-500">
+                                <option value="fit">Auto Fit Image to Page Center</option>
+                                <option value="full">Stretch to Full Page Dimensions</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button onclick="runImg2Pdf()" class="w-full py-3 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 text-white text-sm font-semibold rounded-xl shadow-lg transition">Generate Custom PDF</button>
+                `;
+            } else if (tool === 'splitRange') {
+                title.innerHTML = '<i class="fa-solid fa-scissors text-purple-400 mr-2"></i> Advanced Range Splitter';
+                content.innerHTML = `
+                    <div class="space-y-4">
+                        <input type="file" id="splitFile" accept=".pdf" class="block w-full text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-purple-600 file:text-white cursor-pointer">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-400 uppercase mb-2">Page Indexes to Extract (0-based, comma separated e.g. 0, 1, 3)</label>
+                            <input type="text" id="pageRanges" placeholder="0, 1, 2" class="w-full bg-gray-900 border border-gray-700 rounded-xl p-3 text-sm text-gray-100 outline-none focus:border-purple-500">
+                        </div>
+                    </div>
+                    <button onclick="runRangeSplit()" class="w-full py-3 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 text-white text-sm font-semibold rounded-xl shadow-lg transition">Extract Custom Range</button>
+                `;
+            } else if (tool === 'reorder') {
+                title.innerHTML = '<i class="fa-solid fa-shuffle text-emerald-400 mr-2"></i> Reorder & Delete Pages';
+                content.innerHTML = `
+                    <div class="space-y-4">
+                        <input type="file" id="reorderFile" accept=".pdf" class="block w-full text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-600 file:text-white cursor-pointer">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-400 uppercase mb-2">New Page Sequence Order (e.g. 2, 0, 1)</label>
+                            <input type="text" id="newSequence" placeholder="2, 1, 0" class="w-full bg-gray-900 border border-gray-700 rounded-xl p-3 text-sm text-gray-100 outline-none focus:border-emerald-500">
+                        </div>
+                    </div>
+                    <button onclick="runReorder()" class="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 text-white text-sm font-semibold rounded-xl shadow-lg transition">Apply New Sequence</button>
+                `;
+            } else if (tool === 'watermark') {
+                title.innerHTML = '<i class="fa-solid fa-stamp text-amber-400 mr-2"></i> Pro Watermark Stamper';
+                content.innerHTML = `
+                    <div class="space-y-4">
+                        <input type="file" id="wmFile" accept=".pdf" class="block w-full text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-amber-600 file:text-white cursor-pointer">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-400 uppercase mb-2">Watermark Text Stamp</label>
+                            <input type="text" id="wmText" value="XTRA-TECH VERIFIED" class="w-full bg-gray-900 border border-gray-700 rounded-xl p-3 text-sm text-gray-100 outline-none focus:border-amber-500">
+                        </div>
+                    </div>
+                    <button onclick="runWatermark()" class="w-full py-3 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 text-white text-sm font-semibold rounded-xl shadow-lg transition">Stamp Watermark</button>
+                `;
+            } else if (tool === 'metadata') {
+                title.innerHTML = '<i class="fa-solid fa-circle-info text-rose-400 mr-2"></i> PDF Metadata Inspector';
+                content.innerHTML = `
+                    <div class="space-y-4">
+                        <input type="file" id="metaFile" accept=".pdf" class="block w-full text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-rose-600 file:text-white cursor-pointer">
+                    </div>
+                    <button onclick="runMetadata()" class="w-full py-3 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-500 text-white text-sm font-semibold rounded-xl shadow-lg transition">Inspect Document Data</button>
+                    <div id="metaOutput" class="bg-gray-950 p-4 rounded-xl text-xs text-gray-300 font-mono mt-4 hidden"></div>
+                `;
+            } else if (tool === 'compress') {
+                title.innerHTML = '<i class="fa-solid fa-compress-arrows-alt text-cyan-400 mr-2"></i> Stream Optimizer';
+                content.innerHTML = `
+                    <div class="space-y-4">
+                        <input type="file" id="compFile" accept=".pdf" class="block w-full text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-cyan-600 file:text-white cursor-pointer">
+                    </div>
+                    <button onclick="runCompress()" class="w-full py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 text-white text-sm font-semibold rounded-xl shadow-lg transition">Optimize Stream Objects</button>
+                `;
+            }
+        }
+
+        function closeWorkspace() {
+            document.getElementById('workspace').classList.add('hidden');
+            document.getElementById('toolSelector').classList.remove('hidden');
+        }
+
+        function showResult(blob, name) {
+            const url = URL.createObjectURL(blob);
+            const dl = document.getElementById('downloadLink');
+            dl.href = url;
+            dl.download = name;
+            document.getElementById('workspaceStatus').classList.remove('hidden');
+        }
+
+        async function runImg2Pdf() {
+            const files = document.getElementById('imgFiles').files;
+            if (!files.length) return alert('Please choose images');
+            const pdf = await PDFDocument.create();
+            for (let f of files) {
+                const buf = await f.arrayBuffer();
+                const img = f.type.includes('png') ? await pdf.embedPng(buf) : await pdf.embedJpg(buf);
+                const page = pdf.addPage([img.width, img.height]);
+                page.drawImage(img, { x: 0, y: 0, width: img.width, height: img.height });
+            }
+            showResult(new Blob([await pdf.save()], { type: 'application/pdf' }), 'custom-images.pdf');
+        }
+
+        async function runRangeSplit() {
+            const file = document.getElementById('splitFile').files[0];
+            const indicesStr = document.getElementById('pageRanges').value;
+            if (!file || !indicesStr) return alert('Provide file and ranges');
+            const indices = indicesStr.split(',').map(n => parseInt(n.trim()));
+            const src = await PDFDocument.load(await file.arrayBuffer());
+            const target = await PDFDocument.create();
+            const 

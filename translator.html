@@ -35,7 +35,6 @@
         .glow:hover {
             box-shadow: 0 0 25px rgba(99, 102, 241, 0.4);
         }
-        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #0a0f1d; }
         ::-webkit-scrollbar-thumb { background: #374151; border-radius: 3px; }
@@ -64,7 +63,7 @@
                 <a href="https://v77x.github.io/XTra-Tech/" class="text-sm text-gray-400 hover:text-white transition hidden sm:inline-block">Home</a>
                 <span class="h-4 w-[1px] bg-gray-800 hidden sm:inline-block"></span>
                 <span class="flex items-center text-xs px-3 py-1.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse mr-2"></span> JSON AI v2.4 Active
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse mr-2"></span> Live API Active
                 </span>
             </div>
         </div>
@@ -79,7 +78,7 @@
                 Next-Gen <span class="bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">AI Translation</span>
             </h1>
             <p class="text-gray-400 text-sm sm:text-base max-w-xl mx-auto">
-                Powered by structured JSON localization models and advanced linguistic nodes for flawless translations.
+                Real-time multi-language neural translation powered by live translation nodes.
             </p>
         </div>
 
@@ -93,12 +92,14 @@
                 <div class="flex items-center space-x-3 w-full sm:w-auto">
                     <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">From:</span>
                     <select id="sourceLang" class="bg-gray-900 border border-gray-700 text-gray-200 text-sm rounded-xl focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:w-48 p-2.5 outline-none transition">
-                        <option value="auto">Detect Language</option>
                         <option value="en" selected>English</option>
                         <option value="es">Spanish</option>
                         <option value="fr">French</option>
                         <option value="de">German</option>
                         <option value="hi">Hindi</option>
+                        <option value="zh">Chinese</option>
+                        <option value="ar">Arabic</option>
+                        <option value="ja">Japanese</option>
                     </select>
                 </div>
 
@@ -116,6 +117,9 @@
                         <option value="fr">French</option>
                         <option value="de">German</option>
                         <option value="hi">Hindi</option>
+                        <option value="zh">Chinese</option>
+                        <option value="ar">Arabic</option>
+                        <option value="ja">Japanese</option>
                     </select>
                 </div>
             </div>
@@ -145,14 +149,14 @@
                 <div class="flex flex-col relative">
                     <div class="flex items-center justify-between mb-2">
                         <span class="text-xs font-semibold text-indigo-400 uppercase tracking-wider flex items-center">
-                            <i class="fa-solid fa-wand-magic-sparkles mr-1.5"></i> AI Translation Output
+                            <i class="fa-solid fa-wand-magic-sparkles mr-1.5"></i> Translated Output
                         </span>
                         <button id="copyBtn" class="text-xs text-gray-400 hover:text-indigo-400 transition" title="Copy output">
                             <i class="fa-regular fa-copy mr-1"></i>Copy
                         </button>
                     </div>
                     <div id="outputText" class="w-full h-[150px] bg-gray-950/60 border border-gray-800/80 rounded-2xl p-4 text-gray-200 text-sm overflow-y-auto select-all">
-                        <span class="text-gray-600 italic">Translation will appear instantly via JSON node...</span>
+                        <span class="text-gray-600 italic">Translation will appear here...</span>
                     </div>
 
                     <div class="flex items-center justify-between mt-3 text-xs text-gray-500">
@@ -167,11 +171,11 @@
             <div class="mt-6 pt-4 border-t border-gray-800/80 flex items-center justify-between flex-wrap gap-4">
                 <div class="flex items-center space-x-2 text-xs text-gray-400">
                     <i class="fa-solid fa-bolt text-amber-400"></i>
-                    <span>JSON structured response dictionary active</span>
+                    <span>Live Translation Engine Connected</span>
                 </div>
                 <button id="translateBtn" class="w-full sm:w-auto px-8 py-3 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-sm font-semibold rounded-xl shadow-lg shadow-indigo-600/30 glow transition-all duration-300 flex items-center justify-center space-x-2">
                     <i class="fa-solid fa-brain"></i>
-                    <span>Execute AI Translation</span>
+                    <span>Translate Text</span>
                 </button>
             </div>
 
@@ -181,63 +185,11 @@
 
     <!-- Footer -->
     <footer class="w-full border-t border-gray-800/60 py-6 text-center text-xs text-gray-500 glass-panel">
-        <p>&copy; 2026 <a href="https://v77x.github.io/XTra-Tech/" class="text-indigo-400 hover:underline">XTra-Tech</a>. Built with HTML, Tailwind CSS, JavaScript & JSON Data Architecture.</p>
+        <p>&copy; 2026 <a href="https://v77x.github.io/XTra-Tech/" class="text-indigo-400 hover:underline">XTra-Tech</a>. Professional Web Translation System.</p>
     </footer>
 
-    <!-- JavaScript Application Engine -->
+    <!-- JavaScript Live Translation Engine -->
     <script>
-        // Simulated JSON Database for AI translation matching phrases/words contextually
-        // (This makes it feel real, instant, and fully operational without external blocked APIs)
-        const translationDatabase = {
-            "en": {
-                "es": {
-                    "hello": "hola",
-                    "how are you": "¿cómo estás?",
-                    "welcome to xtra-tech": "bienvenido a xtra-tech",
-                    "artificial intelligence": "inteligencia artificial",
-                    "translator": "traductor",
-                    "website": "sitio web",
-                    "thank you": "gracias",
-                    "good morning": "buenos días",
-                    "coding is awesome": "programar es increíble"
-                },
-                "fr": {
-                    "hello": "bonjour",
-                    "how are you": "comment ça va?",
-                    "welcome to xtra-tech": "bienvenue sur xtra-tech",
-                    "artificial intelligence": "intelligence artificielle",
-                    "translator": "traducteur",
-                    "website": "site web",
-                    "thank you": "merci",
-                    "good morning": "bonjour",
-                    "coding is awesome": "le code c'est génial"
-                },
-                "de": {
-                    "hello": "hallo",
-                    "how are you": "wie geht es dir?",
-                    "welcome to xtra-tech": "willkommen bei xtra-tech",
-                    "artificial intelligence": "künstliche intelligenz",
-                    "translator": "übersetzer",
-                    "website": "webseite",
-                    "thank you": "danke",
-                    "good morning": "guten morgen",
-                    "coding is awesome": "programmieren ist großartig"
-                },
-                "hi": {
-                    "hello": "नमस्ते",
-                    "how are you": "आप कैसे हैं?",
-                    "welcome to xtra-tech": "एक्सट्रा-टेक में आपका स्वागत है",
-                    "artificial intelligence": "कृत्रिम बुद्धिमत्ता",
-                    "translator": "अनुवादक",
-                    "website": "वेबसाइट",
-                    "thank you": "धन्यवाद",
-                    "good morning": "सुप्रभात",
-                    "coding is awesome": "कोडिंग अद्भुत है"
-                }
-            }
-        };
-
-        // DOM Elements
         const inputText = document.getElementById('inputText');
         const outputText = document.getElementById('outputText');
         const sourceLang = document.getElementById('sourceLang');
@@ -249,97 +201,76 @@
         const charCount = document.getElementById('charCount');
         const translationStatus = document.getElementById('translationStatus');
 
-        // Character count live update
+        // Character count update
         inputText.addEventListener('input', () => {
             const length = inputText.value.length;
             charCount.textContent = `${length} / 5000 chars`;
-            if(length > 5000) {
-                charCount.classList.add('text-red-400');
-            } else {
-                charCount.classList.remove('text-red-400');
-            }
         });
 
-        // Clear text action
+        // Clear button
         clearBtn.addEventListener('click', () => {
             inputText.value = '';
-            outputText.innerHTML = '<span class="text-gray-600 italic">Translation will appear instantly via JSON node...</span>';
+            outputText.innerHTML = '<span class="text-gray-600 italic">Translation will appear here...</span>';
             charCount.textContent = '0 / 5000 chars';
             translationStatus.textContent = 'Ready';
         });
 
-        // Swap Languages Action
+        // Swap languages
         swapBtn.addEventListener('click', () => {
             const temp = sourceLang.value;
-            if(temp === 'auto') {
-                sourceLang.value = 'en'; // default back if auto
-            } else {
-                sourceLang.value = targetLang.value;
-            }
-            targetLang.value = temp === 'auto' ? 'es' : temp;
-            
-            // Swap text boxes if text exists
+            sourceLang.value = targetLang.value;
+            targetLang.value = temp;
+
             const tempText = inputText.value;
-            inputText.value = outputText.innerText === 'Translation will appear instantly via JSON node...' ? '' : outputText.innerText;
-            if(tempText) {
-                // Trigger translation automatically after swap
+            inputText.value = outputText.innerText === 'Translation will appear here...' ? '' : outputText.innerText;
+            if(inputText.value) {
                 performTranslation();
             }
         });
 
-        // Core Translation Function utilizing JSON Database + algorithmic processing
-        function performTranslation() {
-            let text = inputText.value.trim().toLowerCase();
-            let src = sourceLang.value;
-            let tgt = targetLang.value;
+        // Real API Translation Function
+        async function performTranslation() {
+            const text = inputText.value.trim();
+            const src = sourceLang.value;
+            const tgt = targetLang.value;
 
             if (!text) {
                 outputText.innerHTML = '<span class="text-gray-600 italic">Please enter text to translate.</span>';
                 return;
             }
 
-            translationStatus.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> Processing JSON nodes...';
+            translationStatus.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> Translating...';
 
-            setTimeout(() => {
-                let translated = "";
+            try {
+                // Using MyMemory translation API (Free public endpoint)
+                const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${src}|${tgt}`;
+                
+                const response = await fetch(url);
+                const data = await response.json();
 
-                // Check if direct translation exists in mock JSON database
-                if (translationDatabase['en'] && translationDatabase['en'][tgt]) {
-                    let dict = translationDatabase['en'][tgt];
-                    // Clean punctuation for lookup check
-                    let cleanText = text.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g,"");
-                    
-                    if (dict[cleanText]) {
-                        translated = dict[cleanText];
-                    } else {
-                        // Fallback algorithmic/synthetic AI formatting for custom text demonstration
-                        translated = `[AI JSON Model Translation (${src.toUpperCase()} -> ${tgt.toUpperCase()}): "${inputText.value}"]`;
-                    }
+                if (data && data.responseData && data.responseData.translatedText) {
+                    outputText.textContent = data.responseData.translatedText;
+                    translationStatus.innerHTML = '<span class="text-emerald-400 font-medium"><i class="fa-solid fa-check mr-1"></i> Success</span>';
                 } else {
-                    translated = `[Translated to ${tgt.toUpperCase()}]: ${inputText.value}`;
+                    throw new Error('Translation failed');
                 }
-
-                // Capitalize first letter if original text was capitalized
-                if(inputText.value[0] === inputText.value[0].toUpperCase()) {
-                    translated = translated.charAt(0).toUpperCase() + translated.slice(1);
-                }
-
-                outputText.textContent = translated;
-                translationStatus.innerHTML = '<span class="text-emerald-400 font-medium"><i class="fa-solid fa-check mr-1"></i> Translated Successfully</span>';
-            }, 350); // Small realistic delay simulating fast neural response
+            } catch (error) {
+                console.error(error);
+                outputText.innerHTML = '<span class="text-red-400">Error connecting to translation service. Please try again.</span>';
+                translationStatus.innerHTML = '<span class="text-red-400">Failed</span>';
+            }
         }
 
-        // Trigger translation on button click
         translateBtn.addEventListener('click', performTranslation);
 
-        // Allow pressing Enter (Ctrl + Enter) to translate
+        // Ctrl + Enter shortcut
         inputText.addEventListener('keydown', (e) => {
             if(e.ctrlKey && e.key === 'Enter') {
                 performTranslation();
             }
         });
 
-        // Copy Output to Clipboard
+        // Copy button
         copyBtn.addEventListener('click', () => {
             const textToCopy = outputText.innerText;
             if(textToCopy.includes('Translation will appear') || textToCopy.includes('Please enter')) return;
@@ -353,9 +284,9 @@
             });
         });
 
-        // Text-to-Speech integration using SpeechSynthesis API
+        // Text-to-Speech
         document.getElementById('speakInputBtn').addEventListener('click', () => {
-            speakText(inputText.value, sourceLang.value === 'auto' ? 'en' : sourceLang.value);
+            speakText(inputText.value, sourceLang.value);
         });
 
         document.getElementById('speakOutputBtn').addEventListener('click', () => {
@@ -365,9 +296,9 @@
         function speakText(text, lang) {
             if (!text || text.includes('Translation will appear')) return;
             if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel(); // Stop any ongoing speech
+                window.speechSynthesis.cancel();
                 const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = lang === 'hi' ? 'hi-IN' : (lang === 'es' ? 'es-ES' : (lang === 'fr' ? 'fr-FR' : (lang === 'de' ? 'de-DE' : 'en-US')));
+                utterance.lang = lang;
                 window.speechSynthesis.speak(utterance);
             } else {
                 alert('Text-to-speech is not supported by your browser.');

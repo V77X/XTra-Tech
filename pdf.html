@@ -404,6 +404,12 @@ document.querySelectorAll('.tab-btn').forEach(btn=>{
 });
 
 // ---------- helpers ----------
+function isPdf(f){
+  return f.type === 'application/pdf' || /\.pdf$/i.test(f.name);
+}
+function isImg(f){
+  return f.type === 'image/jpeg' || f.type === 'image/png' || /\.(jpe?g|png)$/i.test(f.name);
+}
 function fmtBytes(b){
   if(b < 1024) return b + ' B';
   if(b < 1024*1024) return (b/1024).toFixed(1) + ' KB';
@@ -493,7 +499,7 @@ function wireDrop(dropEl, inputEl, onFiles){
     dl.className='download-box'; clearStatus(status);
   }
 
-  wireDrop(drop, input, fs=>{ files = files.concat(fs.filter(f=>f.type==='application/pdf')); render(); input.value=''; });
+  wireDrop(drop, input, fs=>{ files = files.concat(fs.filter(isPdf)); render(); input.value=''; });
 
   btn.addEventListener('click', async ()=>{
     btn.disabled=true;
@@ -531,7 +537,7 @@ function wireDrop(dropEl, inputEl, onFiles){
     btn.disabled = !file;
     dl.className='download-box'; clearStatus(status);
   }
-  wireDrop(drop, input, fs=>{ if(fs[0] && fs[0].type==='application/pdf'){ file=fs[0]; render(); } input.value=''; });
+  wireDrop(drop, input, fs=>{ if(fs[0] && isPdf(fs[0])){ file=fs[0]; render(); } input.value=''; });
 
   btn.addEventListener('click', async ()=>{
     if(!file) return;
@@ -571,7 +577,7 @@ function wireDrop(dropEl, inputEl, onFiles){
     btn.disabled = !file;
     dl.className='download-box'; clearStatus(status);
   }
-  wireDrop(drop, input, fs=>{ if(fs[0] && fs[0].type==='application/pdf'){ file=fs[0]; render(); } input.value=''; });
+  wireDrop(drop, input, fs=>{ if(fs[0] && isPdf(fs[0])){ file=fs[0]; render(); } input.value=''; });
 
   btn.addEventListener('click', async ()=>{
     if(!file) return;
@@ -613,7 +619,7 @@ function wireDrop(dropEl, inputEl, onFiles){
     btn.disabled = !file;
     dl.className='download-box'; clearStatus(status);
   }
-  wireDrop(drop, input, fs=>{ if(fs[0] && fs[0].type==='application/pdf'){ file=fs[0]; render(); } input.value=''; });
+  wireDrop(drop, input, fs=>{ if(fs[0] && isPdf(fs[0])){ file=fs[0]; render(); } input.value=''; });
 
   btn.addEventListener('click', async ()=>{
     if(!file) return;
@@ -668,7 +674,7 @@ function wireDrop(dropEl, inputEl, onFiles){
     dl.className='download-box'; clearStatus(status);
   }
   wireDrop(drop, input, fs=>{
-    files = files.concat(fs.filter(f=>f.type==='image/jpeg' || f.type==='image/png'));
+    files = files.concat(fs.filter(isImg));
     render(); input.value='';
   });
 
@@ -707,7 +713,7 @@ function wireDrop(dropEl, inputEl, onFiles){
     btn.disabled = !file;
     dl.className='download-box'; clearStatus(status);
   }
-  wireDrop(drop, input, fs=>{ if(fs[0] && fs[0].type==='application/pdf'){ file=fs[0]; render(); } input.value=''; });
+  wireDrop(drop, input, fs=>{ if(fs[0] && isPdf(fs[0])){ file=fs[0]; render(); } input.value=''; });
 
   const colorMap = { gray: rgb(0.5,0.5,0.5), red: rgb(0.8,0.15,0.15), purple: rgb(0.486,0.361,1) };
 
@@ -759,7 +765,7 @@ function wireDrop(dropEl, inputEl, onFiles){
     btn.disabled = !file;
     dl.className='download-box'; clearStatus(status);
   }
-  wireDrop(drop, input, fs=>{ if(fs[0] && fs[0].type==='application/pdf'){ file=fs[0]; render(); } input.value=''; });
+  wireDrop(drop, input, fs=>{ if(fs[0] && isPdf(fs[0])){ file=fs[0]; render(); } input.value=''; });
 
   btn.addEventListener('click', async ()=>{
     if(!file) return;

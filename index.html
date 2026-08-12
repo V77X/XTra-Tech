@@ -259,6 +259,14 @@
     .grid-3 { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
     .grid-4 { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
 
+    /* Vertical stack (for stats now) */
+    .stack {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
     /* Cards */
     .card {
       background: var(--bg-card);
@@ -329,7 +337,7 @@
       100% { transform: translateX(calc(-50% - 8px)); }
     }
 
-    /* Vertical Marquee Animation Classes (NEW) */
+    /* Vertical Marquee Animation Classes */
     .trending-container {
       overflow: hidden;
       height: 280px; /* Adjust height based on how many you want to show */
@@ -351,7 +359,7 @@
       100% { transform: translateY(calc(-50% - 8px)); } /* 8px is half the gap */
     }
 
-    /* Minimal Line Cards (For Trending/Recent) */
+    /* Minimal Line Cards (For Trending) */
     .line-card {
       display: flex;
       align-items: center;
@@ -379,10 +387,21 @@
       border: 1px solid var(--accent);
     }
 
-    /* Stats Grid */
+    /* Stats Card (vertical layout) */
+    .stats-card {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+
     .stats-card h3 {
       font-size: 28px;
       color: var(--text-heading);
+    }
+
+    .stats-card p {
+      font-size: 14px;
+      color: var(--text-muted);
     }
 
     /* Footer */
@@ -568,7 +587,7 @@
 
   <!-- Main Content Wrapper -->
   <div class="container">
-    
+
     <!-- Hero -->
     <section class="hero">
       <span class="badge">NEW 2026</span>
@@ -629,12 +648,12 @@
         <div class="icon">📄</div>
         <h3>PDF Tools</h3>
         <p>Convert & Edit</p>
-      </a> 
-      <a href="image.html". class="card">
+      </a>
+      <a href="image.html" class="card">
         <div class="icon">🖼</div>
         <h3>Image Tools</h3>
         <p>Compress & Resize</p>
-      </div>
+      </a>
       <a href="qr-generator.html" class="card">
         <div class="icon">📱</div>
         <h3>QR Scanner</h3>
@@ -652,14 +671,14 @@
       </a>
     </section>
 
-    <!-- Categories -->
+    <!-- Categories (Horizontal Auto-Scroll — unchanged) -->
     <div class="section-title">
       <h2>📂 Categories</h2>
       <p>Choose your favorite</p>
     </div>
     <section class="marquee-container">
       <div class="marquee-track">
-        
+
         <!-- Original 12 Items -->
         <a href="ai-chat.html" class="card category-card">
           <span style="font-size: 20px;">🤖</span>
@@ -675,12 +694,12 @@
           <span style="font-size: 20px;">📄</span>
           <h3>PDF</h3>
           <p>Edit PDF</p>
-        </div>
-        <a href="image html" class="card category-card">
+        </a>
+        <a href="image.html" class="card category-card">
           <span style="font-size: 20px;">🖼</span>
           <h3>Images</h3>
           <p>Resize & Compress</p>
-        </div>
+        </a>
         <div class="card category-card">
           <span style="font-size: 20px;">🎵</span>
           <h3>Audio</h3>
@@ -705,7 +724,7 @@
           <span style="font-size: 20px;">📝</span>
           <h3>Text</h3>
           <p>Utilities</p>
-        </a> 
+        </a>
         <div class="card category-card">
           <span style="font-size: 20px;">🎓</span>
           <h3>Study</h3>
@@ -733,16 +752,16 @@
           <h3>Translator</h3>
           <p>Translate Instantly</p>
         </a>
-        <div class="card category-card" aria-hidden="true">
+        <a href="pdf.html" class="card category-card" aria-hidden="true">
           <span style="font-size: 20px;">📄</span>
           <h3>PDF</h3>
           <p>Edit PDF</p>
-        </div>
-        <div class="card category-card" aria-hidden="true">
+        </a>
+        <a href="image.html" class="card category-card" aria-hidden="true">
           <span style="font-size: 20px;">🖼</span>
           <h3>Images</h3>
           <p>Resize & Compress</p>
-        </div>
+        </a>
         <div class="card category-card" aria-hidden="true">
           <span style="font-size: 20px;">🎵</span>
           <h3>Audio</h3>
@@ -767,7 +786,7 @@
           <span style="font-size: 20px;">📝</span>
           <h3>Text</h3>
           <p>Utilities</p>
-        </a> 
+        </a>
         <div class="card category-card" aria-hidden="true">
           <span style="font-size: 20px;">🎓</span>
           <h3>Study</h3>
@@ -840,40 +859,25 @@
       </div>
     </section>
 
-
-    <!-- Favorites & Recent -->
-    <div class="section-title">
-      <h2>🕒 Recent & Favorites</h2>
-      <p>Quick access to your tools</p>
-    </div>
-    <section class="grid grid-2">
-      <a href="ai-chat.html" class="line-card">🤖 AI Assistant</a>
-      <div class="line-card">📄 PDF Merge</div>
-      <a href="translator.html" class="line-card">🌐 Translate</a>
-      <a href="calculator.html" class="line-card">🧮 Calculator</a>
-      <div class="line-card">🖼 Image Resize</div>
-      <a href="qr-generator.html" class="line-card">📱 QR Scanner</a>
-    </section>
-
-    <!-- App Statistics -->
+    <!-- App Statistics (Vertical Stack) -->
     <div class="section-title">
       <h2>📊 App Statistics</h2>
       <p>XTra Tech Overview</p>
     </div>
-    <section class="grid grid-4 text-center">
-      <div class="card stats-card" style="align-items: center;">
+    <section class="stack">
+      <div class="card stats-card">
         <h3>100+</h3>
         <p>Tools</p>
       </div>
-      <div class="card stats-card" style="align-items: center;">
+      <div class="card stats-card">
         <h3>50K+</h3>
         <p>Users</p>
       </div>
-      <div class="card stats-card" style="align-items: center;">
+      <div class="card stats-card">
         <h3>99%</h3>
         <p>Fast</p>
       </div>
-      <div class="card stats-card" style="align-items: center;">
+      <div class="card stats-card">
         <h3>24×7</h3>
         <p>Available</p>
       </div>

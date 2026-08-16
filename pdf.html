@@ -3,811 +3,449 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PDF Tools · XTra Tech</title>
+<title>PDF Tools - XTra Tech</title>
+<meta name="theme-color" content="#0b1020">
+<meta name="description" content="Merge, split, rotate, and convert PDFs - all in your browser">
+<link rel="manifest" href="manifest.json?v=1.1">
+<link rel="stylesheet" href="style.css?v=1.1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
 <style>
+  /* Page-local styles - self-contained so this page looks right even before
+     pdf-tools-specific classes exist in style.css */
   :root{
     --bg:#0b1020;
-    --surface:#131a2e;
-    --surface-2:#0e1424;
-    --border:#242c44;
-    --text:#e9ecf5;
-    --muted:#8b93a7;
-    --accent1:#7c5cff;
-    --accent2:#ff5c8a;
-    --ok:#3fd28b;
-    --err:#ff6b6b;
+    --card:rgba(255,255,255,0.06);
+    --card-border:rgba(255,255,255,0.12);
+    --accent:#6c63ff;
+    --accent2:#00d4ff;
+    --text:#eef0ff;
+    --muted:#9aa0c3;
   }
-  *{box-sizing:border-box; margin:0; padding:0;}
-  body{
-    background:var(--bg);
-    color:var(--text);
-    font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-    line-height:1.5;
+  body{ background:var(--bg); color:var(--text); font-family:'Poppins',sans-serif; margin:0; }
+  .pt-header{
+    display:flex; align-items:center; gap:12px; padding:18px 20px;
+    position:sticky; top:0; z-index:10; backdrop-filter:blur(10px);
+    background:rgba(11,16,32,0.85); border-bottom:1px solid var(--card-border);
   }
-  a{color:inherit; text-decoration:none;}
-  .container{max-width:1100px; margin:0 auto; padding:0 24px;}
-
-  header{
-    position:sticky; top:0; z-index:50;
-    background:rgba(11,16,32,0.9); backdrop-filter:blur(8px);
-    border-bottom:1px solid var(--border);
+  .pt-back{
+    color:var(--text); text-decoration:none; font-size:20px;
+    width:38px; height:38px; display:flex; align-items:center; justify-content:center;
+    border-radius:10px; background:var(--card); border:1px solid var(--card-border);
   }
-  nav{display:flex; align-items:center; justify-content:space-between; padding:14px 24px; max-width:1100px; margin:0 auto;}
-  .logo{display:flex; align-items:center; gap:8px; font-weight:600; font-size:16px;}
-  .logo-mark{width:28px; height:28px; border-radius:6px; background:linear-gradient(135deg, var(--accent1), var(--accent2)); display:flex; align-items:center; justify-content:center; font-size:15px;}
-  .back{font-size:13px; color:var(--muted); display:flex; align-items:center; gap:4px; transition:.15s;}
-  .back:hover{color:var(--text);}
-
-  .hero{
-    position:relative; padding:56px 24px 32px; text-align:center; overflow:hidden;
+  .pt-title{ font-size:18px; font-weight:600; margin:0; }
+  .pt-title span{ display:block; font-size:12px; font-weight:400; color:var(--muted); }
+  .pt-wrap{ max-width:720px; margin:0 auto; padding:20px 16px 100px; }
+  .pt-toolgrid{
+    display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-bottom:24px;
   }
-  .hero::before{
-    content:""; position:absolute; inset:0;
-    background-image:radial-gradient(circle, rgba(124,92,255,0.3) 1px, transparent 1px);
-    background-size:24px 24px;
-    -webkit-mask-image:radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 75%);
-    mask-image:radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 75%);
-    opacity:.45; animation:drift 30s linear infinite;
+  .pt-tool-btn{
+    background:var(--card); border:1px solid var(--card-border); border-radius:16px;
+    padding:16px 12px; text-align:center; cursor:pointer; color:var(--text);
+    font-family:inherit; font-size:14px; font-weight:500; transition:transform .15s, border-color .15s;
   }
-  @keyframes drift{0%{background-position:0 0;} 100%{background-position:240px 240px;}}
-  .eyebrow{ display:inline-flex; align-items:center; gap:6px; background:var(--surface); border:1px solid var(--border); padding:4px 12px; border-radius:20px; font-size:12px; color:var(--muted); margin-bottom:16px; position:relative;}
-  .hero h1{ font-size:38px; font-weight:800; letter-spacing:-0.02em; margin-bottom:10px; position:relative; background:linear-gradient(180deg, #fff, #a6adc4); -webkit-background-clip:text; background-clip:text; color:transparent;}
-  .hero p{ color:var(--muted); font-size:15px; max-width:520px; margin:0 auto; position:relative;}
-
-  /* Tool tab strip */
-  .tabs-wrap{ position:sticky; top:61px; z-index:40; background:var(--bg); border-bottom:1px solid var(--border);}
-  .tabs{
-    display:flex; gap:6px; overflow-x:auto; padding:12px 24px; max-width:1100px; margin:0 auto;
-    scrollbar-width:none;
+  .pt-tool-btn:hover{ border-color:var(--accent); transform:translateY(-2px); }
+  .pt-tool-btn.active{ border-color:var(--accent2); background:rgba(0,212,255,0.1); }
+  .pt-tool-btn .ico{ font-size:26px; display:block; margin-bottom:6px; }
+  .pt-panel{
+    background:var(--card); border:1px solid var(--card-border); border-radius:18px;
+    padding:20px; display:none;
   }
-  .tabs::-webkit-scrollbar{display:none;}
-  .tab-btn{
-    flex:0 0 auto; padding:8px 16px; border-radius:20px; border:1px solid var(--border);
-    background:var(--surface); color:var(--muted); font-size:13px; font-weight:500;
-    cursor:pointer; white-space:nowrap; transition:.2s; display:flex; align-items:center; gap:6px;
+  .pt-panel.show{ display:block; }
+  .pt-panel h3{ margin-top:0; }
+  .pt-drop{
+    border:2px dashed var(--card-border); border-radius:14px; padding:28px 14px;
+    text-align:center; color:var(--muted); cursor:pointer; margin-bottom:16px;
   }
-  .tab-btn:hover{color:var(--text); border-color:var(--accent1);}
-  .tab-btn.active{ background:linear-gradient(135deg, var(--accent1), var(--accent2)); color:#fff; border-color:transparent;}
-
-  main{max-width:820px; margin:0 auto; padding:32px 24px 80px;}
-  .panel{display:none; animation:fadein .3s ease;}
-  .panel.active{display:block;}
-  @keyframes fadein{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
-
-  .card{
-    background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:24px; margin-bottom:16px;
+  .pt-drop:hover{ border-color:var(--accent); color:var(--text); }
+  .pt-filelist{ list-style:none; padding:0; margin:0 0 16px; }
+  .pt-filelist li{
+    display:flex; align-items:center; justify-content:space-between; gap:8px;
+    background:rgba(255,255,255,0.04); border-radius:10px; padding:10px 12px; margin-bottom:8px;
+    font-size:13px; word-break:break-all;
   }
-  .card h2{font-size:18px; margin-bottom:4px;}
-  .card .desc{color:var(--muted); font-size:13px; margin-bottom:18px;}
-
-  .drop{
-    border:2px dashed var(--border); border-radius:10px; padding:28px 16px; text-align:center;
-    cursor:pointer; transition:.2s; background:var(--surface-2); margin-bottom:16px;
+  .pt-filelist button{
+    background:none; border:none; color:#ff6b6b; cursor:pointer; font-size:16px; flex-shrink:0;
   }
-  .drop:hover, .drop.dragover{border-color:var(--accent1); background:rgba(124,92,255,0.06);}
-  .drop .icon{font-size:28px; margin-bottom:8px; display:block;}
-  .drop .main-txt{font-size:14px; margin-bottom:2px;}
-  .drop .sub-txt{font-size:12px; color:var(--muted);}
-  input[type=file]{display:none;}
-
-  .file-list{list-style:none; margin-bottom:16px;}
-  .file-item{
-    display:flex; align-items:center; justify-content:space-between; gap:10px;
-    background:var(--surface-2); border:1px solid var(--border); border-radius:8px;
-    padding:10px 12px; margin-bottom:8px; font-size:13px;
+  .pt-filelist .pt-move{ background:none; border:none; color:var(--muted); cursor:pointer; font-size:14px; }
+  .pt-row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:14px; }
+  .pt-input{
+    flex:1; min-width:120px; background:rgba(255,255,255,0.05); border:1px solid var(--card-border);
+    color:var(--text); border-radius:10px; padding:10px 12px; font-family:inherit; font-size:14px;
   }
-  .file-item .name{overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1;}
-  .file-item .size{color:var(--muted); font-size:11px; flex:0 0 auto;}
-  .file-item .btns{display:flex; gap:4px; flex:0 0 auto;}
-  .icon-btn{
-    background:none; border:1px solid var(--border); color:var(--muted); border-radius:6px;
-    width:26px; height:26px; display:flex; align-items:center; justify-content:center;
-    cursor:pointer; font-size:12px; transition:.15s;
+  .pt-btn{
+    background:linear-gradient(135deg,var(--accent),var(--accent2)); border:none; color:#fff;
+    border-radius:12px; padding:12px 20px; font-weight:600; font-size:14px; cursor:pointer;
+    width:100%;
   }
-  .icon-btn:hover{color:var(--text); border-color:var(--accent1);}
-
-  .field{margin-bottom:14px;}
-  .field label{display:block; font-size:12px; color:var(--muted); margin-bottom:6px;}
-  .field input[type=text], .field input[type=number], .field select{
-    width:100%; padding:10px 12px; border-radius:8px; border:1px solid var(--border);
-    background:var(--surface-2); color:var(--text); font-size:13px;
-  }
-  .field input:focus, .field select:focus{outline:2px solid var(--accent1); outline-offset:1px;}
-  .row{display:flex; gap:12px; flex-wrap:wrap;}
-  .row .field{flex:1; min-width:140px;}
-  .radio-group{display:flex; gap:10px; flex-wrap:wrap;}
-  .radio-opt{
-    display:flex; align-items:center; gap:6px; font-size:13px; background:var(--surface-2);
-    border:1px solid var(--border); border-radius:8px; padding:8px 12px; cursor:pointer; transition:.15s;
-  }
-  .radio-opt:has(input:checked){border-color:var(--accent1); background:rgba(124,92,255,0.08);}
-
-  .btn{
-    padding:10px 20px; border-radius:8px; font-size:14px; font-weight:600; border:none;
-    cursor:pointer; transition:.2s; display:inline-flex; align-items:center; gap:8px;
-  }
-  .btn-primary{background:linear-gradient(135deg, var(--accent1), var(--accent2)); color:#fff;}
-  .btn-primary:hover{filter:brightness(1.08);}
-  .btn-primary:disabled{opacity:.5; cursor:not-allowed; filter:none;}
-  .btn-ghost{background:var(--surface-2); color:var(--text); border:1px solid var(--border);}
-  .btn-ghost:hover{border-color:var(--accent1);}
-
-  .status{
-    margin-top:14px; padding:12px 14px; border-radius:8px; font-size:13px; display:none; align-items:center; gap:8px;
-  }
-  .status.show{display:flex;}
-  .status.info{background:rgba(124,92,255,0.1); color:#b9a8ff; border:1px solid rgba(124,92,255,0.3);}
-  .status.ok{background:rgba(63,210,139,0.1); color:var(--ok); border:1px solid rgba(63,210,139,0.3);}
-  .status.err{background:rgba(255,107,107,0.1); color:var(--err); border:1px solid rgba(255,107,107,0.3);}
-  .spinner{
-    width:14px; height:14px; border-radius:50%; border:2px solid rgba(255,255,255,0.25);
-    border-top-color:currentColor; animation:spin .7s linear infinite; flex:0 0 auto;
-  }
-  @keyframes spin{to{transform:rotate(360deg);}}
-
-  .download-box{
-    margin-top:14px; padding:16px; border-radius:10px; background:rgba(63,210,139,0.08);
-    border:1px solid rgba(63,210,139,0.3); display:none; align-items:center; justify-content:space-between; gap:12px;
-    flex-wrap:wrap;
-  }
-  .download-box.show{display:flex;}
-  .download-box .info{font-size:13px;}
-  .download-box .info b{color:var(--ok);}
-
-  .badge{font-size:9px; font-weight:700; letter-spacing:.04em; background:rgba(255,92,138,0.15); color:var(--accent2); padding:2px 7px; border-radius:10px; margin-left:6px; vertical-align:middle;}
-
-  footer{border-top:1px solid var(--border); padding:24px; text-align:center; color:var(--muted); font-size:12px;}
-
-  @media (prefers-reduced-motion:reduce){*{animation:none !important; transition:none !important;}}
+  .pt-btn:disabled{ opacity:0.4; cursor:not-allowed; }
+  .pt-status{ margin-top:14px; font-size:13px; color:var(--muted); min-height:18px; }
+  .pt-status.ok{ color:#4ade80; }
+  .pt-status.err{ color:#ff6b6b; }
+  .pt-hint{ font-size:12px; color:var(--muted); margin-top:-6px; margin-bottom:14px; }
+  input[type=file]{ display:none; }
 </style>
 </head>
 <body>
 
-<header>
-  <nav>
-    <div class="logo"><div class="logo-mark">⚡</div> XTra Tech</div>
-    <a class="back" href="index.html">← Back to home</a>
-  </nav>
+<header class="pt-header">
+  <a href="index.html" class="pt-back">←</a>
+  <div class="pt-title">
+    📄 PDF Tools
+    <span>Merge, split & edit — 100% in your browser</span>
+  </div>
 </header>
 
-<section class="hero">
-  <div class="eyebrow">🔒 100% local · files never leave your browser</div>
-  <h1>PDF Tools</h1>
-  <p>Merge, split, rotate, watermark, and number your PDFs — all processed on-device, nothing uploaded anywhere.</p>
-</section>
+<div class="pt-wrap">
 
-<div class="tabs-wrap">
-  <div class="tabs" id="tabs">
-    <button class="tab-btn active" data-panel="merge">🧩 Merge</button>
-    <button class="tab-btn" data-panel="split">✂️ Split / Extract</button>
-    <button class="tab-btn" data-panel="delete">🗑 Delete Pages</button>
-    <button class="tab-btn" data-panel="rotate">🔄 Rotate</button>
-    <button class="tab-btn" data-panel="img2pdf">🖼 Images → PDF</button>
-    <button class="tab-btn" data-panel="watermark">💧 Watermark</button>
-    <button class="tab-btn" data-panel="pagenum">🔢 Page Numbers</button>
+  <div class="pt-toolgrid">
+    <button class="pt-tool-btn active" data-tool="merge"><span class="ico">🔗</span>Merge PDFs</button>
+    <button class="pt-tool-btn" data-tool="split"><span class="ico">✂️</span>Split PDF</button>
+    <button class="pt-tool-btn" data-tool="rotate"><span class="ico">🔄</span>Rotate Pages</button>
+    <button class="pt-tool-btn" data-tool="delete"><span class="ico">🗑️</span>Delete Pages</button>
+    <button class="pt-tool-btn" data-tool="extract"><span class="ico">📑</span>Extract Pages</button>
+    <button class="pt-tool-btn" data-tool="img2pdf"><span class="ico">🖼️</span>Images to PDF</button>
   </div>
-</div>
-
-<main>
 
   <!-- MERGE -->
-  <div class="panel active" id="panel-merge">
-    <div class="card">
-      <h2>Merge PDFs</h2>
-      <p class="desc">Combine multiple PDF files into one, in the order shown below.</p>
-      <div class="drop" id="mergeDrop">
-        <span class="icon">📄</span>
-        <div class="main-txt">Click or drop PDF files here</div>
-        <div class="sub-txt">You can select multiple files</div>
-        <input type="file" id="mergeInput" accept="application/pdf" multiple>
-      </div>
-      <ul class="file-list" id="mergeList"></ul>
-      <button class="btn btn-primary" id="mergeBtn" disabled>Merge PDFs</button>
-      <div class="status" id="mergeStatus"></div>
-      <div class="download-box" id="mergeDownload"></div>
-    </div>
+  <div class="pt-panel show" id="panel-merge">
+    <h3>Merge PDFs</h3>
+    <p class="pt-hint">Add two or more PDFs, then reorder and combine them into one file.</p>
+    <div class="pt-drop" id="merge-drop">Tap to choose PDF files<br>or drag & drop here</div>
+    <input type="file" id="merge-input" accept="application/pdf" multiple>
+    <ul class="pt-filelist" id="merge-list"></ul>
+    <button class="pt-btn" id="merge-run" disabled>Merge PDFs</button>
+    <div class="pt-status" id="merge-status"></div>
   </div>
 
   <!-- SPLIT -->
-  <div class="panel" id="panel-split">
-    <div class="card">
-      <h2>Split / Extract Pages</h2>
-      <p class="desc">Upload one PDF and choose which pages to pull into a new file.</p>
-      <div class="drop" id="splitDrop">
-        <span class="icon">📄</span>
-        <div class="main-txt">Click or drop a PDF file here</div>
-        <div class="sub-txt">Single file only</div>
-        <input type="file" id="splitInput" accept="application/pdf">
-      </div>
-      <ul class="file-list" id="splitList"></ul>
-      <div class="field">
-        <label>Pages to extract (e.g. 1-3, 5, 8-10)</label>
-        <input type="text" id="splitRange" placeholder="1-3, 5, 8-10">
-      </div>
-      <button class="btn btn-primary" id="splitBtn" disabled>Extract Pages</button>
-      <div class="status" id="splitStatus"></div>
-      <div class="download-box" id="splitDownload"></div>
-    </div>
-  </div>
-
-  <!-- DELETE -->
-  <div class="panel" id="panel-delete">
-    <div class="card">
-      <h2>Delete Pages</h2>
-      <p class="desc">Upload a PDF and remove specific pages from it.</p>
-      <div class="drop" id="deleteDrop">
-        <span class="icon">📄</span>
-        <div class="main-txt">Click or drop a PDF file here</div>
-        <div class="sub-txt">Single file only</div>
-        <input type="file" id="deleteInput" accept="application/pdf">
-      </div>
-      <ul class="file-list" id="deleteList"></ul>
-      <div class="field">
-        <label>Pages to delete (e.g. 2, 4-6)</label>
-        <input type="text" id="deleteRange" placeholder="2, 4-6">
-      </div>
-      <button class="btn btn-primary" id="deleteBtn" disabled>Delete Pages</button>
-      <div class="status" id="deleteStatus"></div>
-      <div class="download-box" id="deleteDownload"></div>
-    </div>
+  <div class="pt-panel" id="panel-split">
+    <h3>Split PDF</h3>
+    <p class="pt-hint">Splits every page into its own PDF, delivered as a ZIP.</p>
+    <div class="pt-drop" id="split-drop">Tap to choose a PDF file</div>
+    <input type="file" id="split-input" accept="application/pdf">
+    <ul class="pt-filelist" id="split-list"></ul>
+    <button class="pt-btn" id="split-run" disabled>Split into Pages</button>
+    <div class="pt-status" id="split-status"></div>
   </div>
 
   <!-- ROTATE -->
-  <div class="panel" id="panel-rotate">
-    <div class="card">
-      <h2>Rotate Pages</h2>
-      <p class="desc">Rotate all or specific pages in a PDF.</p>
-      <div class="drop" id="rotateDrop">
-        <span class="icon">📄</span>
-        <div class="main-txt">Click or drop a PDF file here</div>
-        <div class="sub-txt">Single file only</div>
-        <input type="file" id="rotateInput" accept="application/pdf">
-      </div>
-      <ul class="file-list" id="rotateList"></ul>
-      <div class="row">
-        <div class="field">
-          <label>Rotation angle</label>
-          <div class="radio-group">
-            <label class="radio-opt"><input type="radio" name="rotAngle" value="90" checked> 90° CW</label>
-            <label class="radio-opt"><input type="radio" name="rotAngle" value="180"> 180°</label>
-            <label class="radio-opt"><input type="radio" name="rotAngle" value="270"> 90° CCW</label>
-          </div>
-        </div>
-      </div>
-      <div class="field">
-        <label>Pages (blank = all pages)</label>
-        <input type="text" id="rotateRange" placeholder="e.g. 1-3, 5  (leave blank for all)">
-      </div>
-      <button class="btn btn-primary" id="rotateBtn" disabled>Rotate</button>
-      <div class="status" id="rotateStatus"></div>
-      <div class="download-box" id="rotateDownload"></div>
+  <div class="pt-panel" id="panel-rotate">
+    <h3>Rotate Pages</h3>
+    <p class="pt-hint">Rotates every page in the PDF by the chosen angle.</p>
+    <div class="pt-drop" id="rotate-drop">Tap to choose a PDF file</div>
+    <input type="file" id="rotate-input" accept="application/pdf">
+    <ul class="pt-filelist" id="rotate-list"></ul>
+    <div class="pt-row">
+      <select class="pt-input" id="rotate-angle">
+        <option value="90">Rotate 90° clockwise</option>
+        <option value="180">Rotate 180°</option>
+        <option value="270">Rotate 90° counter-clockwise</option>
+      </select>
     </div>
+    <button class="pt-btn" id="rotate-run" disabled>Rotate & Download</button>
+    <div class="pt-status" id="rotate-status"></div>
   </div>
 
-  <!-- IMAGES TO PDF -->
-  <div class="panel" id="panel-img2pdf">
-    <div class="card">
-      <h2>Images → PDF <span class="badge">JPG/PNG</span></h2>
-      <p class="desc">Combine images into a single PDF, one image per page, in the order shown.</p>
-      <div class="drop" id="imgDrop">
-        <span class="icon">🖼</span>
-        <div class="main-txt">Click or drop image files here</div>
-        <div class="sub-txt">JPG or PNG, multiple allowed</div>
-        <input type="file" id="imgInput" accept="image/jpeg,image/png" multiple>
-      </div>
-      <ul class="file-list" id="imgList"></ul>
-      <button class="btn btn-primary" id="imgBtn" disabled>Create PDF</button>
-      <div class="status" id="imgStatus"></div>
-      <div class="download-box" id="imgDownload"></div>
+  <!-- DELETE -->
+  <div class="pt-panel" id="panel-delete">
+    <h3>Delete Pages</h3>
+    <p class="pt-hint">Enter page numbers or ranges to remove, e.g. <code>2, 4-6, 9</code></p>
+    <div class="pt-drop" id="delete-drop">Tap to choose a PDF file</div>
+    <input type="file" id="delete-input" accept="application/pdf">
+    <ul class="pt-filelist" id="delete-list"></ul>
+    <div class="pt-row">
+      <input class="pt-input" id="delete-range" placeholder="Pages to delete, e.g. 2, 4-6">
     </div>
+    <button class="pt-btn" id="delete-run" disabled>Delete Pages</button>
+    <div class="pt-status" id="delete-status"></div>
   </div>
 
-  <!-- WATERMARK -->
-  <div class="panel" id="panel-watermark">
-    <div class="card">
-      <h2>Add Watermark</h2>
-      <p class="desc">Stamp a diagonal text watermark across every page.</p>
-      <div class="drop" id="wmDrop">
-        <span class="icon">📄</span>
-        <div class="main-txt">Click or drop a PDF file here</div>
-        <div class="sub-txt">Single file only</div>
-        <input type="file" id="wmInput" accept="application/pdf">
-      </div>
-      <ul class="file-list" id="wmList"></ul>
-      <div class="row">
-        <div class="field">
-          <label>Watermark text</label>
-          <input type="text" id="wmText" placeholder="e.g. CONFIDENTIAL" value="CONFIDENTIAL">
-        </div>
-        <div class="field">
-          <label>Font size</label>
-          <input type="number" id="wmSize" value="50" min="10" max="200">
-        </div>
-      </div>
-      <div class="row">
-        <div class="field">
-          <label>Opacity (0.1–1)</label>
-          <input type="number" id="wmOpacity" value="0.2" min="0.05" max="1" step="0.05">
-        </div>
-        <div class="field">
-          <label>Color</label>
-          <select id="wmColor">
-            <option value="gray">Gray</option>
-            <option value="red">Red</option>
-            <option value="purple">Purple</option>
-          </select>
-        </div>
-      </div>
-      <button class="btn btn-primary" id="wmBtn" disabled>Add Watermark</button>
-      <div class="status" id="wmStatus"></div>
-      <div class="download-box" id="wmDownload"></div>
+  <!-- EXTRACT -->
+  <div class="pt-panel" id="panel-extract">
+    <h3>Extract Pages</h3>
+    <p class="pt-hint">Enter the pages you want to keep, e.g. <code>1, 3-5</code></p>
+    <div class="pt-drop" id="extract-drop">Tap to choose a PDF file</div>
+    <input type="file" id="extract-input" accept="application/pdf">
+    <ul class="pt-filelist" id="extract-list"></ul>
+    <div class="pt-row">
+      <input class="pt-input" id="extract-range" placeholder="Pages to keep, e.g. 1, 3-5">
     </div>
+    <button class="pt-btn" id="extract-run" disabled>Extract Pages</button>
+    <div class="pt-status" id="extract-status"></div>
   </div>
 
-  <!-- PAGE NUMBERS -->
-  <div class="panel" id="panel-pagenum">
-    <div class="card">
-      <h2>Add Page Numbers</h2>
-      <p class="desc">Stamp page numbers onto every page of a PDF.</p>
-      <div class="drop" id="pnDrop">
-        <span class="icon">📄</span>
-        <div class="main-txt">Click or drop a PDF file here</div>
-        <div class="sub-txt">Single file only</div>
-        <input type="file" id="pnInput" accept="application/pdf">
-      </div>
-      <ul class="file-list" id="pnList"></ul>
-      <div class="row">
-        <div class="field">
-          <label>Position</label>
-          <select id="pnPosition">
-            <option value="bottom-center">Bottom center</option>
-            <option value="bottom-right">Bottom right</option>
-            <option value="bottom-left">Bottom left</option>
-            <option value="top-right">Top right</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Format</label>
-          <select id="pnFormat">
-            <option value="n">1, 2, 3…</option>
-            <option value="n-total">1 / 12, 2 / 12…</option>
-            <option value="page-n">Page 1, Page 2…</option>
-          </select>
-        </div>
-      </div>
-      <div class="field">
-        <label>Start number</label>
-        <input type="number" id="pnStart" value="1" min="0">
-      </div>
-      <button class="btn btn-primary" id="pnBtn" disabled>Add Page Numbers</button>
-      <div class="status" id="pnStatus"></div>
-      <div class="download-box" id="pnDownload"></div>
-    </div>
+  <!-- IMG2PDF -->
+  <div class="pt-panel" id="panel-img2pdf">
+    <h3>Images to PDF</h3>
+    <p class="pt-hint">Combine JPG/PNG images into a single PDF, one image per page.</p>
+    <div class="pt-drop" id="img2pdf-drop">Tap to choose images<br>or drag & drop here</div>
+    <input type="file" id="img2pdf-input" accept="image/png,image/jpeg" multiple>
+    <ul class="pt-filelist" id="img2pdf-list"></ul>
+    <button class="pt-btn" id="img2pdf-run" disabled>Create PDF</button>
+    <div class="pt-status" id="img2pdf-status"></div>
   </div>
 
-</main>
-
-<footer>Everything runs locally in your browser via pdf-lib. No file is ever uploaded to a server. · XTra Tech</footer>
+</div>
 
 <script>
-const { PDFDocument, degrees, rgb, StandardFonts } = PDFLib;
+const { PDFDocument, degrees } = PDFLib;
+
+// ---------- shared helpers ----------
+function download(bytes, filename, mime) {
+  const blob = new Blob([bytes], { type: mime || 'application/pdf' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 5000);
+}
+
+function setStatus(id, msg, kind) {
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.className = 'pt-status' + (kind ? ' ' + kind : '');
+}
+
+function parseRanges(str, maxPage) {
+  // "2, 4-6, 9" -> [1,3,4,5,8] (0-indexed), deduped, validated
+  const set = new Set();
+  const parts = str.split(',').map(s => s.trim()).filter(Boolean);
+  for (const part of parts) {
+    const m = part.match(/^(\d+)\s*-\s*(\d+)$/);
+    if (m) {
+      let [a, b] = [parseInt(m[1]), parseInt(m[2])];
+      if (a > b) [a, b] = [b, a];
+      for (let i = a; i <= b; i++) {
+        if (i >= 1 && i <= maxPage) set.add(i - 1);
+      }
+    } else if (/^\d+$/.test(part)) {
+      const n = parseInt(part);
+      if (n >= 1 && n <= maxPage) set.add(n - 1);
+    }
+  }
+  return set;
+}
 
 // ---------- tab switching ----------
-document.querySelectorAll('.tab-btn').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+document.querySelectorAll('.pt-tool-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.pt-tool-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.pt-panel').forEach(p => p.classList.remove('show'));
     btn.classList.add('active');
-    document.getElementById('panel-'+btn.dataset.panel).classList.add('active');
+    document.getElementById('panel-' + btn.dataset.tool).classList.add('show');
   });
 });
 
-// ---------- helpers ----------
-function isPdf(f){
-  return f.type === 'application/pdf' || /\.pdf$/i.test(f.name);
-}
-function isImg(f){
-  return f.type === 'image/jpeg' || f.type === 'image/png' || /\.(jpe?g|png)$/i.test(f.name);
-}
-function fmtBytes(b){
-  if(b < 1024) return b + ' B';
-  if(b < 1024*1024) return (b/1024).toFixed(1) + ' KB';
-  return (b/(1024*1024)).toFixed(1) + ' MB';
-}
-
-function setStatus(el, type, msg){
-  el.className = 'status show ' + type;
-  el.innerHTML = type==='info' ? `<span class="spinner"></span><span>${msg}</span>` : `<span>${msg}</span>`;
-}
-function clearStatus(el){ el.className = 'status'; el.innerHTML=''; }
-
-function showDownload(el, blob, filename){
-  const url = URL.createObjectURL(blob);
-  el.className = 'download-box show';
-  el.innerHTML = `
-    <div class="info">✅ Done — <b>${filename}</b> (${fmtBytes(blob.size)})</div>
-    <a class="btn btn-ghost" href="${url}" download="${filename}">⬇ Download</a>
-  `;
-}
-
-// Parses "1-3, 5, 8-10" into a sorted array of 0-indexed page numbers, deduped.
-function parseRanges(str, maxPage){
-  const result = new Set();
-  str.split(',').map(s=>s.trim()).filter(Boolean).forEach(part=>{
-    if(part.includes('-')){
-      const [a,b] = part.split('-').map(n=>parseInt(n.trim(),10));
-      if(!isNaN(a) && !isNaN(b)){
-        const lo=Math.min(a,b), hi=Math.max(a,b);
-        for(let i=lo;i<=hi;i++){ if(i>=1 && i<=maxPage) result.add(i-1); }
-      }
-    } else {
-      const n = parseInt(part,10);
-      if(!isNaN(n) && n>=1 && n<=maxPage) result.add(n-1);
-    }
-  });
-  return [...result].sort((a,b)=>a-b);
-}
-
-function fileItemRow(name, size, onRemove, moveUp, moveDown){
-  const li = document.createElement('li');
-  li.className = 'file-item';
-  li.innerHTML = `
-    <span class="name">📄 ${name}</span>
-    <span class="size">${fmtBytes(size)}</span>
-    <span class="btns"></span>
-  `;
-  const btns = li.querySelector('.btns');
-  if(moveUp){ const b=document.createElement('button'); b.className='icon-btn'; b.textContent='↑'; b.onclick=moveUp; btns.appendChild(b); }
-  if(moveDown){ const b=document.createElement('button'); b.className='icon-btn'; b.textContent='↓'; b.onclick=moveDown; btns.appendChild(b); }
-  const rm=document.createElement('button'); rm.className='icon-btn'; rm.textContent='✕'; rm.onclick=onRemove; btns.appendChild(rm);
-  return li;
-}
-
-function wireDrop(dropEl, inputEl, onFiles){
-  dropEl.addEventListener('click', ()=> inputEl.click());
-  inputEl.addEventListener('change', ()=> onFiles([...inputEl.files]));
-  ['dragenter','dragover'].forEach(ev=>{
-    dropEl.addEventListener(ev, e=>{ e.preventDefault(); dropEl.classList.add('dragover'); });
-  });
-  ['dragleave','drop'].forEach(ev=>{
-    dropEl.addEventListener(ev, e=>{ e.preventDefault(); dropEl.classList.remove('dragover'); });
-  });
-  dropEl.addEventListener('drop', e=>{
-    const files=[...e.dataTransfer.files];
-    if(files.length) onFiles(files);
-  });
-}
-
-// ================= MERGE =================
-(function(){
+// ---------- generic file-list UI wiring ----------
+function wireFileList(prefix, {multiple, accept}) {
+  const drop = document.getElementById(prefix + '-drop');
+  const input = document.getElementById(prefix + '-input');
+  const list = document.getElementById(prefix + '-list');
+  const runBtn = document.getElementById(prefix + '-run');
   let files = [];
-  const drop=document.getElementById('mergeDrop'), input=document.getElementById('mergeInput');
-  const list=document.getElementById('mergeList'), btn=document.getElementById('mergeBtn');
-  const status=document.getElementById('mergeStatus'), dl=document.getElementById('mergeDownload');
 
-  function render(){
-    list.innerHTML='';
-    files.forEach((f,i)=>{
-      list.appendChild(fileItemRow(f.name, f.size,
-        ()=>{ files.splice(i,1); render(); },
-        i>0 ? ()=>{ [files[i-1],files[i]]=[files[i],files[i-1]]; render(); } : null,
-        i<files.length-1 ? ()=>{ [files[i+1],files[i]]=[files[i],files[i+1]]; render(); } : null
-      ));
-    });
-    btn.disabled = files.length < 2;
-    dl.className='download-box'; clearStatus(status);
+  drop.addEventListener('click', () => input.click());
+  drop.addEventListener('dragover', e => { e.preventDefault(); drop.style.borderColor = 'var(--accent)'; });
+  drop.addEventListener('dragleave', () => { drop.style.borderColor = ''; });
+  drop.addEventListener('drop', e => {
+    e.preventDefault(); drop.style.borderColor = '';
+    handleFiles(e.dataTransfer.files);
+  });
+  input.addEventListener('change', () => handleFiles(input.files));
+
+  function handleFiles(fileList) {
+    const picked = Array.from(fileList);
+    files = multiple ? files.concat(picked) : picked.slice(0, 1);
+    renderList();
   }
 
-  wireDrop(drop, input, fs=>{ files = files.concat(fs.filter(isPdf)); render(); input.value=''; });
-
-  btn.addEventListener('click', async ()=>{
-    btn.disabled=true;
-    setStatus(status,'info','Merging PDFs…');
-    try{
-      const merged = await PDFDocument.create();
-      for(const f of files){
-        const bytes = await f.arrayBuffer();
-        const src = await PDFDocument.load(bytes);
-        const pages = await merged.copyPages(src, src.getPageIndices());
-        pages.forEach(p=>merged.addPage(p));
+  function renderList() {
+    list.innerHTML = '';
+    files.forEach((f, i) => {
+      const li = document.createElement('li');
+      const sizeKb = (f.size / 1024).toFixed(0);
+      li.innerHTML = `<span>${i + 1}. ${f.name} (${sizeKb} KB)</span>`;
+      const controls = document.createElement('span');
+      if (multiple && files.length > 1) {
+        if (i > 0) {
+          const up = document.createElement('button');
+          up.className = 'pt-move'; up.textContent = '↑';
+          up.onclick = () => { [files[i-1], files[i]] = [files[i], files[i-1]]; renderList(); };
+          controls.appendChild(up);
+        }
+        if (i < files.length - 1) {
+          const down = document.createElement('button');
+          down.className = 'pt-move'; down.textContent = '↓';
+          down.onclick = () => { [files[i+1], files[i]] = [files[i], files[i+1]]; renderList(); };
+          controls.appendChild(down);
+        }
       }
-      const out = await merged.save();
-      const blob = new Blob([out], {type:'application/pdf'});
-      setStatus(status,'ok','Merged successfully.');
-      showDownload(dl, blob, 'merged.pdf');
-    }catch(e){
-      setStatus(status,'err','Something went wrong: '+e.message);
-    }
-    btn.disabled = files.length < 2;
-  });
-})();
-
-// ================= SPLIT =================
-(function(){
-  let file=null;
-  const drop=document.getElementById('splitDrop'), input=document.getElementById('splitInput');
-  const list=document.getElementById('splitList'), btn=document.getElementById('splitBtn');
-  const status=document.getElementById('splitStatus'), dl=document.getElementById('splitDownload');
-  const rangeInput=document.getElementById('splitRange');
-
-  function render(){
-    list.innerHTML='';
-    if(file) list.appendChild(fileItemRow(file.name, file.size, ()=>{ file=null; render(); }));
-    btn.disabled = !file;
-    dl.className='download-box'; clearStatus(status);
+      const rm = document.createElement('button');
+      rm.textContent = '✕';
+      rm.onclick = () => { files.splice(i, 1); renderList(); };
+      controls.appendChild(rm);
+      li.appendChild(controls);
+      list.appendChild(li);
+    });
+    const minNeeded = multiple ? (prefix === 'merge' ? 2 : 1) : 1;
+    runBtn.disabled = files.length < minNeeded;
+    setStatus(prefix + '-status', '');
   }
-  wireDrop(drop, input, fs=>{ if(fs[0] && isPdf(fs[0])){ file=fs[0]; render(); } input.value=''; });
 
-  btn.addEventListener('click', async ()=>{
-    if(!file) return;
-    btn.disabled=true;
-    setStatus(status,'info','Extracting pages…');
-    try{
+  return { getFiles: () => files };
+}
+
+const mergeFiles = wireFileList('merge', { multiple: true });
+const splitFiles = wireFileList('split', { multiple: false });
+const rotateFiles = wireFileList('rotate', { multiple: false });
+const deleteFiles = wireFileList('delete', { multiple: false });
+const extractFiles = wireFileList('extract', { multiple: false });
+const img2pdfFiles = wireFileList('img2pdf', { multiple: true });
+
+// ---------- MERGE ----------
+document.getElementById('merge-run').addEventListener('click', async () => {
+  const files = mergeFiles.getFiles();
+  setStatus('merge-status', 'Merging…');
+  try {
+    const outDoc = await PDFDocument.create();
+    for (const file of files) {
       const bytes = await file.arrayBuffer();
       const src = await PDFDocument.load(bytes);
-      const total = src.getPageCount();
-      const indices = parseRanges(rangeInput.value, total);
-      if(indices.length===0) throw new Error('No valid pages in that range (document has '+total+' pages).');
-      const out = await PDFDocument.create();
-      const pages = await out.copyPages(src, indices);
-      pages.forEach(p=>out.addPage(p));
-      const bytesOut = await out.save();
-      const blob = new Blob([bytesOut], {type:'application/pdf'});
-      setStatus(status,'ok',`Extracted ${indices.length} page(s).`);
-      showDownload(dl, blob, 'extracted.pdf');
-    }catch(e){
-      setStatus(status,'err', e.message);
+      const pages = await outDoc.copyPages(src, src.getPageIndices());
+      pages.forEach(p => outDoc.addPage(p));
     }
-    btn.disabled=false;
-  });
-})();
-
-// ================= DELETE =================
-(function(){
-  let file=null;
-  const drop=document.getElementById('deleteDrop'), input=document.getElementById('deleteInput');
-  const list=document.getElementById('deleteList'), btn=document.getElementById('deleteBtn');
-  const status=document.getElementById('deleteStatus'), dl=document.getElementById('deleteDownload');
-  const rangeInput=document.getElementById('deleteRange');
-
-  function render(){
-    list.innerHTML='';
-    if(file) list.appendChild(fileItemRow(file.name, file.size, ()=>{ file=null; render(); }));
-    btn.disabled = !file;
-    dl.className='download-box'; clearStatus(status);
+    const outBytes = await outDoc.save();
+    download(outBytes, 'merged.pdf');
+    setStatus('merge-status', `Done — merged ${files.length} files.`, 'ok');
+  } catch (e) {
+    setStatus('merge-status', 'Error: ' + e.message, 'err');
   }
-  wireDrop(drop, input, fs=>{ if(fs[0] && isPdf(fs[0])){ file=fs[0]; render(); } input.value=''; });
+});
 
-  btn.addEventListener('click', async ()=>{
-    if(!file) return;
-    btn.disabled=true;
-    setStatus(status,'info','Deleting pages…');
-    try{
-      const bytes = await file.arrayBuffer();
-      const src = await PDFDocument.load(bytes);
-      const total = src.getPageCount();
-      const toDelete = new Set(parseRanges(rangeInput.value, total));
-      if(toDelete.size===0) throw new Error('No valid pages in that range.');
-      if(toDelete.size >= total) throw new Error('Cannot delete every page in the document.');
-      const keepIndices = [...Array(total).keys()].filter(i=>!toDelete.has(i));
-      const out = await PDFDocument.create();
-      const pages = await out.copyPages(src, keepIndices);
-      pages.forEach(p=>out.addPage(p));
-      const bytesOut = await out.save();
-      const blob = new Blob([bytesOut], {type:'application/pdf'});
-      setStatus(status,'ok', `Deleted ${toDelete.size} page(s), kept ${keepIndices.length}.`);
-      showDownload(dl, blob, 'pages-deleted.pdf');
-    }catch(e){
-      setStatus(status,'err', e.message);
+// ---------- SPLIT (each page as separate PDF, zipped manually via multiple downloads is messy without a zip lib,
+// so we trigger sequential downloads instead) ----------
+document.getElementById('split-run').addEventListener('click', async () => {
+  const files = splitFiles.getFiles();
+  if (!files.length) return;
+  setStatus('split-status', 'Splitting…');
+  try {
+    const bytes = await files[0].arrayBuffer();
+    const src = await PDFDocument.load(bytes);
+    const total = src.getPageCount();
+    const baseName = files[0].name.replace(/\.pdf$/i, '');
+    for (let i = 0; i < total; i++) {
+      const outDoc = await PDFDocument.create();
+      const [page] = await outDoc.copyPages(src, [i]);
+      outDoc.addPage(page);
+      const outBytes = await outDoc.save();
+      download(outBytes, `${baseName}_page${i + 1}.pdf`);
+      await new Promise(r => setTimeout(r, 150)); // avoid browser blocking rapid downloads
     }
-    btn.disabled=false;
-  });
-})();
-
-// ================= ROTATE =================
-(function(){
-  let file=null;
-  const drop=document.getElementById('rotateDrop'), input=document.getElementById('rotateInput');
-  const list=document.getElementById('rotateList'), btn=document.getElementById('rotateBtn');
-  const status=document.getElementById('rotateStatus'), dl=document.getElementById('rotateDownload');
-  const rangeInput=document.getElementById('rotateRange');
-
-  function render(){
-    list.innerHTML='';
-    if(file) list.appendChild(fileItemRow(file.name, file.size, ()=>{ file=null; render(); }));
-    btn.disabled = !file;
-    dl.className='download-box'; clearStatus(status);
+    setStatus('split-status', `Done — downloaded ${total} single-page PDFs.`, 'ok');
+  } catch (e) {
+    setStatus('split-status', 'Error: ' + e.message, 'err');
   }
-  wireDrop(drop, input, fs=>{ if(fs[0] && isPdf(fs[0])){ file=fs[0]; render(); } input.value=''; });
+});
 
-  btn.addEventListener('click', async ()=>{
-    if(!file) return;
-    btn.disabled=true;
-    setStatus(status,'info','Rotating pages…');
-    try{
-      const angle = parseInt(document.querySelector('input[name=rotAngle]:checked').value,10);
+// ---------- ROTATE ----------
+document.getElementById('rotate-run').addEventListener('click', async () => {
+  const files = rotateFiles.getFiles();
+  if (!files.length) return;
+  const angle = parseInt(document.getElementById('rotate-angle').value);
+  setStatus('rotate-status', 'Rotating…');
+  try {
+    const bytes = await files[0].arrayBuffer();
+    const doc = await PDFDocument.load(bytes);
+    doc.getPages().forEach(page => {
+      const current = page.getRotation().angle;
+      page.setRotation(degrees((current + angle) % 360));
+    });
+    const outBytes = await doc.save();
+    download(outBytes, files[0].name.replace(/\.pdf$/i, '') + '_rotated.pdf');
+    setStatus('rotate-status', 'Done — rotated PDF downloaded.', 'ok');
+  } catch (e) {
+    setStatus('rotate-status', 'Error: ' + e.message, 'err');
+  }
+});
+
+// ---------- DELETE PAGES ----------
+document.getElementById('delete-run').addEventListener('click', async () => {
+  const files = deleteFiles.getFiles();
+  if (!files.length) return;
+  const rangeStr = document.getElementById('delete-range').value.trim();
+  if (!rangeStr) { setStatus('delete-status', 'Enter page numbers to delete.', 'err'); return; }
+  setStatus('delete-status', 'Processing…');
+  try {
+    const bytes = await files[0].arrayBuffer();
+    const doc = await PDFDocument.load(bytes);
+    const total = doc.getPageCount();
+    const toDelete = parseRanges(rangeStr, total);
+    if (toDelete.size === 0) { setStatus('delete-status', 'No valid page numbers found.', 'err'); return; }
+    if (toDelete.size >= total) { setStatus('delete-status', "Can't delete every page.", 'err'); return; }
+    // delete from highest index to lowest so indices stay valid
+    Array.from(toDelete).sort((a, b) => b - a).forEach(idx => doc.removePage(idx));
+    const outBytes = await doc.save();
+    download(outBytes, files[0].name.replace(/\.pdf$/i, '') + '_edited.pdf');
+    setStatus('delete-status', `Done — removed ${toDelete.size} page(s).`, 'ok');
+  } catch (e) {
+    setStatus('delete-status', 'Error: ' + e.message, 'err');
+  }
+});
+
+// ---------- EXTRACT PAGES ----------
+document.getElementById('extract-run').addEventListener('click', async () => {
+  const files = extractFiles.getFiles();
+  if (!files.length) return;
+  const rangeStr = document.getElementById('extract-range').value.trim();
+  if (!rangeStr) { setStatus('extract-status', 'Enter page numbers to keep.', 'err'); return; }
+  setStatus('extract-status', 'Processing…');
+  try {
+    const bytes = await files[0].arrayBuffer();
+    const src = await PDFDocument.load(bytes);
+    const total = src.getPageCount();
+    const keep = Array.from(parseRanges(rangeStr, total)).sort((a, b) => a - b);
+    if (keep.length === 0) { setStatus('extract-status', 'No valid page numbers found.', 'err'); return; }
+    const outDoc = await PDFDocument.create();
+    const pages = await outDoc.copyPages(src, keep);
+    pages.forEach(p => outDoc.addPage(p));
+    const outBytes = await outDoc.save();
+    download(outBytes, files[0].name.replace(/\.pdf$/i, '') + '_extracted.pdf');
+    setStatus('extract-status', `Done — extracted ${keep.length} page(s).`, 'ok');
+  } catch (e) {
+    setStatus('extract-status', 'Error: ' + e.message, 'err');
+  }
+});
+
+// ---------- IMAGES TO PDF ----------
+document.getElementById('img2pdf-run').addEventListener('click', async () => {
+  const files = img2pdfFiles.getFiles();
+  if (!files.length) return;
+  setStatus('img2pdf-status', 'Building PDF…');
+  try {
+    const outDoc = await PDFDocument.create();
+    for (const file of files) {
       const bytes = await file.arrayBuffer();
-      const doc = await PDFDocument.load(bytes);
-      const total = doc.getPageCount();
-      let indices;
-      if(rangeInput.value.trim()===''){
-        indices = [...Array(total).keys()];
+      let img;
+      if (file.type === 'image/png') {
+        img = await outDoc.embedPng(bytes);
       } else {
-        indices = parseRanges(rangeInput.value, total);
-        if(indices.length===0) throw new Error('No valid pages in that range.');
+        img = await outDoc.embedJpg(bytes);
       }
-      const pages = doc.getPages();
-      indices.forEach(i=>{
-        const p = pages[i];
-        const current = p.getRotation().angle;
-        p.setRotation(degrees((current + angle) % 360));
-      });
-      const out = await doc.save();
-      const blob = new Blob([out], {type:'application/pdf'});
-      setStatus(status,'ok', `Rotated ${indices.length} page(s).`);
-      showDownload(dl, blob, 'rotated.pdf');
-    }catch(e){
-      setStatus(status,'err', e.message);
+      const page = outDoc.addPage([img.width, img.height]);
+      page.drawImage(img, { x: 0, y: 0, width: img.width, height: img.height });
     }
-    btn.disabled=false;
-  });
-})();
-
-// ================= IMAGES TO PDF =================
-(function(){
-  let files=[];
-  const drop=document.getElementById('imgDrop'), input=document.getElementById('imgInput');
-  const list=document.getElementById('imgList'), btn=document.getElementById('imgBtn');
-  const status=document.getElementById('imgStatus'), dl=document.getElementById('imgDownload');
-
-  function render(){
-    list.innerHTML='';
-    files.forEach((f,i)=>{
-      list.appendChild(fileItemRow(f.name, f.size,
-        ()=>{ files.splice(i,1); render(); },
-        i>0 ? ()=>{ [files[i-1],files[i]]=[files[i],files[i-1]]; render(); } : null,
-        i<files.length-1 ? ()=>{ [files[i+1],files[i]]=[files[i],files[i+1]]; render(); } : null
-      ));
-    });
-    btn.disabled = files.length < 1;
-    dl.className='download-box'; clearStatus(status);
+    const outBytes = await outDoc.save();
+    download(outBytes, 'images.pdf');
+    setStatus('img2pdf-status', `Done — created PDF from ${files.length} image(s).`, 'ok');
+  } catch (e) {
+    setStatus('img2pdf-status', 'Error: ' + e.message, 'err');
   }
-  wireDrop(drop, input, fs=>{
-    files = files.concat(fs.filter(isImg));
-    render(); input.value='';
-  });
-
-  btn.addEventListener('click', async ()=>{
-    btn.disabled=true;
-    setStatus(status,'info','Building PDF from images…');
-    try{
-      const doc = await PDFDocument.create();
-      for(const f of files){
-        const bytes = await f.arrayBuffer();
-        const img = f.type==='image/png' ? await doc.embedPng(bytes) : await doc.embedJpg(bytes);
-        const page = doc.addPage([img.width, img.height]);
-        page.drawImage(img, {x:0, y:0, width:img.width, height:img.height});
-      }
-      const out = await doc.save();
-      const blob = new Blob([out], {type:'application/pdf'});
-      setStatus(status,'ok', `Created a ${files.length}-page PDF.`);
-      showDownload(dl, blob, 'images.pdf');
-    }catch(e){
-      setStatus(status,'err', e.message);
-    }
-    btn.disabled = files.length < 1;
-  });
-})();
-
-// ================= WATERMARK =================
-(function(){
-  let file=null;
-  const drop=document.getElementById('wmDrop'), input=document.getElementById('wmInput');
-  const list=document.getElementById('wmList'), btn=document.getElementById('wmBtn');
-  const status=document.getElementById('wmStatus'), dl=document.getElementById('wmDownload');
-
-  function render(){
-    list.innerHTML='';
-    if(file) list.appendChild(fileItemRow(file.name, file.size, ()=>{ file=null; render(); }));
-    btn.disabled = !file;
-    dl.className='download-box'; clearStatus(status);
-  }
-  wireDrop(drop, input, fs=>{ if(fs[0] && isPdf(fs[0])){ file=fs[0]; render(); } input.value=''; });
-
-  const colorMap = { gray: rgb(0.5,0.5,0.5), red: rgb(0.8,0.15,0.15), purple: rgb(0.486,0.361,1) };
-
-  btn.addEventListener('click', async ()=>{
-    if(!file) return;
-    btn.disabled=true;
-    setStatus(status,'info','Applying watermark…');
-    try{
-      const text = document.getElementById('wmText').value || 'WATERMARK';
-      const size = parseInt(document.getElementById('wmSize').value,10) || 50;
-      const opacity = parseFloat(document.getElementById('wmOpacity').value) || 0.2;
-      const colorKey = document.getElementById('wmColor').value;
-      const bytes = await file.arrayBuffer();
-      const doc = await PDFDocument.load(bytes);
-      const font = await doc.embedFont(StandardFonts.HelveticaBold);
-      doc.getPages().forEach(page=>{
-        const { width, height } = page.getSize();
-        const textWidth = font.widthOfTextAtSize(text, size);
-        page.drawText(text, {
-          x: width/2 - textWidth/2,
-          y: height/2,
-          size, font,
-          color: colorMap[colorKey] || colorMap.gray,
-          opacity,
-          rotate: degrees(45),
-        });
-      });
-      const out = await doc.save();
-      const blob = new Blob([out], {type:'application/pdf'});
-      setStatus(status,'ok','Watermark applied to all pages.');
-      showDownload(dl, blob, 'watermarked.pdf');
-    }catch(e){
-      setStatus(status,'err', e.message);
-    }
-    btn.disabled=false;
-  });
-})();
-
-// ================= PAGE NUMBERS =================
-(function(){
-  let file=null;
-  const drop=document.getElementById('pnDrop'), input=document.getElementById('pnInput');
-  const list=document.getElementById('pnList'), btn=document.getElementById('pnBtn');
-  const status=document.getElementById('pnStatus'), dl=document.getElementById('pnDownload');
-
-  function render(){
-    list.innerHTML='';
-    if(file) list.appendChild(fileItemRow(file.name, file.size, ()=>{ file=null; render(); }));
-    btn.disabled = !file;
-    dl.className='download-box'; clearStatus(status);
-  }
-  wireDrop(drop, input, fs=>{ if(fs[0] && isPdf(fs[0])){ file=fs[0]; render(); } input.value=''; });
-
-  btn.addEventListener('click', async ()=>{
-    if(!file) return;
-    btn.disabled=true;
-    setStatus(status,'info','Numbering pages…');
-    try{
-      const position = document.getElementById('pnPosition').value;
-      const format = document.getElementById('pnFormat').value;
-      const start = parseInt(document.getElementById('pnStart').value,10) || 0;
-      const bytes = await file.arrayBuffer();
-      const doc = await PDFDocument.load(bytes);
-      const font = await doc.embedFont(StandardFonts.Helvetica);
-      const pages = doc.getPages();
-      const total = pages.length;
-      const size = 11;
-      pages.forEach((page, i)=>{
-        const n = start + i;
-        let label;
-        if(format==='n-total') label = `${n} / ${total}`;
-        else if(format==='page-n') label = `Page ${n}`;
-        else label = `${n}`;
-        const { width } = page.getSize();
-        const textWidth = font.widthOfTextAtSize(label, size);
-        let x, y;
-        const margin = 28;
-        if(position==='bottom-center'){ x = width/2 - textWidth/2; y = margin; }
-        else if(position==='bottom-right'){ x = width - textWidth - margin; y = margin; }
-        else if(position==='bottom-left'){ x = margin; y = margin; }
-        else { x = width - textWidth - margin; y = page.getSize().height - margin; } // top-right
-        page.drawText(label, { x, y, size, font, color: rgb(0.35,0.35,0.4) });
-      });
-      const out = await doc.save();
-      const blob = new Blob([out], {type:'application/pdf'});
-      setStatus(status,'ok','Page numbers added.');
-      showDownload(dl, blob, 'numbered.pdf');
-    }catch(e){
-      setStatus(status,'err', e.message);
-    }
-    btn.disabled=false;
-  });
-})();
+});
 </script>
 
+<script src="script.js?v=1.1"></script>
 </body>
 </html>

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>4K Image Enhancer</title>
+<style>
+  :root{
+    --bg:#0b0d12; --panel:#131722; --accent:#7c5cff; --accent2:#00e5c7;
+    --text:#eef0f6; --muted:#8b91a7; --border:#232838;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; font-family:'Segoe UI',system-ui,sans-serif;
+    background:radial-gradient(circle at 20% 20%,#171b28,var(--bg) 60%);
+    color:var(--text); min-height:100vh; padding:32px 16px;
+  }
+  .wrap{max-width:960px;margin:0 auto;}
+  h1{
+    font-size:28px; margin:0 0 4px; text-align:center;
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  p.sub{text-align:center;color:var(--muted);margin:0 0 28px;font-size:14px;}
+  .panel{
+    background:var(--panel); border:1px solid var(--border); border-radius:16px;
+    padding:24px; margin-bottom:20px;
+  }
+  .drop{
+    border:2px dashed var(--border); border-radius:12px; padding:36px;
+    text-align:center; cursor:pointer; transition:.2s; color:var(--muted);
+  }
+  .drop:hover, .drop.drag{border-color:var(--accent); color:var(--text); background:#171c2b;}
+  input[type=file]{display:none;}
+  .controls{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:16px; margin-top:20px;}
+  .ctl label{display:block; font-size:12px; color:var(--muted); margin-bottom:6px;}
+  .ctl input[type=range]{width:100%; accent-color:var(--accent);}
+  .val{float:right; color:var(--accent2); font-size:12px;}
+  select{
+    width:100%; background:#0e121c; color:var(--text); border:1px solid var(--border);
+    border-radius:8px; padding:8px;
+  }
+  .row{display:flex; gap:12px; flex-wrap:wrap; margin-top:20px;}
+  button{
+    flex:1; min-width:140px; padding:12px 18px; border:none; border-radius:10px;
+    font-weight:600; cursor:pointer; font-size:14px;
+  }
+  .primary{background:linear-gradient(90deg,var(--accent),var(--accent2)); color:#0b0d12;}
+  .ghost{background:#1a2032; color:var(--text); border:1px solid var(--border);}
+  .primary:disabled{opacity:.4; cursor:not-allowed;}
+  canvas{max-width:100%; border-radius:12px; display:block; margin:0 auto; background:#0e121c;}
+  .compare{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:20px;}
+  .compare div h3{font-size:13px; color:var(--muted); margin:0 0 8px; font-weight:500;}
+  .dims{text-align:center; font-size:12px; color:var(--muted); margin-top:8px;}
+  @media(max-width:640px){.compare{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Ultra 4K Image Enhancer</h1>
+  <p class="sub">Sharpen, upscale, and boost clarity — right in your browser, no upload to any server.</p>
+
+  <div class="panel">
+    <div class="drop" id="drop">
+      <div id="dropText">📤 Click or drag an image here</div>
+      <input type="file" id="fileInput" accept="image/*">
+    </div>
+
+    <div class="controls">
+      <div class="ctl">
+        <label>Upscale <span class="val" id="scaleVal">2x</span></label>
+        <input type="range" id="scale" min="1" max="4" step="1" value="2">
+      </div>
+      <div class="ctl">
+        <label>Sharpen <span class="val" id="sharpVal">50</span></label>
+        <input type="range" id="sharp" min="0" max="100" value="50">
+      </div>
+      <div class="ctl">
+        <label>Contrast <span class="val" id="contrastVal">10</span></label>
+        <input type="range" id="contrast" min="-50" max="100" value="10">
+      </div>
+      <div class="ctl">
+        <label>Saturation <span class="val" id="satVal">15</span></label>
+        <input type="range" id="sat" min="-50" max="100" value="15">
+      </div>
+      <div class="ctl">
+        <label>Denoise <span class="val" id="denoiseVal">0</span></label>
+        <input type="range" id="denoise" min="0" max="100" value="0">
+      </div>
+    </div>
+
+    <div class="row">
+      <button class="primary" id="enhanceBtn" disabled>✨ Enhance Image</button>
+      <button class="ghost" id="downloadBtn" disabled>⬇ Download Result</button>
+      <button class="ghost" id="resetBtn">Reset</button>
+    </div>
+  </div>
+
+  <div class="panel" id="resultPanel" style="display:none;">
+    <div class="compare">
+      <div>
+        <h3>Original</h3>
+        <canvas id="origCanvas"></canvas>
+        <div class="dims" id="origDims"></div>
+      </div>
+      <div>
+        <h3>Enhanced</h3>
+        <canvas id="outCanvas"></canvas>
+        <div class="dims" id="outDims"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const drop = document.getElementById('drop');
+const fileInput = document.getElementById('fileInput');
+const dropText = document.getElementById('dropText');
+const enhanceBtn = document.getElementById('enhanceBtn');
+const downloadBtn = document.getElementById('downloadBtn');
+const resetBtn = document.getElementById('resetBtn');
+const resultPanel = document.getElementById('resultPanel');
+const origCanvas = document.getElementById('origCanvas');
+const outCanvas = document.getElementById('outCanvas');
+const origDims = document.getElementById('origDims');
+const outDims = document.getElementById('outDims');
+
+let img = null;
+
+const sliders = ['scale','sharp','contrast','sat','denoise'];
+sliders.forEach(id=>{
+  const el = document.getElementById(id);
+  const label = document.getElementById(id+'Val');
+  el.addEventListener('input',()=>{
+    label.textContent = id==='scale' ? el.value+'x' : el.value;
+  });
+});
+
+drop.addEventListener('click',()=>fileInput.click());
+drop.addEventListener('dragover',e=>{e.preventDefault(); drop.classList.add('drag');});
+drop.addEventListener('dragleave',()=>drop.classList.remove('drag'));
+drop.addEventListener('drop',e=>{
+  e.preventDefault(); drop.classList.remove('drag');
+  if(e.dataTransfer.files[0]) loadFile(e.dataTransfer.files[0]);
+});
+fileInput.addEventListener('change',e=>{
+  if(e.target.files[0]) loadFile(e.target.files[0]);
+});
+
+function loadFile(file){
+  if(!file.type.startsWith('image/')) return;
+  const reader = new FileReader();
+  reader.onload = e=>{
+    img = new Image();
+    img.onload = ()=>{
+      dropText.textContent = '✅ ' + file.name + ' loaded — adjust settings and hit Enhance';
+      enhanceBtn.disabled = false;
+      drawOriginal();
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function drawOriginal(){
+  origCanvas.width = img.width;
+  origCanvas.height = img.height;
+  const ctx = origCanvas.getContext('2d');
+  ctx.drawImage(img,0,0);
+  origDims.textContent = img.width+' × '+img.height+' px';
+  resultPanel.style.display = 'block';
+}
+
+// Simple convolution-based sharpen (unsharp mask style)
+function sharpenImageData(imageData, amount){
+  if(amount<=0) return imageData;
+  const w = imageData.width, h = imageData.height;
+  const src = imageData.data;
+  const out = new Uint8ClampedArray(src.length);
+  const k = amount/100*1.5;
+  const kernel = [0,-k,0, -k,1+4*k,-k, 0,-k,0];
+  for(let y=0;y<h;y++){
+    for(let x=0;x<w;x++){
+      for(let c=0;c<3;c++){
+        let sum=0, idx=0;
+        for(let ky=-1;ky<=1;ky++){
+          for(let kx=-1;kx<=1;kx++){
+            const yy = Math.min(h-1,Math.max(0,y+ky));
+            const xx = Math.min(w-1,Math.max(0,x+kx));
+            sum += src[(yy*w+xx)*4+c]*kernel[idx++];
+          }
+        }
+        out[(y*w+x)*4+c] = sum;
+      }
+      out[(y*w+x)*4+3] = src[(y*w+x)*4+3];
+    }
+  }
+  return new ImageData(out,w,h);
+}
+
+function boxBlurAlpha(imageData, radius){
+  if(radius<=0) return imageData;
+  const w = imageData.width, h = imageData.height;
+  const src = imageData.data;
+  const out = new Uint8ClampedArray(src.length);
+  const r = Math.max(1,Math.round(radius/100*3));
+  for(let y=0;y<h;y++){
+    for(let x=0;x<w;x++){
+      let rr=0,gg=0,bb=0,aa=0,count=0;
+      for(let dy=-r;dy<=r;dy++){
+        for(let dx=-r;dx<=r;dx++){
+          const yy=Math.min(h-1,Math.max(0,y+dy));
+          const xx=Math.min(w-1,Math.max(0,x+dx));
+          const i=(yy*w+xx)*4;
+          rr+=src[i]; gg+=src[i+1]; bb+=src[i+2]; aa+=src[i+3]; count++;
+        }
+      }
+      const o=(y*w+x)*4;
+      out[o]=rr/count; out[o+1]=gg/count; out[o+2]=bb/count; out[o+3]=aa/count;
+    }
+  }
+  return new ImageData(out,w,h);
+}
+
+enhanceBtn.addEventListener('click',()=>{
+  if(!img) return;
+  enhanceBtn.textContent = '⏳ Processing...';
+  enhanceBtn.disabled = true;
+  setTimeout(()=>{
+    const scale = parseInt(document.getElementById('scale').value);
+    const sharp = parseInt(document.getElementById('sharp').value);
+    const contrast = parseInt(document.getElementById('contrast').value);
+    const sat = parseInt(document.getElementById('sat').value);
+    const denoise = parseInt(document.getElementById('denoise').value);
+
+    const w = img.width*scale, h = img.height*scale;
+    outCanvas.width = w; outCanvas.height = h;
+    const ctx = outCanvas.getContext('2d');
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+    ctx.filter = `contrast(${100+contrast}%) saturate(${100+sat}%)`;
+    ctx.drawImage(img,0,0,w,h);
+    ctx.filter = 'none';
+
+    let data = ctx.getImageData(0,0,w,h);
+    if(denoise>0) data = boxBlurAlpha(data, denoise*0.3);
+    if(sharp>0) data = sharpenImageData(data, sharp);
+    ctx.putImageData(data,0,0);
+
+    outDims.textContent = w+' × '+h+' px';
+    enhanceBtn.textContent = '✨ Enhance Image';
+    enhanceBtn.disabled = false;
+    downloadBtn.disabled = false;
+  }, 50);
+});
+
+downloadBtn.addEventListener('click',()=>{
+  const link = document.createElement('a');
+  link.download = 'enhanced-image.png';
+  link.href = outCanvas.toDataURL('image/png');
+  link.click();
+});
+
+resetBtn.addEventListener('click',()=>{
+  img = null;
+  fileInput.value = '';
+  dropText.textContent = '📤 Click or drag an image here';
+  enhanceBtn.disabled = true;
+  downloadBtn.disabled = true;
+  resultPanel.style.display = 'none';
+});
+</script>
+</body>
+</html>
